@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스포츠 산업 채용 모니터링 대시보드</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  .table-row:hover { background-color: #f8fafc; }
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- 헤더 -->
+  <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
+        </div>
+        <span class="text-sm font-semibold text-blue-600 tracking-wide">SPORTS CAREER RADAR</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900">스포츠 산업 채용 모니터링 대시보드</h1>
+    </div>
+    <div id="todayDate" class="text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg px-4 py-2 shadow-sm w-fit"></div>
+  </header>
+
+  <!-- 요약 카드 -->
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-gray-500 mb-1">전체 공고 수</p>
+        <p class="text-3xl font-extrabold text-gray-900">128<span class="text-base font-semibold text-gray-400 ml-1">건</span></p>
+        <p class="text-xs text-blue-600 font-semibold mt-2">▲ 전주 대비 12건 증가</p>
+      </div>
+      <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-gray-500 mb-1">신규 등록 (오늘)</p>
+        <p class="text-3xl font-extrabold text-gray-900">7<span class="text-base font-semibold text-gray-400 ml-1">건</span></p>
+        <p class="text-xs text-emerald-600 font-semibold mt-2">● 실시간 수집 중</p>
+      </div>
+      <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-between">
+      <div>
+        <p class="text-sm font-medium text-gray-500 mb-1">가장 활발한 직무</p>
+        <p class="text-3xl font-extrabold text-gray-900">스포츠 마케팅</p>
+        <p class="text-xs text-gray-400 font-semibold mt-2">전체 공고의 27%</p>
+      </div>
+      <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- 차트 영역 -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <h2 class="text-base font-bold text-gray-900 mb-1">연차별 채용 비중</h2>
+      <p class="text-sm text-gray-400 mb-4">경력 구간별 공고 분포</p>
+      <div class="h-72 flex items-center justify-center">
+        <canvas id="experienceChart"></canvas>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <h2 class="text-base font-bold text-gray-900 mb-1">기업 규모별 채용 현황</h2>
+      <p class="text-sm text-gray-400 mb-4">대기업 · 중견 · 중소 · 스타트업</p>
+      <div class="h-72">
+        <canvas id="companySizeChart"></canvas>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- 데이터 표 -->
+  <section class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 pb-4 flex items-center justify-between">
+      <div>
+        <h2 class="text-base font-bold text-gray-900">최신 채용 공고</h2>
+        <p class="text-sm text-gray-400 mt-1">최근 수집된 스포츠 산업 채용 공고 목록</p>
+      </div>
+      <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full">총 10건</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-y border-gray-100 bg-gray-50/60 text-gray-500">
+            <th class="text-left font-semibold px-6 py-3 whitespace-nowrap">플랫폼</th>
+            <th class="text-left font-semibold px-6 py-3 whitespace-nowrap">회사명</th>
+            <th class="text-left font-semibold px-6 py-3 whitespace-nowrap">공고 제목</th>
+            <th class="text-left font-semibold px-6 py-3 whitespace-nowrap">직무</th>
+            <th class="text-left font-semibold px-6 py-3 whitespace-nowrap">연차</th>
+            <th class="text-left font-semibold px-6 py-3 whitespace-nowrap">기업 규모</th>
+          </tr>
+        </thead>
+        <tbody id="jobTableBody" class="divide-y divide-gray-100"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="text-center text-xs text-gray-400 mt-8">
+    데이터는 예시(Mock)입니다. 실제 서비스 연동 전 UI 테스트용으로 제공됩니다.
+  </footer>
+
+</div>
+
+<script>
+// ---------- 날짜 ----------
+const today = new Date();
+const dateStr = today.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+document.getElementById('todayDate').textContent = dateStr;
+
+// ---------- Mock 데이터 ----------
+const jobs = [
+  { platform: '사람인', company: '나이키코리아', title: '스포츠 마케팅 매니저 채용', role: '마케팅', level: '경력 3~5년', size: '대기업' },
+  { platform: '원티드', company: '아디다스코리아', title: '리테일 MD 신규 채용', role: 'MD', level: '경력 2~4년', size: '대기업' },
+  { platform: '잡코리아', company: '핏펫', title: '백엔드 개발자(Java/Spring)', role: '개발', level: '경력 3년 이상', size: '스타트업' },
+  { platform: '원티드', company: '데카트론코리아', title: '매장 운영 매니저', role: '운영', level: '신입~경력 2년', size: '중견기업' },
+  { platform: '사람인', company: '언더아머코리아', title: '브랜드 마케터 채용', role: '마케팅', level: '경력 2~5년', size: '대기업' },
+  { platform: '점핏', company: '스포애드', title: '스포츠 데이터 분석가', role: '데이터 분석', level: '경력 1~3년', size: '중소기업' },
+  { platform: '원티드', company: '골프존', title: '프로덕트 매니저(PM)', role: '기획', level: '경력 4년 이상', size: '중견기업' },
+  { platform: '잡코리아', company: 'FC서울', title: '구단 마케팅 및 홍보 담당자', role: '마케팅', level: '신입~경력 3년', size: '중소기업' },
+  { platform: '사람인', company: '휠라코리아', title: '온라인 MD(이커머스)', role: 'MD', level: '경력 2~4년', size: '대기업' },
+  { platform: '점핏', company: '스포츠몬스터', title: '프론트엔드 개발자(React)', role: '개발', level: '경력 2년 이상', size: '스타트업' },
+];
+
+// ---------- 표 렌더링 ----------
+const platformColor = {
+  '사람인': 'bg-sky-50 text-sky-700',
+  '원티드': 'bg-blue-50 text-blue-700',
+  '잡코리아': 'bg-indigo-50 text-indigo-700',
+  '점핏': 'bg-cyan-50 text-cyan-700',
+};
+const sizeColor = {
+  '대기업': 'bg-blue-100 text-blue-700',
+  '중견기업': 'bg-emerald-100 text-emerald-700',
+  '중소기업': 'bg-amber-100 text-amber-700',
+  '스타트업': 'bg-violet-100 text-violet-700',
+};
+
+const tbody = document.getElementById('jobTableBody');
+jobs.forEach(job => {
+  const tr = document.createElement('tr');
+  tr.className = 'table-row transition-colors';
+  tr.innerHTML = `
+    <td class="px-6 py-4 whitespace-nowrap">
+      <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${platformColor[job.platform] || 'bg-gray-100 text-gray-600'}">${job.platform}</span>
+    </td>
+    <td class="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap">${job.company}</td>
+    <td class="px-6 py-4 text-gray-600">${job.title}</td>
+    <td class="px-6 py-4 text-gray-600 whitespace-nowrap">${job.role}</td>
+    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">${job.level}</td>
+    <td class="px-6 py-4 whitespace-nowrap">
+      <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${sizeColor[job.size] || 'bg-gray-100 text-gray-600'}">${job.size}</span>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// ---------- 연차별 채용 비중 (도넛) ----------
+const levelCounts = {};
+jobs.forEach(j => {
+  let key = j.level.includes('신입') ? '신입' : j.level.includes('1~3') || j.level.includes('2년') ? '주니어(1~3년)' : j.level.includes('3~5') || j.level.includes('2~4') || j.level.includes('2~5') ? '미들(3~5년)' : '시니어(5년+)';
+  levelCounts[key] = (levelCounts[key] || 0) + 1;
+});
+
+new Chart(document.getElementById('experienceChart'), {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(levelCounts),
+    datasets: [{
+      data: Object.values(levelCounts),
+      backgroundColor: ['#3b82f6', '#60a5fa', '#93c5fd', '#1d4ed8'],
+      borderWidth: 3,
+      borderColor: '#ffffff',
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle', padding: 16, font: { size: 12 } } },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.parsed}건` } }
+    }
+  }
+});
+
+// ---------- 기업 규모별 채용 현황 (막대) ----------
+const sizeCounts = {};
+jobs.forEach(j => { sizeCounts[j.size] = (sizeCounts[j.size] || 0) + 1; });
+const sizeOrder = ['대기업', '중견기업', '중소기업', '스타트업'];
+
+new Chart(document.getElementById('companySizeChart'), {
+  type: 'bar',
+  data: {
+    labels: sizeOrder,
+    datasets: [{
+      label: '공고 수',
+      data: sizeOrder.map(s => sizeCounts[s] || 0),
+      backgroundColor: '#2563eb',
+      borderRadius: 8,
+      maxBarThickness: 48,
+    }]
+  },
+  options: {
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.y}건` } } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 12 } }, grid: { color: '#f1f5f9' } },
+      x: { grid: { display: false }, ticks: { font: { size: 12 } } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
