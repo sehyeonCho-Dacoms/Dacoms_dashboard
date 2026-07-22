@@ -56,6 +56,11 @@ class Config:
     claude_model: str = os.getenv("CLAUDE_MODEL", "claude-opus-4-8")
     angles_per_topic: int = int(os.getenv("ANGLES_PER_TOPIC", "5"))
 
+    # Google Gemini (기획/브레인스토밍 단계)
+    gemini_api_key: Optional[str] = os.getenv("GEMINI_API_KEY")
+    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    topics_per_plan: int = int(os.getenv("TOPICS_PER_PLAN", "5"))
+
     # OpenAI (이미지 생성)
     openai_api_key: Optional[str] = os.getenv("OPENAI_API_KEY")
     image_model: str = os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-1")
@@ -74,3 +79,11 @@ class Config:
                 "ANTHROPIC_API_KEY가 설정되지 않았습니다. .env 파일 또는 환경변수를 확인하세요."
             )
         return self.anthropic_api_key
+
+    def require_gemini(self) -> str:
+        if not self.gemini_api_key:
+            raise RuntimeError(
+                "GEMINI_API_KEY가 설정되지 않았습니다. .env 파일 또는 환경변수를 확인하세요. "
+                "https://aistudio.google.com/apikey 에서 발급받을 수 있습니다."
+            )
+        return self.gemini_api_key

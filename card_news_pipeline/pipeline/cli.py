@@ -2,10 +2,11 @@
 
 서브커맨드:
   init        입력/초안 시트(또는 CSV) 헤더 생성 + 로컬 샘플 주제 시드
+  check       구글 시트 연동 상태 점검
+  plan        Gemini로 주제·타겟 페르소나 기획(브레인스토밍) → 주제입력 시트에 기입
   generate    주제 시트를 읽어 Claude로 P.D.A. 5앵글 카피 생성 → 초안 시트 기입
   export      승인된 카피만 모아 피그마 플러그인용 JSON으로 내보내기
   render      승인된 카피를 OpenAI 이미지 + Playwright로 카드 PNG 렌더링
-  run         generate → (검토/승인 후) export + render 안내를 포함한 상태 출력
 """
 
 from __future__ import annotations
@@ -91,6 +92,30 @@ def cmd_check(config: Config, args) -> None:
               "(2) SPREADSHEET_ID가 맞는지 (3) Sheets/Drive API 활성화 여부")
 
 
+def cmd_plan(config: Config, args) -> None:
+    """Gemini로 주제·페르소나를 기획해 주제입력 시트에 추가한다."""
+    from .planner import generate_topics
+
+    backend = get_backend(config)
+    backend.ensure_headers()
+    existing = backend.read_topics()
+
+    count = args.count or config.topics_per_plan
+    print(f"🧠 Gemini로 주제 기획 중... (모델={config.gemini_model}, {count}개)")
+    try:
+        new_topics = generate_topics(config, args.brief, count, existing_topics=existing)
+    except RuntimeError as exc:
+        print(f"❌ {exc}")
+        return
+
+    backend.append_topics(new_topics)
+    print(f"✅ 신규 주제 {len(new_topics)}개를 주제입력 시트에 추가했습니다.")
+    for t in new_topics:
+        print(f"  • [{t.id}] {t.topic}")
+        print(f"      → 타겟: {t.persona}")
+    print("다음 단계: `generate` 명령으로 Claude P.D.A. 카피를 생성하세요.")
+
+
 def cmd_generate(config: Config, args) -> None:
     backend = get_backend(config)
     backend.ensure_headers()
@@ -102,7 +127,11 @@ def cmd_generate(config: Config, args) -> None:
     print(f"📝 {len(topics)}개 주제에 대해 카피 생성 시작 (모델={config.claude_model})")
     for t in topics:
         print(f"  • [{t.id}] {t.topic}")
-        angles = generate_angles(config, t)
+        try:
+            angles = generate_angles(config, t)
+        except RuntimeError as exc:
+            print(f"❌ {exc}")
+            return
         backend.append_copies(angles)
         backend.mark_topic_processed(t)
         print(f"    → {len(angles)}개 앵글 시트 기입 완료")
@@ -169,6 +198,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = sub.add_parser("check", help="구글 시트 연동 상태 점검 (서비스 계정·시트 접근)")
     sp.set_defaults(func=cmd_check)
+
+    sp = sub.add_parser("plan", help="Gemini로 주제·페르소나 기획 → 주제입력 시트에 추가")
+    sp.add_argument("--brief", required=True, help="브랜드/서비스 브리프 (예: '중소기업용 회계 자동화 SaaS')")
+    sp.add_argument("--count", type=int, default=None, help="기획할 주제 개수 (기본: TOPICS_PER_PLAN)")
+    sp.set_defaults(func=cmd_plan)
 
     sp = sub.add_parser("generate", help="주제 → Claude P.D.A. 5앵글 카피 생성")
     sp.set_defaults(func=cmd_generate)

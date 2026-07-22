@@ -1,5 +1,6 @@
 anthropic>=0.69
 openai>=1.40
+google-genai>=1.0
 gspread>=6.0
 google-auth>=2.30
 playwright>=1.44

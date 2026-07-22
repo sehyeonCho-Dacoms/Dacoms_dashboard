@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 
@@ -19,6 +20,23 @@ class Topic:
     @property
     def is_processed(self) -> bool:
         return self.status.strip() == "처리됨"
+
+    def to_row(self) -> list[str]:
+        """주제입력 탭에 기입할 순서대로 값을 반환 (TOPIC_HEADERS 순서와 일치)."""
+        return [self.id, self.topic, self.persona, self.status]
+
+
+_TOPIC_ID_RE = re.compile(r"^T(\d+)$")
+
+
+def next_topic_ids(existing_ids: list[str], count: int) -> list[str]:
+    """기존 ID(T001, T002, ...) 중 최댓값 다음부터 count개의 새 ID를 생성."""
+    max_n = 0
+    for tid in existing_ids:
+        m = _TOPIC_ID_RE.match(tid.strip())
+        if m:
+            max_n = max(max_n, int(m.group(1)))
+    return [f"T{max_n + i:03d}" for i in range(1, count + 1)]
 
 
 @dataclass

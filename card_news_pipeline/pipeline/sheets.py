@@ -5,6 +5,7 @@
 
 두 백엔드 모두 아래 인터페이스를 구현한다:
     read_topics() -> list[Topic]
+    append_topics(list[Topic]) -> None
     append_copies(list[CopyAngle]) -> None
     read_approved_copies() -> list[CopyAngle]
     mark_topic_processed(Topic) -> None
@@ -30,6 +31,7 @@ from .models import (
 class SheetBackend(Protocol):
     def ensure_headers(self) -> None: ...
     def read_topics(self) -> list[Topic]: ...
+    def append_topics(self, topics: list[Topic]) -> None: ...
     def append_copies(self, copies: list[CopyAngle]) -> None: ...
     def read_approved_copies(self) -> list[CopyAngle]: ...
     def mark_topic_processed(self, topic: Topic) -> None: ...
@@ -103,6 +105,13 @@ class LocalCsvBackend:
             if t:
                 topics.append(t)
         return topics
+
+    def append_topics(self, topics: list[Topic]) -> None:
+        self.ensure_headers()
+        rows = self._read_rows(self.topic_path) or [TOPIC_HEADERS]
+        for t in topics:
+            rows.append(t.to_row())
+        self._write_rows(self.topic_path, rows)
 
     def append_copies(self, copies: list[CopyAngle]) -> None:
         self.ensure_headers()
@@ -180,6 +189,10 @@ class GoogleSheetBackend:
             if t:
                 topics.append(t)
         return topics
+
+    def append_topics(self, topics: list[Topic]) -> None:
+        ws = self._ws(self.topic_tab, TOPIC_HEADERS)
+        ws.append_rows([t.to_row() for t in topics], value_input_option="USER_ENTERED")
 
     def append_copies(self, copies: list[CopyAngle]) -> None:
         ws = self._ws(self.draft_tab, DRAFT_HEADERS)

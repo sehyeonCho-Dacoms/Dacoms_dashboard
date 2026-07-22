@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from pipeline.config import Config
-from pipeline.models import CopyAngle, is_approved_value
+from pipeline.models import CopyAngle, Topic, is_approved_value, next_topic_ids
 from pipeline.sheets import LocalCsvBackend
 
 
@@ -97,3 +97,43 @@ def test_empty_rows_ignored(tmp_path):
     topics = backend.read_topics()
     assert len(topics) == 1
     assert topics[0].id == "T003"
+
+
+def test_next_topic_ids_empty():
+    assert next_topic_ids([], 3) == ["T001", "T002", "T003"]
+
+
+def test_next_topic_ids_continues_from_max():
+    assert next_topic_ids(["T001", "T003", "T002"], 2) == ["T004", "T005"]
+
+
+def test_next_topic_ids_ignores_non_matching():
+    assert next_topic_ids(["T001", "custom-id", ""], 1) == ["T002"]
+
+
+def test_topic_to_row_roundtrip():
+    t = Topic(id="T009", topic="주제X", persona="페르소나X", status="")
+    assert t.to_row() == ["T009", "주제X", "페르소나X", ""]
+
+
+def test_local_backend_append_topics(tmp_path):
+    cfg = make_config(tmp_path)
+    backend = LocalCsvBackend(cfg)
+    backend.ensure_headers()
+
+    backend.append_topics(
+        [
+            Topic(id="T001", topic="기존 주제", persona="P1"),
+        ]
+    )
+    existing = backend.read_topics()
+    assert len(existing) == 1
+
+    new_ids = next_topic_ids([t.id for t in existing], 2)
+    backend.append_topics(
+        [Topic(id=nid, topic=f"신규 주제 {nid}", persona="P2") for nid in new_ids]
+    )
+
+    reloaded = backend.read_topics()
+    assert [t.id for t in reloaded] == ["T001", "T002", "T003"]
+    assert reloaded[1].topic == "신규 주제 T002"
