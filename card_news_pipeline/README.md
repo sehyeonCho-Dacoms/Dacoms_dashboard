@@ -103,11 +103,35 @@ python -m pipeline.cli --backend local render --no-image    # 그라디언트 �
 
 ## 구글 시트 연동
 
-1. GCP에서 서비스 계정 생성 → JSON 키 다운로드 → `GOOGLE_SERVICE_ACCOUNT_JSON` 경로 지정
-2. 대상 스프레드시트를 서비스 계정 이메일과 **공유**(편집자)
-3. `SPREADSHEET_ID` 지정 후 `--backend google` 로 실행
+이 프로젝트는 아래 서비스 계정으로 연동하도록 구성합니다:
 
-시트 구성(자동 생성):
+```
+cardnewsbot@iron-ripple-503203-b3.iam.gserviceaccount.com
+```
+
+1. **키 파일 준비**: GCP 콘솔(IAM 및 관리자 → 서비스 계정 → `cardnewsbot@...`)에서
+   **키 추가 → JSON**으로 새 키를 발급받아 `service_account.json`으로 저장합니다.
+   (기존 키가 있으면 재사용해도 됩니다. 키는 절대 깃허브에 커밋하지 마세요 — `.gitignore`에 이미 제외되어 있습니다.)
+2. **시트 공유**: 연동할 구글 스프레드시트를 열고 **공유** → 위 이메일 주소를
+   **편집자(Editor)** 권한으로 추가합니다.
+3. **API 활성화**: 해당 GCP 프로젝트(`iron-ripple-503203-b3`)에서
+   **Google Sheets API**와 **Google Drive API**를 사용 설정합니다.
+4. **`.env` 설정**:
+   ```env
+   SHEET_BACKEND=google
+   GOOGLE_SERVICE_ACCOUNT_JSON=./service_account.json
+   SPREADSHEET_ID=<스프레드시트 URL의 /d/ 와 /edit 사이 값>
+   ```
+5. **연동 점검**:
+   ```bash
+   python -m pipeline.cli --backend google check
+   ```
+   서비스 계정 이메일, 시트 제목, 탭 목록이 출력되면 정상입니다. 실패하면
+   1)~3) 단계(공유·API 활성화·`SPREADSHEET_ID`)를 다시 확인하세요.
+6. 이후 `generate`/`export`/`render`를 `--backend google`(또는 `.env`의
+   `SHEET_BACKEND=google`)로 실행하면 이 시트에 직접 기입/조회합니다.
+
+시트 구성(첫 실행 시 자동 생성):
 - **주제입력** 탭: `ID | 주제 | 타겟페르소나 | 상태`
 - **카피초안** 탭: `주제ID | 주제 | 페르소나 | 앵글명 | 앵글설명 | 후킹 | 문제(P) | 욕망(D) | 행동(A) | CTA | 이미지프롬프트 | 승인`
 

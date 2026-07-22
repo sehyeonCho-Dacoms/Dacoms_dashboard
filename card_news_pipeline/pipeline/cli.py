@@ -51,6 +51,46 @@ def cmd_init(config: Config, args) -> None:
             print(f"🌱 샘플 주제 시드 완료 → {backend.topic_path}")
 
 
+def cmd_check(config: Config, args) -> None:
+    """구글 시트 연동 상태를 점검한다(서비스 계정 이메일·시트 접근 확인)."""
+    if config.backend != "google":
+        print(f"backend={config.backend} (로컬 모드). 구글 점검은 --backend google 로 실행하세요.")
+        return
+
+    # 서비스 계정 이메일을 키 파일에서 읽어 안내
+    import json
+
+    if not config.google_credentials:
+        print("❌ GOOGLE_SERVICE_ACCOUNT_JSON 경로가 설정되지 않았습니다.")
+        return
+    try:
+        sa_email = json.load(open(config.google_credentials, encoding="utf-8")).get(
+            "client_email", "(알 수 없음)"
+        )
+    except Exception as exc:
+        print(f"❌ 서비스 계정 키 파일을 읽을 수 없습니다: {exc}")
+        return
+
+    print(f"🔑 서비스 계정: {sa_email}")
+    print(f"   이 이메일을 대상 스프레드시트에 '편집자'로 공유했는지 확인하세요.")
+
+    try:
+        backend = get_backend(config)  # 여기서 인증 + open_by_key 수행
+        from .sheets import GoogleSheetBackend
+
+        assert isinstance(backend, GoogleSheetBackend)
+        title = backend.sh.title
+        tabs = [ws.title for ws in backend.sh.worksheets()]
+        print(f"✅ 스프레드시트 접근 성공: '{title}'")
+        print(f"   워크시트 탭: {tabs}")
+        backend.ensure_headers()
+        print(f"✅ '{config.topic_worksheet}' / '{config.draft_worksheet}' 탭 준비 완료")
+    except Exception as exc:
+        print(f"❌ 시트 접근 실패: {exc}")
+        print("   확인: (1) 시트를 서비스 계정 이메일과 공유했는지 "
+              "(2) SPREADSHEET_ID가 맞는지 (3) Sheets/Drive API 활성화 여부")
+
+
 def cmd_generate(config: Config, args) -> None:
     backend = get_backend(config)
     backend.ensure_headers()
@@ -126,6 +166,9 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("init", help="시트 헤더 생성 + 로컬 샘플 시드")
     sp.add_argument("--no-seed", dest="seed", action="store_false")
     sp.set_defaults(func=cmd_init, seed=True)
+
+    sp = sub.add_parser("check", help="구글 시트 연동 상태 점검 (서비스 계정·시트 접근)")
+    sp.set_defaults(func=cmd_check)
 
     sp = sub.add_parser("generate", help="주제 → Claude P.D.A. 5앵글 카피 생성")
     sp.set_defaults(func=cmd_generate)
