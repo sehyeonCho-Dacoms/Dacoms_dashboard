@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: {{ brand.primary }};
+    --secondary: {{ brand.secondary }};
+    --accent: {{ brand.accent }};
+    --ink: {{ brand.ink }};
+    --surface: {{ brand.surface }};
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: {{ brand.font_family|safe }}; }
+  html, body { width: {{ brand.card_width }}px; height: {{ brand.card_height }}px; overflow: hidden; }
+
+  .card {
+    width: {{ brand.card_width }}px;
+    height: {{ brand.card_height }}px;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    padding: 96px 88px;
+  }
+
+  .brand-row { display: flex; align-items: center; gap: 16px; }
+  .brand-mark {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 26px;
+  }
+  .brand-name { font-weight: 700; font-size: 26px; letter-spacing: 2px; color: var(--primary); }
+
+  .badge {
+    display: inline-block; margin-top: 20px;
+    font-size: 28px; font-weight: 700; color: #fff;
+    background: var(--primary); padding: 12px 28px; border-radius: 999px;
+  }
+
+  .spacer { flex: 1; }
+  .kicker { font-size: 32px; font-weight: 600; color: var(--primary); margin-bottom: 20px; }
+  .headline { font-weight: 800; line-height: 1.2; letter-spacing: -1px; }
+  .footer { font-size: 28px; color: #94a3b8; font-weight: 500; margin-top: 32px; }
+  .step {
+    font-size: 200px; font-weight: 800; color: var(--accent); opacity: .22; line-height: 1;
+    position: absolute; right: 72px; top: 72px;
+  }
+
+  {% if card.variant == 'cover' %}
+  .card { color: #fff; }
+  .card .kicker, .card .footer, .card .brand-name { color: rgba(255,255,255,.92); }
+  .card .brand-mark { background: #fff; color: var(--primary); }
+  .cover-bg {
+    position: absolute; inset: 0; z-index: 0;
+    {% if cover_image %}
+    background-image: linear-gradient(180deg, rgba(15,23,42,.25), rgba(15,23,42,.72)), url('{{ cover_image }}');
+    background-size: cover; background-position: center;
+    {% else %}
+    background: linear-gradient(150deg, var(--primary), var(--secondary));
+    {% endif %}
+  }
+  .card > *:not(.cover-bg) { position: relative; z-index: 1; }
+  {% elif card.variant == 'cta' %}
+  .card { background: linear-gradient(150deg, var(--primary), var(--secondary)); color: #fff; }
+  .card .brand-name { color: #fff; }
+  .card .brand-mark { background: #fff; color: var(--primary); }
+  .cta-pill {
+    align-self: flex-start; margin-top: 40px;
+    font-size: 38px; font-weight: 700; color: var(--primary);
+    background: #fff; padding: 22px 48px; border-radius: 999px;
+  }
+  {% endif %}
+</style>
+</head>
+<body>
+<div class="card">
+  {% if card.variant == 'cover' %}<div class="cover-bg"></div>{% endif %}
+  {% if card.step %}<div class="step">{{ card.step }}</div>{% endif %}
+
+  <div class="brand-row">
+    {% if card.show_mark %}<div class="brand-mark">{{ brand.name[0] }}</div>{% endif %}
+    <div class="brand-name">{{ brand.name }}</div>
+  </div>
+
+  {% if card.badge %}<div><span class="badge">{{ card.badge }}</span></div>{% endif %}
+
+  <div class="spacer"></div>
+  {% if card.kicker %}<div class="kicker">{{ card.kicker }}</div>{% endif %}
+  <div class="headline" style="font-size: {{ card.head_size }}px;">{{ card.headline }}</div>
+  {% if card.footer %}<div class="footer">{{ card.footer }}</div>{% endif %}
+  {% if card.pill %}<div class="cta-pill">{{ card.pill }}</div>{% endif %}
+  <div class="spacer"></div>
+</div>
+</body>
+</html>
