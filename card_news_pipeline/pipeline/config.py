@@ -58,7 +58,7 @@ class Config:
 
     # Google Gemini (기획/브레인스토밍 단계)
     gemini_api_key: Optional[str] = os.getenv("GEMINI_API_KEY")
-    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
     topics_per_plan: int = int(os.getenv("TOPICS_PER_PLAN", "5"))
 
     # OpenAI (이미지 생성)
