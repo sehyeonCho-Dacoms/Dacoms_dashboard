@@ -133,7 +133,7 @@ class LocalCsvBackend:
 # --------------------------------------------------------------------------- #
 # 구글 시트 백엔드 (gspread)
 # --------------------------------------------------------------------------- #
-class GoogleSheetBackend:
+class GoogleSheetBackend:cardnewsbot@iron-ripple-503203-b3.iam.gserviceaccount.com
     STATUS_COL = 4  # '상태' 열 (1-based: ID,주제,페르소나,상태)
 
     def __init__(self, config: Config):
