@@ -2,8 +2,11 @@
 
 페르소나·욕구·인지단계를 입력받아, 앵글(공감/공포/이익/편의/사회증거)별로
 3줄(공백 제외 7~12자) 헤드라인 + 칩 태그 2개를 생성한다. 각 앵글은
-'규칙 검증 → Claude 자기 평가 → 7점 미만이면 재작성'(최대 3회) 루프를 거친
+'규칙 검증 → 자기 평가 → 7점 미만이면 재작성'(최대 3회) 루프를 거친
 뒤 구글 시트 '카드뉴스 결과물'에 5행으로 저장된다.
+
+카피 생성/자기평가는 Gemini(llm_client)로 진행한다 — Claude 크레딧이 없어도
+전체 자동화(자기평가 루프 포함)가 그대로 동작하도록 하기 위함이다.
 """
 
 from __future__ import annotations
@@ -17,6 +20,7 @@ from typing import Optional
 import yaml
 from pydantic import BaseModel, Field
 
+import llm_client
 from sheet_client import SheetClient, STATUS_THUMBNAIL_APPROVED, STATUS_THUMBNAIL_WAIT
 from verify_loop import run_self_eval_loop, validate_headline_rules
 
@@ -34,11 +38,11 @@ class ThumbnailAngle(BaseModel):
 
 
 class SelfEval(BaseModel):
-    hook: int = Field(description="후킹력 0~10")
-    empathy: int = Field(description="공감도 0~10")
-    clarity: int = Field(description="명확성 0~10")
-    rule_compliance: int = Field(description="규칙 준수 0~10")
-    chip_fit: int = Field(description="칩 적합성 0~10")
+    hook: float = Field(description="후킹력 0~10")
+    empathy: float = Field(description="공감도 0~10")
+    clarity: float = Field(description="명확성 0~10")
+    rule_compliance: float = Field(description="규칙 준수 0~10")
+    chip_fit: float = Field(description="칩 적합성 0~10")
     overall: float = Field(description="종합 점수 0~10 (위 5개 평균 또는 종합 판단)")
     comment: str = Field(description="개선이 필요하다면 구체적 코멘트, 아니면 '통과'")
 
@@ -56,7 +60,7 @@ def _slugify_persona(persona: str, maxlen: int = 12) -> str:
 
 
 def generate_headline_for_angle(
-    client, angle: str, persona: str, desire: str, awareness: str, feedback: Optional[str]
+    angle: str, persona: str, desire: str, awareness: str, feedback: Optional[str]
 ) -> dict:
     system_prompt = PROMPT_PATH.read_text(encoding="utf-8")
     user_content = (
@@ -66,50 +70,42 @@ def generate_headline_for_angle(
     if feedback:
         user_content += f"\n\n[이전 시도 피드백] {feedback}\n이 피드백을 반영해 다시 작성하세요."
 
-    response = client.messages.parse(
-        model="claude-opus-4-8",
-        max_tokens=2000,
-        thinking={"type": "adaptive"},
-        system=system_prompt,
-        messages=[{"role": "user", "content": user_content}],
-        output_format=ThumbnailAngle,
-    )
-    result = response.parsed_output
-    if result is None:
-        raise RuntimeError(f"Claude 응답 파싱 실패 (angle={angle}, stop_reason={response.stop_reason})")
+    data = llm_client.generate_json(system_prompt, user_content)
+    try:
+        result = ThumbnailAngle(**data)
+    except Exception as exc:
+        raise RuntimeError(f"응답 파싱 실패 (angle={angle}): {exc}\n원본: {data}") from exc
     return result.model_dump()
 
 
-def self_evaluate_headline(client, payload: dict, persona: str, desire: str) -> tuple[float, str]:
+def self_evaluate_headline(payload: dict, persona: str, desire: str) -> tuple[float, str]:
     lines = "\n".join(payload["headline_lines"])
-    prompt = (
-        "다음 썸네일 헤드라인을 스스로 평가하세요.\n"
+    system_prompt = (
+        "당신은 카드뉴스 카피를 냉정하게 평가하는 심사자입니다. "
+        "후킹력, 공감도, 명확성, 규칙 준수, 칩 적합성을 각 0~10점으로 채점하고 "
+        "종합 점수(overall, 0~10)를 매기세요. 7점 미만이면 comment에 구체적 개선점을 쓰고, "
+        "7점 이상이면 comment에 '통과'라고 쓰세요.\n\n"
+        "반드시 아래 JSON 스키마로만 응답하세요.\n"
+        '{"hook": int, "empathy": int, "clarity": int, "rule_compliance": int, '
+        '"chip_fit": int, "overall": float, "comment": "string"}'
+    )
+    user_prompt = (
         f"타겟 페르소나: {persona}\n욕구: {desire}\n\n"
         f"헤드라인:\n{lines}\n칩1(페르소나): {payload['chip_persona']}\n"
-        f"칩2(콘텐츠): {payload['chip_content']}\n\n"
-        "후킹력, 공감도, 명확성, 규칙 준수, 칩 적합성을 각 10점 만점으로 채점하고 "
-        "종합 점수(overall)를 매기세요. 7점 미만이면 comment에 구체적 개선점을 쓰세요."
+        f"칩2(콘텐츠): {payload['chip_content']}"
     )
-    response = client.messages.parse(
-        model="claude-opus-4-8",
-        max_tokens=1000,
-        thinking={"type": "adaptive"},
-        messages=[{"role": "user", "content": prompt}],
-        output_format=SelfEval,
-    )
-    result = response.parsed_output
-    if result is None:
+    try:
+        data = llm_client.generate_json(system_prompt, user_prompt)
+        result = SelfEval(**data)
+    except Exception:
         return 0.0, "자기 평가 파싱 실패"
     return result.overall, result.comment
 
 
 def generate_thumbnails(
-    persona: str, desire: str, awareness: str, auto: bool = False, client=None
+    persona: str, desire: str, awareness: str, auto: bool = False
 ) -> list[dict]:
     """5개 앵글 헤드라인을 생성하고 시트에 저장할 row dict 리스트를 반환."""
-    import anthropic
-
-    client = client or anthropic.Anthropic()
     today = date.today().isoformat()
     folder_name = f"{today}_{_slugify_persona(persona)}"
 
@@ -117,7 +113,7 @@ def generate_thumbnails(
     rows = []
     for angle in ANGLES:
         def _generate(feedback, angle=angle):
-            return generate_headline_for_angle(client, angle, persona, desire, awareness, feedback)
+            return generate_headline_for_angle(angle, persona, desire, awareness, feedback)
 
         def _validate(payload):
             ok, reason = validate_headline_rules(payload["headline_lines"])
@@ -126,8 +122,8 @@ def generate_thumbnails(
             return ok, reason
 
         def _evaluate(payload):
-            print("  🔍 Claude 자기 평가 중...")
-            return self_evaluate_headline(client, payload, persona, desire)
+            print("  🔍 자기 평가 중...")
+            return self_evaluate_headline(payload, persona, desire)
 
         result = run_self_eval_loop(_generate, _evaluate, _validate)
         payload = result.payload
@@ -173,7 +169,7 @@ def main():
     args = parser.parse_args()
     try:
         generate_thumbnails(args.persona, args.desire, args.awareness, auto=args.auto)
-    except Exception as exc:  # anthropic API 오류 등을 깔끔하게 표시
+    except Exception as exc:  # Gemini API 오류 등을 깔끔하게 표시
         print(f"❌ 썸네일 생성 실패: {exc}")
         raise SystemExit(1)
 

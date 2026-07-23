@@ -82,12 +82,10 @@ def _render_card_backgrounds(raw_png: bytes, out_dir: Path) -> list[Path]:
     return paths
 
 
-def process_approved_bodies(client=None, openai_client=None) -> list[dict]:
+def process_approved_bodies(openai_client=None) -> list[dict]:
     """'본문 승인'이면서 미처리인 행들의 배경 이미지+카드 PNG를 생성한다."""
-    import anthropic
     from openai import OpenAI
 
-    client = client or anthropic.Anthropic()
     openai_client = openai_client or OpenAI()
 
     sheet = SheetClient()
@@ -109,7 +107,7 @@ def process_approved_bodies(client=None, openai_client=None) -> list[dict]:
 
         headline = row.get("Card01 헤드라인", "").replace("\n", " ")
         persona = row.get("페르소나", "")
-        prompt = build_dalle_prompt(client, headline, persona)
+        prompt = build_dalle_prompt(headline, persona)
         print(f"  [{row.get('앵글', '')}] DALL-E 프롬프트: {prompt[:80]}...")
 
         raw_png = _generate_dalle_image(openai_client, prompt)

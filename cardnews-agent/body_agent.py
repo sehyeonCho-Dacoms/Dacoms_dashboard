@@ -2,8 +2,11 @@
 
 구글 시트에서 '썸네일 승인'이면서 아직 본문이 없는 행을 읽어와, 헤드라인의
 톤을 이어받아 Card02~04 섹션타이틀+인풋텍스트, Card05 CTA, 컨셉, 기대반응을
-생성한다. 썸네일 톤과의 일관성을 Claude가 자기 평가(10점 만점, 7점 미만이면
+생성한다. 썸네일 톤과의 일관성을 자기 평가(10점 만점, 7점 미만이면
 재작성)한 뒤 같은 행의 L~U열에 저장한다.
+
+카피 생성/자기평가는 Gemini(llm_client)로 진행한다 — Claude 크레딧이 없어도
+전체 자동화(자기평가 루프 포함)가 그대로 동작하도록 하기 위함이다.
 """
 
 from __future__ import annotations
@@ -14,6 +17,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+import llm_client
 from sheet_client import SheetClient, STATUS_BODY_APPROVED, STATUS_BODY_WAIT, STATUS_THUMBNAIL_APPROVED
 
 PROMPT_PATH = Path(__file__).parent / "prompts" / "generate_body.txt"
@@ -51,7 +55,7 @@ def _validate_body(payload: dict) -> tuple[bool, str]:
     return True, ""
 
 
-def generate_body_for_row(client, row: dict, feedback: Optional[str] = None) -> dict:
+def generate_body_for_row(row: dict, feedback: Optional[str] = None) -> dict:
     system_prompt = PROMPT_PATH.read_text(encoding="utf-8")
     headline = row.get("Card01 헤드라인", "").replace("\n", " / ")
     user_content = (
@@ -63,49 +67,41 @@ def generate_body_for_row(client, row: dict, feedback: Optional[str] = None) -> 
     if feedback:
         user_content += f"\n\n[이전 시도 피드백] {feedback}\n이 피드백을 반영해 다시 작성하세요."
 
-    response = client.messages.parse(
-        model="claude-opus-4-8",
-        max_tokens=3000,
-        thinking={"type": "adaptive"},
-        system=system_prompt,
-        messages=[{"role": "user", "content": user_content}],
-        output_format=BodyContent,
-    )
-    result = response.parsed_output
-    if result is None:
-        raise RuntimeError(f"Claude 응답 파싱 실패 (stop_reason={response.stop_reason})")
+    data = llm_client.generate_json(system_prompt, user_content)
+    try:
+        result = BodyContent(**data)
+    except Exception as exc:
+        raise RuntimeError(f"응답 파싱 실패: {exc}\n원본: {data}") from exc
     return result.model_dump()
 
 
-def self_evaluate_tone(client, payload: dict, headline: str) -> tuple[float, str]:
-    prompt = (
-        "다음 본문이 아래 썸네일 헤드라인과 톤·타겟이 일관되는지 평가하세요.\n"
+def self_evaluate_tone(payload: dict, headline: str) -> tuple[float, str]:
+    system_prompt = (
+        "당신은 카드뉴스 본문이 썸네일과 톤·타겟이 일관되는지 냉정하게 심사하는 평가자입니다. "
+        "어긋나면 낮은 점수를 주고 comment에 구체적으로 지적하세요. "
+        "7점 이상이면 comment에 '통과'라고 쓰세요.\n\n"
+        "반드시 아래 JSON 스키마로만 응답하세요.\n"
+        '{"tone_consistency": float, "comment": "string"}'
+    )
+    user_prompt = (
         f"썸네일 헤드라인: {headline}\n\n"
         f"Card02: {payload['card02_title']} — {payload['card02_text']}\n"
         f"Card03: {payload['card03_title']} — {payload['card03_text']}\n"
         f"Card04: {payload['card04_title']} — {payload['card04_text']}\n"
-        f"CTA: {payload['cta']}\n\n"
-        "썸네일과 어투·타겟이 어긋나면 낮은 점수를 주고 comment에 구체적으로 지적하세요."
+        f"CTA: {payload['cta']}"
     )
-    response = client.messages.parse(
-        model="claude-opus-4-8",
-        max_tokens=800,
-        thinking={"type": "adaptive"},
-        messages=[{"role": "user", "content": prompt}],
-        output_format=ToneEval,
-    )
-    result = response.parsed_output
-    if result is None:
+    try:
+        data = llm_client.generate_json(system_prompt, user_prompt)
+        result = ToneEval(**data)
+    except Exception:
         return 0.0, "자기 평가 파싱 실패"
     return result.tone_consistency, result.comment
 
 
-def process_approved_thumbnails(auto: bool = False, client=None) -> list[dict]:
+def process_approved_thumbnails(auto: bool = False) -> list[dict]:
     """'썸네일 승인'이면서 본문이 아직 없는 행들을 처리한다."""
-    import anthropic
     from verify_loop import run_self_eval_loop
 
-    client = client or anthropic.Anthropic()
     sheet = SheetClient()
     sheet.ensure_headers()
 
@@ -124,7 +120,7 @@ def process_approved_thumbnails(auto: bool = False, client=None) -> list[dict]:
         headline = row.get("Card01 헤드라인", "").replace("\n", " / ")
 
         def _generate(feedback, row=row):
-            return generate_body_for_row(client, row, feedback)
+            return generate_body_for_row(row, feedback)
 
         def _validate(payload):
             ok, reason = _validate_body(payload)
@@ -133,8 +129,8 @@ def process_approved_thumbnails(auto: bool = False, client=None) -> list[dict]:
             return ok, reason
 
         def _evaluate(payload, headline=headline):
-            print("  🔍 Claude 톤 일관성 자기 평가 중...")
-            return self_evaluate_tone(client, payload, headline)
+            print("  🔍 톤 일관성 자기 평가 중...")
+            return self_evaluate_tone(payload, headline)
 
         result = run_self_eval_loop(_generate, _evaluate, _validate)
         payload = result.payload

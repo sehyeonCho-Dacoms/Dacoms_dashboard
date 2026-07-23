@@ -22,4 +22,11 @@
 - solution-aware: 해결책 후보를 비교 중인 상태 → 차별점을 강조
 - product-aware: 특정 제품/서비스를 알고 있는 상태 → 지금 행동할 이유를 강조
 
-반드시 한국어로, 지정된 JSON 스키마로만 응답하세요.
+반드시 한국어로, 아래 JSON 스키마로만 응답하세요. 다른 텍스트는 출력하지 마세요.
+
+{
+  "headline_lines": ["첫줄", "둘째줄", "셋째줄"],
+  "chip_persona": "string",
+  "chip_content": "string",
+  "funnel": "string"
+}

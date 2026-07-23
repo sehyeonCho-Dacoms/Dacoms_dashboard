@@ -19,4 +19,11 @@
   "이익" 앵글이었다면 본문도 이득 중심 어투를 유지하는 식으로
   앵글의 정체성이 본문까지 이어져야 합니다.
 
-반드시 한국어로, 지정된 JSON 스키마로만 응답하세요.
+반드시 한국어로, 아래 JSON 스키마로만 응답하세요. 다른 텍스트는 출력하지 마세요.
+
+{
+  "card02_title": "string", "card02_text": "string",
+  "card03_title": "string", "card03_text": "string",
+  "card04_title": "string", "card04_text": "string",
+  "cta": "string", "concept": "string", "expected_reaction": "string"
+}
