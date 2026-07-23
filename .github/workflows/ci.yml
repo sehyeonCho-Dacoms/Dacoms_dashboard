@@ -1,0 +1,32 @@
+name: CI
+
+# 파이프라인 테스트. 네트워크/자격증명 불필요(sample·순수 함수만).
+
+on:
+  push:
+    paths:
+      - "job_pipeline/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    paths:
+      - "job_pipeline/**"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r job_pipeline/requirements.txt
+
+      - name: 파이프라인 스모크 (오프라인 수집→export)
+        run: PYTHONPATH=job_pipeline python -m pipeline.cli run
+
+      - name: 테스트
+        run: cd job_pipeline && python -m pytest -q

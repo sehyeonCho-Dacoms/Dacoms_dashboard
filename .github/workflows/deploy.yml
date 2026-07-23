@@ -1,0 +1,82 @@
+name: Build & Deploy Dashboard
+
+# 채용 파이프라인을 주기 실행해 data/dashboard.json 을 새로 만들고,
+# 대시보드를 GitHub Pages 로 라이브 배포한다.
+#
+# ⚠️  schedule(cron) 트리거는 GitHub 정책상 "기본 브랜치(main)"에서만 발동한다.
+#     따라서 이 자동화를 켜려면 이 브랜치를 main 에 머지해야 한다.
+#     (workflow_dispatch 수동 실행과 main push 는 즉시 동작)
+
+on:
+  schedule:
+    - cron: "0 9,21 * * *"     # 매일 06:00 / 18:00 KST (UTC 09:00 / 21:00)
+  workflow_dispatch:            # Actions 탭에서 "Run workflow" 수동 실행
+  push:
+    branches: [main]
+    paths:
+      - "dashboard.html"
+      - "job_pipeline/**"
+      - ".github/workflows/deploy.yml"
+
+# Pages 배포에 필요한 권한
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포는 취소하지 않고 순차 처리
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r job_pipeline/requirements.txt
+
+      # 실행 간 수집 스토어를 유지 → 주간 증가폭(momentum) 시그널 누적
+      - name: 스토어 캐시 복원/저장
+        uses: actions/cache@v4
+        with:
+          path: job_pipeline/data
+          key: jobstore-${{ github.run_id }}
+          restore-keys: |
+            jobstore-
+
+      - name: 수집 + 스코어링 + export
+        env:
+          # 사람인 키 승인 전이면 vars.JOB_SOURCES 를 비워두어 sample 로 동작.
+          # 키 발급 후: Settings > Variables 에 JOB_SOURCES=saramin (필요시 ,worknet)
+          JOB_SOURCES: ${{ vars.JOB_SOURCES || 'sample' }}
+          JOB_KEYWORDS: ${{ vars.JOB_KEYWORDS || '스포츠,피트니스,골프,구단,스포츠마케팅' }}
+          SARAMIN_ACCESS_KEY: ${{ secrets.SARAMIN_ACCESS_KEY }}
+          WORKNET_AUTH_KEY: ${{ secrets.WORKNET_AUTH_KEY }}
+        run: PYTHONPATH=job_pipeline python -m pipeline.cli run
+
+      - name: 정적 사이트 구성 (_site)
+        run: |
+          mkdir -p _site/data
+          cp dashboard.html _site/index.html
+          cp data/dashboard.json _site/data/dashboard.json
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

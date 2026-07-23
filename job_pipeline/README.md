@@ -86,6 +86,44 @@ JOB_SOURCES=saramin,worknet SARAMIN_ACCESS_KEY=xxx WORKNET_AUTH_KEY=yyy \
 cd job_pipeline && python -m pytest -q     # 네트워크 불필요 (sample/순수 함수)
 ```
 
+## GitHub 자동화 (Actions + Pages)
+
+`.github/workflows/` 에 두 개의 워크플로가 있다.
+
+| 워크플로 | 트리거 | 하는 일 |
+|----------|--------|---------|
+| `ci.yml` | push / PR (`job_pipeline/**`) | 파이프라인 스모크 + pytest |
+| `deploy.yml` | **매일 06:00·18:00 KST** · 수동 · main push | 수집→export 후 대시보드를 **GitHub Pages 로 배포** |
+
+### 최초 1회 설정
+
+1. **이 브랜치를 `main` 에 머지한다.**
+   `schedule`(cron) 트리거는 GitHub 정책상 **기본 브랜치에서만** 발동한다. 머지
+   전에도 Actions 탭의 **Run workflow**(수동)로는 즉시 돌려볼 수 있다.
+2. **Settings → Pages → Build and deployment → Source = "GitHub Actions"** 선택.
+3. 배포가 끝나면 `https://<계정>.github.io/<레포>/` 에서 대시보드가 열린다.
+   (`data/dashboard.json` 을 HTTP 로 fetch 하므로 Pages/서버가 반드시 필요 —
+   로컬 `file://` 로는 목업만 보인다.)
+
+### 사람인 키가 나오면 (지금은 승인 대기)
+
+승인 전에는 `JOB_SOURCES` 미설정 → **sample 로 안전하게 동작**한다. 키 발급 후:
+
+1. **Settings → Secrets and variables → Actions → Secrets** 에
+   `SARAMIN_ACCESS_KEY` 추가 (워크넷도 쓰면 `WORKNET_AUTH_KEY`).
+2. 같은 화면 **Variables** 탭에 `JOB_SOURCES=saramin` 추가
+   (워크넷 병행 시 `saramin,worknet`). 필요하면 `JOB_KEYWORDS` 도.
+3. 다음 스케줄부터 실데이터로 수집된다(수동 실행으로 즉시 확인 가능).
+
+> `deploy.yml` 은 실행 간 수집 스토어(`job_pipeline/data/`)를 캐시로 유지하므로,
+> 날이 갈수록 회사별 **주간 채용 증가폭(momentum)** 시그널이 쌓여 리드 스코어에
+> 반영된다.
+
+### 크론 주기 바꾸기
+
+`deploy.yml` 의 `cron` 은 UTC 기준이다. 예) 매시간 → `0 * * * *`,
+매일 1회(오전 9시 KST) → `0 0 * * *`.
+
 ## 구조
 
 ```
