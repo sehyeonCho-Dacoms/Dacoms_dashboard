@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1350px; overflow: hidden; }
+  .bg {
+    width: 1080px; height: 1350px; position: relative;
+    background-image: url('{{ image_data_uri }}');
+    background-size: cover; background-position: center;
+  }
+  .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,{{ overlay_opacity }}) 100%);
+  }
+</style>
+</head>
+<body>
+  <div class="bg"><div class="overlay"></div></div>
+</body>
+</html>
