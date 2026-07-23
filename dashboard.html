@@ -100,11 +100,11 @@
     <div class="flex gap-6">
       <div>
         <p class="text-[11px] font-semibold" style="color:var(--ink-muted)">이번 주 업로드 적합 공고</p>
-        <p class="text-2xl font-extrabold text-[#2a78d6] tabular-nums">37<span class="text-sm font-bold opacity-60 ml-0.5">건</span></p>
+        <p class="text-2xl font-extrabold text-[#2a78d6] tabular-nums"><span id="bnUploadReady">37</span><span class="text-sm font-bold opacity-60 ml-0.5">건</span></p>
       </div>
       <div class="border-l pl-6" style="border-color:var(--grid)">
         <p class="text-[11px] font-semibold" style="color:var(--ink-muted)">헤드헌팅 파이프라인</p>
-        <p class="text-2xl font-extrabold text-[#1baf7a] tabular-nums">₩2.4<span class="text-sm font-bold opacity-60 ml-0.5">억</span></p>
+        <p id="bnPipeline" class="text-2xl font-extrabold text-[#1baf7a] tabular-nums">₩2.4<span class="text-sm font-bold opacity-60 ml-0.5">억</span></p>
       </div>
     </div>
   </div>
@@ -122,8 +122,8 @@
           <svg class="w-4.5 h-4.5 text-[#2a78d6]" style="width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         </div>
       </div>
-      <p class="text-3xl font-extrabold tabular-nums">142<span class="text-base font-bold opacity-40 ml-1">건</span></p>
-      <p class="text-xs font-semibold mt-2" style="color:var(--delta-up)">▲ 전주 대비 18건</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="kpiCollected">142</span><span class="text-base font-bold opacity-40 ml-1">건</span></p>
+      <p id="kpiCollectedDelta" class="text-xs font-semibold mt-2" style="color:var(--delta-up)">▲ 전주 대비 18건</p>
     </div>
 
     <div class="card rounded-2xl p-5">
@@ -133,8 +133,8 @@
           <svg style="width:18px;height:18px" class="text-[#1baf7a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         </div>
       </div>
-      <p class="text-3xl font-extrabold tabular-nums">37<span class="text-base font-bold opacity-40 ml-1">건</span></p>
-      <p class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">적합도 70+ · 전체의 26%</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="kpiUploadReady">37</span><span class="text-base font-bold opacity-40 ml-1">건</span></p>
+      <p id="kpiUploadSub" class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">적합도 70+ · 전체의 26%</p>
     </div>
 
     <div class="card rounded-2xl p-5">
@@ -144,7 +144,7 @@
           <svg style="width:18px;height:18px" class="text-[#eb6834]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
         </div>
       </div>
-      <p class="text-3xl font-extrabold tabular-nums">9<span class="text-base font-bold opacity-40 ml-1">곳</span></p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="kpiHotLeads">9</span><span class="text-base font-bold opacity-40 ml-1">곳</span></p>
       <p class="text-xs font-semibold mt-2" style="color:var(--serious)">● 이번 주 접근 권장</p>
     </div>
 
@@ -155,8 +155,8 @@
           <svg style="width:18px;height:18px" class="text-[#4a3aa7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </div>
       </div>
-      <p class="text-3xl font-extrabold tabular-nums">₩2.4<span class="text-base font-bold opacity-40 ml-1">억</span></p>
-      <p class="text-xs font-semibold mt-2" style="color:var(--delta-up)">▲ 신규 리드 3곳 반영</p>
+      <p id="kpiPipeline" class="text-3xl font-extrabold tabular-nums">₩2.4<span class="text-base font-bold opacity-40 ml-1">억</span></p>
+      <p id="kpiPipelineDelta" class="text-xs font-semibold mt-2" style="color:var(--delta-up)">▲ 신규 리드 3곳 반영</p>
     </div>
   </div>
 
@@ -326,8 +326,8 @@ const isDark = ()=>document.documentElement.classList.contains('dark');
 const P = ()=>isDark()?PAL.dark:PAL.light;
 const withA=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;};
 
-/* ─────────── 데이터 (Mock) ─────────── */
-const jobs = [
+/* ─────────── 데이터 (기본값 = Mock, 라이브 로드 시 교체) ─────────── */
+let jobs = [
   {platform:'원티드', company:'스마트스코어', title:'스포츠테크 백엔드 엔지니어(Go)', role:'개발', level:'경력 4년+', size:'스타트업', fit:92, status:'신규'},
   {platform:'점핏',   company:'골프존',       title:'프로덕트 매니저(골프 SaaS)',    role:'기획/PM', level:'경력 5년+', size:'중견기업', fit:88, status:'검토중'},
   {platform:'사람인', company:'FC서울',        title:'구단 마케팅 & 스폰서십 담당',    role:'마케팅', level:'경력 3~5년', size:'중소기업', fit:95, status:'신규'},
@@ -346,7 +346,7 @@ const jobs = [
   {platform:'원티드', company:'울산HD FC',      title:'구단 디지털 콘텐츠 매니저',      role:'미디어', level:'경력 2~4년', size:'중소기업', fit:91, status:'신규'},
 ];
 
-const leads = [
+let leads = [
   {company:'스마트스코어', sector:'스포츠테크', open:11, growth:'+4 (3주↑)', senior:5, tier:'Hot',  score:94, fee:5200, stage:'미팅 예정', signal:'개발·PM 동시 확대, 시리즈C 후 스케일업'},
   {company:'골프존',       sector:'스포츠테크', open:8,  growth:'+2',        senior:4, tier:'Hot',  score:88, fee:4300, stage:'접촉',      signal:'해외법인 PM/엔지니어 리더급 수요'},
   {company:'FC서울',       sector:'구단',      open:4,  growth:'+2',        senior:2, tier:'Warm', score:79, fee:1800, stage:'신규',      signal:'스폰서십·마케팅 리더 부재, HH 미사용'},
@@ -359,7 +359,7 @@ const leads = [
   {company:'울산HD FC',    sector:'구단',      open:3,  growth:'+1',        senior:1, tier:'Nurture',score:58, fee:900, stage:'신규',      signal:'디지털 조직 신설 초기, 관계 구축 단계'},
 ];
 
-const actions = [
+let actions = [
   {lane:'supply', pr:'P0', title:'FC서울 스폰서십 공고 독점 업로드', company:'FC서울 · 적합도 95',
    why:'대형 플랫폼 미노출 + 스포츠 연관 최상. 드래프트온 단독 인벤토리로 확보', cta:'지금 업로드'},
   {lane:'supply', pr:'P0', title:'울산HD 콘텐츠 매니저 공고 확보', company:'울산HD FC · 적합도 91',
@@ -405,10 +405,12 @@ function renderIngest(){
       <td class="px-4 py-3 whitespace-nowrap"><span class="inline-flex items-center gap-1.5 text-xs font-semibold" style="color:${statusClass[j.status]}"><span class="w-1.5 h-1.5 rounded-full" style="background:${statusClass[j.status]}"></span>${j.status}</span></td>
     </tr>`).join('') || `<tr><td colspan="6" class="px-4 py-10 text-center text-sm" style="color:var(--ink-muted)">조건에 맞는 공고가 없습니다.</td></tr>`;
 }
-(()=>{ // 플랫폼 필터 옵션
+function populatePlatformFilter(){ // 플랫폼 필터 옵션 (라이브 데이터로 갱신 가능)
   const sel=document.getElementById('platformFilter');
+  sel.querySelectorAll('option:not([value=""])').forEach(o=>o.remove());
   [...new Set(jobs.map(j=>j.platform))].forEach(p=>{const o=document.createElement('option');o.value=o.textContent=p;sel.appendChild(o);});
-})();
+}
+populatePlatformFilter();
 document.getElementById('platformFilter').addEventListener('change',renderIngest);
 document.getElementById('fitFilter').addEventListener('change',renderIngest);
 renderIngest();
@@ -425,11 +427,17 @@ function actionCard(a){
     <button class="text-xs font-bold px-3 py-1.5 rounded-lg text-white transition hover:opacity-90" style="background:${accent}">${a.cta} →</button>
   </div>`;
 }
-document.getElementById('supplyActions').innerHTML = actions.filter(a=>a.lane==='supply').map(actionCard).join('');
-document.getElementById('demandActions').innerHTML = actions.filter(a=>a.lane==='demand').map(actionCard).join('');
+function renderActions(){
+  const sup=actions.filter(a=>a.lane==='supply'), dem=actions.filter(a=>a.lane==='demand');
+  const empty=`<p class="text-sm py-6 text-center" style="color:var(--ink-muted)">해당 액션이 없습니다.</p>`;
+  document.getElementById('supplyActions').innerHTML = sup.map(actionCard).join('') || empty;
+  document.getElementById('demandActions').innerHTML = dem.map(actionCard).join('') || empty;
+}
+renderActions();
 
 /* ─────────── 리드 보드 ─────────── */
-document.getElementById('leadBoard').innerHTML = leads.map(l=>`
+function renderLeads(){
+  document.getElementById('leadBoard').innerHTML = leads.map(l=>`
   <div class="card rounded-2xl p-5 hover:shadow-md transition-shadow">
     <div class="flex items-start justify-between mb-3">
       <div>
@@ -451,10 +459,13 @@ document.getElementById('leadBoard').innerHTML = leads.map(l=>`
       <div><p class="text-[10px]" style="color:var(--ink-muted)">시니어</p><p class="text-sm font-bold tabular-nums">${l.senior}건</p></div>
       <div><p class="text-[10px]" style="color:var(--ink-muted)">예상 수수료</p><p class="text-sm font-bold tabular-nums text-[#1baf7a]">₩${l.fee.toLocaleString()}만</p></div>
     </div>
-  </div>`).join('');
+  </div>`).join('') || `<p class="text-sm py-10 text-center col-span-full" style="color:var(--ink-muted)">리드가 없습니다.</p>`;
+}
+renderLeads();
 
 /* ─────────── 차트 ─────────── */
 let charts=[];
+let liveTrends=null;   // 라이브 export의 trends (있으면 주간차트에 사용)
 function baseOpts(){
   const c=P();
   return {maintainAspectRatio:false,
@@ -468,12 +479,15 @@ function buildCharts(){
   charts.forEach(ch=>ch.destroy()); charts=[];
   const c=P();
 
-  // 주간 추이 (2 series, same unit)
+  // 주간 추이 (2 series, same unit) — 라이브 데이터가 있으면 실제 시계열 사용
+  const wk=(liveTrends&&liveTrends.weekly&&liveTrends.weekly.labels&&liveTrends.weekly.labels.length)
+    ? liveTrends.weekly
+    : {labels:['8주전','7주','6주','5주','4주','3주','2주','이번주'],total:[98,105,112,120,118,128,124,142],uploadReady:[22,25,26,29,28,33,31,37]};
   charts.push(new Chart(document.getElementById('trendChart'),{type:'line',
-    data:{labels:['8주전','7주','6주','5주','4주','3주','2주','이번주'],
+    data:{labels:wk.labels,
       datasets:[
-        {label:'전체 수집',data:[98,105,112,120,118,128,124,142],borderColor:c.cat[0],backgroundColor:withA(c.cat[0],.10),borderWidth:2,fill:true,tension:.35,pointRadius:3,pointBackgroundColor:c.cat[0],pointBorderColor:c.surface,pointBorderWidth:2},
-        {label:'업로드 적합',data:[22,25,26,29,28,33,31,37],borderColor:c.cat[2],backgroundColor:'transparent',borderWidth:2,fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c.cat[2],pointBorderColor:c.surface,pointBorderWidth:2}
+        {label:'전체 수집',data:wk.total,borderColor:c.cat[0],backgroundColor:withA(c.cat[0],.10),borderWidth:2,fill:true,tension:.35,pointRadius:3,pointBackgroundColor:c.cat[0],pointBorderColor:c.surface,pointBorderWidth:2},
+        {label:'업로드 적합',data:wk.uploadReady,borderColor:c.cat[2],backgroundColor:'transparent',borderWidth:2,fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c.cat[2],pointBorderColor:c.surface,pointBorderWidth:2}
       ]},
     options:{...baseOpts(),interaction:{mode:'index',intersect:false},
       scales:{y:{beginAtZero:true,...gridScale()},x:{...gridScale(),grid:{display:false}}}}}));
@@ -546,6 +560,53 @@ document.getElementById('themeToggle').addEventListener('click',()=>{
   localStorage.setItem('drafton-theme',isDark()?'dark':'light');
   renderIngest(); buildCharts();
 });
+
+/* ─────────── 라이브 데이터 로드 (파이프라인 산출물) ─────────── */
+// job_pipeline 이 생성한 ./data/dashboard.json 을 불러와 목업을 실데이터로 교체.
+// 파일이 없거나(아직 미수집) file:// CORS 로 실패하면 조용히 목업을 유지한다.
+function setText(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+
+function applyLiveData(d){
+  if(!d || !Array.isArray(d.jobs)) return;
+  jobs = d.jobs;
+  leads = Array.isArray(d.leads) ? d.leads : leads;
+  // actions: {supply:[],demand:[]} → lane 필드를 붙여 평탄화
+  if(d.actions){
+    actions = [
+      ...(d.actions.supply||[]).map(a=>({...a,lane:'supply'})),
+      ...(d.actions.demand||[]).map(a=>({...a,lane:'demand'})),
+    ];
+  }
+  liveTrends = d.trends || null;
+
+  // KPI 갱신
+  const k = d.kpis || {};
+  if(k.collected!=null){ setText('kpiCollected',k.collected); setText('kpiCollectedDelta','실시간 수집분'); }
+  if(k.uploadReady!=null){ setText('kpiUploadReady',k.uploadReady); setText('bnUploadReady',k.uploadReady);
+    setText('kpiUploadSub',`적합도 70+ · 전체의 ${k.uploadReadyPct||0}%`); }
+  if(k.hotLeads!=null) setText('kpiHotLeads',k.hotLeads);
+  if(k.pipelineValueLabel){ setText('kpiPipeline',k.pipelineValueLabel); setText('bnPipeline',k.pipelineValueLabel);
+    setText('kpiPipelineDelta','Hot 리드 예상 수수료 합'); }
+
+  // 전체 재렌더 (오버뷰가 보이는 초기 시점이라 차트도 정상 사이즈로 그려짐)
+  populatePlatformFilter();
+  renderIngest(); renderActions(); renderLeads(); buildCharts();
+
+  // 생성 시각 배지
+  if(d.generatedAt){
+    const el=document.getElementById('todayDate');
+    if(el) el.title = '데이터 생성: '+d.generatedAt;
+  }
+  document.querySelector('footer').innerHTML =
+    `드래프트온 운영 대시보드 · 라이브 데이터 (생성: ${(d.generatedAt||'').replace('T',' ').slice(0,16)}) · job_pipeline 수집 결과`;
+}
+
+(function loadLive(){
+  fetch('./data/dashboard.json',{cache:'no-store'})
+    .then(r=>{ if(!r.ok) throw new Error('no data'); return r.json(); })
+    .then(applyLiveData)
+    .catch(()=>{ /* 목업 유지 */ });
+})();
 </script>
 </body>
 </html>
