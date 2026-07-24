@@ -23,6 +23,10 @@ TARGET_ROLES = {"마케팅", "MD", "데이터", "개발", "기획/PM", "운영",
 LOW_EXCLUSIVITY_SECTORS = {"브랜드"}
 HIGH_EXCLUSIVITY_SECTORS = {"구단", "협회", "에이전시"}
 
+# 이 섹터로 분류됐다는 것 자체가 스포츠 산업 기업이라는 신호 → 연관성 하한 보장
+SPORTS_SECTORS = {"협회", "구단", "스포츠테크", "에이전시", "미디어", "브랜드"}
+SECTOR_RELEVANCE_FLOOR = 40
+
 # 리드 티어 임계값 (단일 크롤 규모 기준으로 보정 — 주간 momentum이 붙으면 상향)
 TIER_HOT = 62
 TIER_WARM = 48
@@ -37,6 +41,11 @@ SECTOR_FEE = {
 def score_job(job: JobPosting) -> JobPosting:
     """공고 하나의 drafton_fit 계산 (in-place로 채워 반환)."""
     rel, reasons = sports_relevance(job.company, job.title, job.description, job.sector)
+
+    # 스포츠 섹터로 분류된 공고는 최소한의 연관성을 보장(일반 직무여도 스포츠 산업 잡)
+    if job.sector in SPORTS_SECTORS and rel < SECTOR_RELEVANCE_FLOOR:
+        rel = SECTOR_RELEVANCE_FLOOR
+        reasons.append(f"{job.sector} 섹터 확정")
 
     role_pts = 30 if job.role in TARGET_ROLES else 5
     if job.role in TARGET_ROLES:

@@ -152,3 +152,92 @@ def test_enabled_sources_skip_without_credentials():
     cfg = Config(sources=["saramin", "worknet", "wanted", "sample"])
     # 자격증명 없음 → sample 만 남아야 함
     assert cfg.enabled_source_keys() == ["sample"]
+
+
+def test_ksoc_needs_no_credential():
+    # 대한체육회는 공개 게시판이라 키 없이도 활성
+    assert Config(sources=["ksoc"]).enabled_source_keys() == ["ksoc"]
+
+
+# --------------------------------------------------------------------------- #
+# 대한체육회(eGov 게시판) 크롤러 파서 — 표준 마크업 픽스처 (네트워크 불필요)
+# --------------------------------------------------------------------------- #
+KSOC_FIXTURE = """
+<table class="board_list"><thead><tr><th>번호</th><th>제목</th><th>등록일</th></tr></thead>
+<tbody>
+  <tr>
+    <td>공지</td>
+    <td class="subject"><a href="view.do?nttId=10521&amp;bbsId=BMSR00024&amp;menuNo=200027&amp;pageIndex=1">2026년 대한체육회 일반직 직원 채용 공고</a></td>
+    <td>2026-07-20</td><td>1523</td>
+  </tr>
+  <tr>
+    <td>102</td>
+    <td class="subject"><a href="#none" onclick="fn_view('10498'); return false;">스포츠 마케팅 담당자 채용</a></td>
+    <td>2026.07.15</td><td>842</td>
+  </tr>
+  <tr>
+    <td>101</td>
+    <td class="subject"><a href="./view.do?dataSid=10477&amp;menuNo=200027">체육회관 시설 운영 담당자 모집</a></td>
+    <td>2026/07/10</td><td>301</td>
+  </tr>
+</tbody></table>
+<div class="pagination"><a href="list.do?pageIndex=2">다음</a></div>
+"""
+
+
+def _ksoc_source():
+    from pipeline.sources.ksoc import KsocSource
+    return KsocSource(Config(sources=["ksoc"]))
+
+
+def test_ksoc_parses_egov_board_rows():
+    rows = _ksoc_source()._parse_list(KSOC_FIXTURE)
+    # 헤더/페이지네이션 제외, 실제 공고 3건
+    assert len(rows) == 3
+    titles = [r["title"] for r in rows]
+    assert "2026년 대한체육회 일반직 직원 채용 공고" in titles
+    assert "스포츠 마케팅 담당자 채용" in titles
+    # 날짜 정규화 (다양한 구분자 → YYYY-MM-DD)
+    dates = {r["date"] for r in rows}
+    assert {"2026-07-20", "2026-07-15", "2026-07-10"} == dates
+
+
+def test_ksoc_builds_detail_urls_and_ids():
+    rows = {r["title"]: r for r in _ksoc_source()._parse_list(KSOC_FIXTURE)}
+    # href view.do → 절대 URL로 결합
+    r1 = rows["2026년 대한체육회 일반직 직원 채용 공고"]
+    assert r1["id"] == "10521"
+    assert r1["url"].startswith("https://sports.or.kr/sports/bbs/BMSR00024/view.do")
+    assert "nttId=10521" in r1["url"]
+    # onclick 함수 인자에서 ID 추출 → URL 구성
+    r2 = rows["스포츠 마케팅 담당자 채용"]
+    assert r2["id"] == "10498"
+    assert "bbsId=BMSR00024" in r2["url"] and "menuNo=200027" in r2["url"]
+    # dataSid 파라미터도 인식
+    assert rows["체육회관 시설 운영 담당자 모집"]["id"] == "10477"
+
+
+def test_ksoc_normalize_sets_association_sector():
+    src = _ksoc_source()
+    rows = src._parse_list(KSOC_FIXTURE)
+    jobs = [src.normalize(r) for r in rows]
+    assert all(j is not None for j in jobs)
+    for j in jobs:
+        assert j.source == "ksoc"
+        assert j.company == "대한체육회"
+        assert j.sector == "협회"
+        assert j.company_size == "공공/협회"
+    # 직무 정규화(taxonomy)까지 적용
+    by_title = {j.title: j for j in jobs}
+    assert by_title["스포츠 마케팅 담당자 채용"].role == "마케팅"
+    assert by_title["체육회관 시설 운영 담당자 모집"].role == "운영"
+
+
+def test_ksoc_scores_prioritize_sports_roles():
+    src = _ksoc_source()
+    from pipeline.scoring import score_job
+    jobs = {j.title: score_job(j) for j in (src.normalize(r) for r in src._parse_list(KSOC_FIXTURE))}
+    # 스포츠 마케팅 = 핵심 직무 + 협회 직접공고 → 업로드 강력 권장
+    assert jobs["스포츠 마케팅 담당자 채용"].drafton_fit >= 70
+    # 일반 행정직도 협회 직접공고라 최소한 검토 대상(중간 점수)
+    assert jobs["2026년 대한체육회 일반직 직원 채용 공고"].drafton_fit >= 50

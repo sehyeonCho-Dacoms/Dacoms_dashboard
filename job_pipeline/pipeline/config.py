@@ -46,6 +46,10 @@ class Config:
     # 원티드 크롤러 사용 동의 (ToS 확인 후 true로) — 기본 비활성
     wanted_enabled: bool = os.getenv("WANTED_CRAWLER_ENABLED", "false").lower() == "true"
 
+    # 대한체육회 채용공고 게시판 (공개 · 키 불필요). 다른 eGov 게시판도 URL만 바꿔 재사용
+    ksoc_list_url: Optional[str] = os.getenv("KSOC_LIST_URL")
+    ksoc_pages: int = int(os.getenv("KSOC_PAGES", "2"))
+
     # HTTP 매너 (크롤러 rate-limit)
     request_delay_sec: float = float(os.getenv("REQUEST_DELAY_SEC", "1.0"))
     user_agent: str = os.getenv(

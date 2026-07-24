@@ -14,12 +14,14 @@ from .sample import SampleSource
 from .saramin import SaraminSource
 from .worknet import WorknetSource
 from .wanted import WantedSource
+from .ksoc import KsocSource
 
 _REGISTRY: dict[str, type[Source]] = {
     "sample": SampleSource,
     "saramin": SaraminSource,
     "worknet": WorknetSource,
     "wanted": WantedSource,
+    "ksoc": KsocSource,
 }
 
 

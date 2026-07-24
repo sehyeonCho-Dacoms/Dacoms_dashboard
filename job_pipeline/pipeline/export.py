@@ -162,7 +162,7 @@ def _weekly_series(jobs: list[JobPosting]) -> dict:
 # --------------------------------------------------------------------------- #
 _PLATFORM = {
     "saramin": "사람인", "worknet": "워크넷", "wanted": "원티드",
-    "jumpit": "점핏", "jobkorea": "잡코리아", "sample": "샘플",
+    "jumpit": "점핏", "jobkorea": "잡코리아", "ksoc": "대한체육회", "sample": "샘플",
 }
 
 

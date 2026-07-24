@@ -53,9 +53,9 @@ jobs:
 
       - name: 수집 + 스코어링 + export
         env:
-          # 사람인 키 승인 전이면 vars.JOB_SOURCES 를 비워두어 sample 로 동작.
-          # 키 발급 후: Settings > Variables 에 JOB_SOURCES=saramin (필요시 ,worknet)
-          JOB_SOURCES: ${{ vars.JOB_SOURCES || 'sample' }}
+          # 기본값 ksoc(대한체육회, 공개 게시판·키 불필요)로 실데이터 수집.
+          # 사람인 키 발급 후: Settings > Variables 에 JOB_SOURCES=saramin,ksoc (필요시 ,worknet)
+          JOB_SOURCES: ${{ vars.JOB_SOURCES || 'ksoc' }}
           JOB_KEYWORDS: ${{ vars.JOB_KEYWORDS || '스포츠,피트니스,골프,구단,스포츠마케팅' }}
           SARAMIN_ACCESS_KEY: ${{ secrets.SARAMIN_ACCESS_KEY }}
           WORKNET_AUTH_KEY: ${{ secrets.WORKNET_AUTH_KEY }}

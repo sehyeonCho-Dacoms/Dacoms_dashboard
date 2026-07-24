@@ -36,6 +36,7 @@ python -m http.server 8000
 |------|------|---------|------|
 | `saramin` | 공식 Open API (JSON) | `SARAMIN_ACCESS_KEY` | https://oapi.saramin.co.kr |
 | `worknet` | 공식 API (XML) | `WORKNET_AUTH_KEY` | 공공데이터포털/work.go.kr |
+| `ksoc` | 공개 게시판 크롤러 (HTML) | — (키 불필요) | 대한체육회 채용공고. `KSOC_LIST_URL`로 다른 eGov 게시판도 재사용 |
 | `wanted` | 비공식 내부 JSON | `WANTED_CRAWLER_ENABLED=true` | ⚠️ ToS/robots 확인 후에만 |
 | `sample` | 로컬 JSON | — | 오프라인 데모/테스트 기본값 |
 
@@ -105,15 +106,20 @@ cd job_pipeline && python -m pytest -q     # 네트워크 불필요 (sample/순�
    (`data/dashboard.json` 을 HTTP 로 fetch 하므로 Pages/서버가 반드시 필요 —
    로컬 `file://` 로는 목업만 보인다.)
 
-### 사람인 키가 나오면 (지금은 승인 대기)
+### 소스 전환 (사람인 키는 승인 대기 중)
 
-승인 전에는 `JOB_SOURCES` 미설정 → **sample 로 안전하게 동작**한다. 키 발급 후:
+`deploy.yml`의 기본 소스는 **`ksoc`(대한체육회 공개 게시판, 키 불필요)** 이라,
+사람인 키 없이도 **실데이터가 바로 수집·배포**된다. 사람인 키 발급 후:
 
 1. **Settings → Secrets and variables → Actions → Secrets** 에
    `SARAMIN_ACCESS_KEY` 추가 (워크넷도 쓰면 `WORKNET_AUTH_KEY`).
-2. 같은 화면 **Variables** 탭에 `JOB_SOURCES=saramin` 추가
-   (워크넷 병행 시 `saramin,worknet`). 필요하면 `JOB_KEYWORDS` 도.
-3. 다음 스케줄부터 실데이터로 수집된다(수동 실행으로 즉시 확인 가능).
+2. 같은 화면 **Variables** 탭에 `JOB_SOURCES=saramin,ksoc` 추가
+   (워크넷 병행 시 `saramin,worknet,ksoc`). 필요하면 `JOB_KEYWORDS` 도.
+3. 다음 스케줄부터 여러 소스를 함께 수집한다(수동 실행으로 즉시 확인 가능).
+
+> 크롤러(ksoc)는 게시판 마크업이 표준 eGov와 다르면 조정이 필요할 수 있다.
+> 실행 후 수집이 0건이면 `sources/ksoc.py`의 `_parse_list` 선택 규칙을 실제
+> HTML에 맞춰 손보면 된다(단위테스트에 표준 마크업 픽스처 포함).
 
 > `deploy.yml` 은 실행 간 수집 스토어(`job_pipeline/data/`)를 캐시로 유지하므로,
 > 날이 갈수록 회사별 **주간 채용 증가폭(momentum)** 시그널이 쌓여 리드 스코어에
