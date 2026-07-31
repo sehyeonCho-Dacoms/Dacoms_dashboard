@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+# 수집 스토어(런타임 산출물)는 커밋하지 않음
+data/jobs.json
