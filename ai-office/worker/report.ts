@@ -2,10 +2,14 @@
  * 완료 보고 발행 — 같은 내용을 Notion(김비서 일일 브리핑)과 Discord로 동시에 보낸다.
  *
  * 비밀값은 코드에 두지 않는다. 로컬은 `.dev.vars`, 배포는 `wrangler secret put`.
- *   NOTION_TOKEN          Notion 내부 통합 토큰 (ntn_…)
- *   NOTION_BRIEFING_DB    김비서 일일 브리핑 데이터베이스 ID
- *   DISCORD_WEBHOOK_URL   보고를 받을 채널의 웹훅 URL
+ *   NOTION_TOKEN            Notion 내부 통합 토큰 (ntn_…)
+ *   NOTION_BRIEFING_DB      김비서 일일 브리핑 데이터베이스 ID
+ *   DISCORD_WEBHOOK_URL     보고를 받을 채널의 웹훅 URL
+ *   INSTAGRAM_ACCESS_TOKEN  Instagram 장기 액세스 토큰
+ *   INSTAGRAM_BUSINESS_ID   Instagram 비즈니스 계정 ID
  */
+
+import { fetchInstagramMetrics, type InstagramEnv } from "./instagram";
 
 export type DayReport = {
   title: string;
@@ -19,7 +23,7 @@ export type DayReport = {
   log: { time: string; text: string }[];
 };
 
-export type PublishEnv = {
+export type PublishEnv = InstagramEnv & {
   NOTION_TOKEN?: string;
   NOTION_BRIEFING_DB?: string;
   DISCORD_WEBHOOK_URL?: string;
@@ -29,12 +33,16 @@ type TargetResult = { ok: boolean; status: "sent" | "unconfigured" | "failed"; d
 
 const NOTION_VERSION = "2022-06-28";
 
-export function integrationStatus(env: PublishEnv) {
+export async function integrationStatus(env: PublishEnv) {
+  const instagram = await fetchInstagramMetrics(env);
+
   return {
     notion: { configured: Boolean(env.NOTION_TOKEN && env.NOTION_BRIEFING_DB), label: "Notion 저장" },
     discord: { configured: Boolean(env.DISCORD_WEBHOOK_URL), label: "Discord 전송" },
-    // 아래 3개는 자격증명을 받는 즉시 같은 방식으로 붙는다
-    instagram: { configured: false, label: "Instagram 지표", need: "Meta 비즈니스 앱 + 장기 액세스 토큰" },
+    instagram: instagram.ok
+      ? { configured: true, label: "Instagram 지표", metrics: instagram.metrics }
+      : { configured: false, label: "Instagram 지표", need: "Meta 비즈니스 앱 + 장기 액세스 토큰", detail: instagram.detail },
+    // 아래 2개는 자격증명을 받는 즉시 같은 방식으로 붙는다
     gmail: { configured: false, label: "Gmail 읽기", need: "Google OAuth 클라이언트 + 리프레시 토큰" },
     finance: { configured: false, label: "재무 파일", need: "대표가 현황 파일 업로드" },
   };

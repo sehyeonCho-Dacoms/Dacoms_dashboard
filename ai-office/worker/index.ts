@@ -32,7 +32,7 @@ const worker = {
 
     // 연동 설정 여부만 알려준다 (값은 절대 내보내지 않는다)
     if (url.pathname === "/api/integrations") {
-      return Response.json(integrationStatus(env));
+      return Response.json(await integrationStatus(env));
     }
 
     // 완료 보고를 Notion + Discord로 동시 발행

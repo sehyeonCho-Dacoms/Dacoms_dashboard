@@ -17,3 +17,14 @@ NOTION_BRIEFING_DB=
 # ── Discord ────────────────────────────────────────────
 # 보고를 받을 채널 → 채널 편집 → 연동 → 웹후크 → 새 웹후크 → URL 복사
 DISCORD_WEBHOOK_URL=
+
+# ── Instagram (Meta Graph API) ──────────────────────────
+# 1) 인스타그램 계정을 프로페셔널(비즈니스/크리에이터) 계정으로 전환
+# 2) 그 계정을 Facebook 페이지에 연결
+# 3) developers.facebook.com 에서 비즈니스 앱 생성 (개발 모드로 두면 앱 검수 없이 본인 계정만 조회 가능)
+# 4) Graph API Explorer 에서 pages_show_list, pages_read_engagement,
+#    instagram_basic, instagram_manage_insights 권한으로 토큰 발급 → 장기 토큰으로 교환
+# 자세한 절차는 README.md의 "Instagram 연동" 참고
+INSTAGRAM_ACCESS_TOKEN=
+# GET /me/accounts 로 연결된 페이지 조회 → instagram_business_account 필드값
+INSTAGRAM_BUSINESS_ID=

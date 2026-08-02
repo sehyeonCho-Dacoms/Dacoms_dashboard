@@ -731,7 +731,14 @@ function DashboardView({
           tone: publishResult?.discord.ok ? "mint" : integrations.discord?.configured ? "yellow" : "lav",
           href: "",
         },
-        { name: "Instagram", status: integrations.instagram?.need ?? "연동 대기", tone: "lav", href: "" },
+        {
+          name: "Instagram",
+          status: integrations.instagram?.configured
+            ? `팔로워 ${integrations.instagram.metrics?.followers.toLocaleString() ?? 0}명 · 게시물 ${integrations.instagram.metrics?.mediaCount ?? 0}개`
+            : (integrations.instagram?.need ?? "연동 대기"),
+          tone: integrations.instagram?.configured ? "mint" : "lav",
+          href: "",
+        },
         { name: "Gmail", status: integrations.gmail?.need ?? "연동 대기", tone: "lav", href: "" },
         { name: "재무 파일", status: integrations.finance?.need ?? "자료 대기", tone: "lav", href: "" },
       ]

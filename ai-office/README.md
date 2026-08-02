@@ -93,6 +93,43 @@ company.config.ts 파일만 고쳐줘. 다른 파일은 건드리지 마.
 > 🔒 `.dev.vars` 는 절대 남에게 주거나 인터넷에 올리지 마세요. 비밀번호와 같습니다.
 > 이 폴더를 남에게 줄 때도 `.dev.vars` 는 빼고 주세요.
 
+### Instagram 연동
+
+인스타그램 팔로워·게시물 수를 대시보드에 실시간으로 표시하려면:
+
+1. 인스타그램 앱 → 설정 → 계정 유형 및 도구 → **프로페셔널 계정으로 전환** (비즈니스 또는 크리에이터)
+2. 그 계정을 **Facebook 페이지**에 연결 (없으면 페이지부터 만들기)
+3. [developers.facebook.com](https://developers.facebook.com) 접속 → 내 앱 → **앱 만들기** → 유형 "비즈니스" 선택
+4. 앱을 **개발 모드**로 둔 채로 진행하세요. 개발 모드에서는 앱을 정식 심사(App Review) 받지 않아도
+   본인 계정 데이터는 조회할 수 있습니다. (다른 사람 계정을 조회하려면 심사가 필요합니다)
+5. [Graph API Explorer](https://developers.facebook.com/tools/explorer)에서 방금 만든 앱 선택 →
+   본인 계정으로 로그인 → 권한(permissions)에서 아래 4개 체크 → **Access Token 생성**
+   - `pages_show_list`
+   - `pages_read_engagement`
+   - `instagram_basic`
+   - `instagram_manage_insights`
+6. 이 토큰은 짧게 만료되는 "단기 토큰"입니다. **장기 토큰(60일)** 으로 교환하세요:
+   ```
+   GET https://graph.facebook.com/v21.0/oauth/access_token
+     ?grant_type=fb_exchange_token
+     &client_id=앱ID
+     &client_secret=앱시크릿
+     &fb_exchange_token=단기토큰
+   ```
+   (앱 ID·시크릿은 앱 대시보드 → 설정 → 기본 설정에서 확인)
+7. 내 Instagram 비즈니스 계정 ID 확인:
+   ```
+   GET https://graph.facebook.com/v21.0/me/accounts?access_token=장기토큰
+   ```
+   응답으로 나오는 페이지 ID로 다시 조회:
+   ```
+   GET https://graph.facebook.com/v21.0/{페이지ID}?fields=instagram_business_account&access_token=장기토큰
+   ```
+8. `.dev.vars`에 `INSTAGRAM_ACCESS_TOKEN`(7번의 장기 토큰), `INSTAGRAM_BUSINESS_ID`(7번의 계정 ID) 채우기
+9. `npm run dev` 다시 실행 → 대시보드에 팔로워·게시물 수가 뜨면 성공
+
+> ⚠️ 장기 토큰은 60일마다 만료됩니다. 화면에서 "토큰이 만료됐어요"가 뜨면 6번부터 다시 반복하세요.
+
 ---
 
 ## 5. 자주 막히는 곳

@@ -24,7 +24,13 @@ export type PublishResult = {
 
 export type IntegrationStatus = Record<
   string,
-  { configured: boolean; label: string; need?: string }
+  {
+    configured: boolean;
+    label: string;
+    need?: string;
+    detail?: string;
+    metrics?: { username: string; followers: number; mediaCount: number };
+  }
 >;
 
 export function buildReport(snap: Snapshot): DayReport {
