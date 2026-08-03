@@ -1,0 +1,69 @@
+{
+  "postings": [
+    {
+      "source": "사람인",
+      "job_id": "test-001",
+      "title": "축구단 마케팅 담당자",
+      "company": "테스트 스포츠 구단 A",
+      "location": "서울",
+      "employment_type": "정규직",
+      "sport_category": "축구",
+      "posted_at": "2026-08-01",
+      "deadline": "2026-08-20",
+      "raw_url": "https://example.com/postings/test-001",
+      "description_summary": "축구단 SNS 및 마케팅 콘텐츠 기획/운영 담당자 채용. 3년 이상 경력 우대."
+    },
+    {
+      "source": "워크넷",
+      "job_id": "test-002",
+      "title": "야구 아카데미 코치",
+      "company": "테스트 스포츠 아카데미 B",
+      "location": "경기",
+      "employment_type": "계약직",
+      "sport_category": "야구",
+      "posted_at": "2026-08-02",
+      "deadline": "2026-08-15",
+      "raw_url": "https://example.com/postings/test-002",
+      "description_summary": "유소년 야구 아카데미 코치 채용. 관련 지도 자격증 필수."
+    },
+    {
+      "source": "대한체육회",
+      "job_id": "test-003",
+      "title": "배드민턴 종목 실무자",
+      "company": "테스트 협회 C",
+      "location": "인천",
+      "employment_type": "정규직",
+      "sport_category": "배드민턴",
+      "posted_at": "2026-07-30",
+      "deadline": "2026-08-10",
+      "raw_url": "https://example.com/postings/test-003",
+      "description_summary": "협회 행정 및 대회 운영 실무자 채용."
+    },
+    {
+      "source": "사람인",
+      "job_id": "test-004",
+      "title": "농구단 데이터 분석가",
+      "company": "테스트 스포츠 구단 D",
+      "location": "서울",
+      "employment_type": "정규직",
+      "sport_category": "농구",
+      "posted_at": "2026-08-01",
+      "deadline": "1900-01-01",
+      "raw_url": "https://example.com/postings/test-004",
+      "description_summary": "마감일이 과거로 잘못 입력된 이상 데이터 테스트용 항목."
+    },
+    {
+      "source": "워크넷",
+      "job_id": "test-005",
+      "title": "",
+      "company": "테스트 스포츠 구단 E",
+      "location": "부산",
+      "employment_type": "정규직",
+      "sport_category": "배구",
+      "posted_at": "2026-08-02",
+      "deadline": "2026-08-25",
+      "raw_url": "https://example.com/postings/test-005",
+      "description_summary": "제목 필드 누락 테스트용 항목."
+    }
+  ]
+}

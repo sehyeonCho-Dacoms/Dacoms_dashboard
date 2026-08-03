@@ -26,6 +26,9 @@ model: sonnet
   요청받으면 **데이터 소스 미연결 상태임을 먼저 보고**하고, 만약 사람이
   CSV/API 응답 등 원시 데이터를 직접 제공하면 그것으로만 분석한다.
   추정치나 예시 데이터를 실제 성과인 것처럼 만들어내지 않는다.
+  `test-data/dummy-metrics.csv`는 테스트 전용 더미 데이터다(cn-003,
+  cn-006은 노출 100 미만으로 일부러 저신뢰 케이스로 만들어 두었다 —
+  반드시 `low_confidence_flags`로 분리되어야 한다).
 
 ## 분석 대상 데이터
 
@@ -68,8 +71,8 @@ model: sonnet
 }
 ```
 
-산출물은 `automation/reports/metrics-analyzer/YYYY-MM-DD.json`(이력)과
-`automation/reports/metrics-analyzer/latest.json`(최신본)에 저장한다.
+산출물은 `outputs/metrics-analyzer/YYYY-MM-DD.json`(이력)과
+`outputs/metrics-analyzer/latest.json`(최신본)에 저장한다.
 
 ## 하지 말아야 할 것
 

@@ -18,25 +18,29 @@ model: haiku
 
 ## 입력
 
-`automation/reports/<team-slug>/latest.json`(및 필요 시 오늘 날짜의
-이력 파일)을 읽는다. 현재 존재하는 팀 슬러그: `job-posting-collector`,
-`metrics-analyzer`. 각 파일은 공통 스키마(`team`, `status`, `payload`,
-`next_team`)를 따른다. `status: blocked` 또는 `rejected` 항목은 반드시
-브리핑 상단에 별도로 강조한다. 해당 팀의 `latest.json`이 아직 없으면
-"아직 실행 이력 없음"으로만 표시하고 값을 추정하지 않는다.
+`outputs/<team-slug>/latest.json`(및 필요 시 오늘 날짜의 이력 파일)을
+읽는다. 현재 존재 가능한 팀 슬러그: `job-posting-collector`,
+`metrics-analyzer`, `card-news-planner`, `card-news-designer`,
+`content-risk-reviewer`, `cold-email-team`. 각 파일은 공통 스키마
+(`team`, `status`, `payload`, `next_team`)를 따른다. `status: blocked`,
+`rejected`, `conditional` 항목과 "사람 승인(게시)"/"사람 승인(발송)" 대기
+항목은 반드시 브리핑 상단에 별도로 강조한다. 해당 팀의 `latest.json`이
+아직 없으면 "아직 실행 이력 없음"으로만 표시하고 값을 추정하지 않는다.
 
 ## 브리핑 구성 (출근용)
 
-1. **오늘 확인이 필요한 것** (승인 대기, blocked 상태 항목 최상단)
+1. **오늘 확인이 필요한 것** (승인 대기, blocked/rejected 상태 항목 최상단 —
+   콘텐츠 게시 승인, 콜드메일 발송 승인 포함)
 2. **어제 자동으로 처리된 것** (팀별 1줄 요약, 수치 중심)
 3. **오늘 예정된 자동 실행** (트리거 주기표 기준: 공고 수집 매일,
-   지표 분석 주간 — 필요 시 도래 여부, `.github/workflows/deploy.yml`의
-   06:00/18:00 KST 대시보드 갱신도 참고)
+   지표 분석 주간, 콘텐츠/콜드메일 파이프라인 주기 도래 여부 —
+   `.github/workflows/deploy.yml`의 06:00/18:00 KST 대시보드 갱신도 참고)
 
 ## 브리핑 구성 (퇴근용)
 
 1. **오늘 완료된 작업** (팀별 1줄 요약)
-2. **오늘 발생한 이슈/예외** (각 팀 리포트의 `blocked`/`flagged` 항목 기준)
+2. **오늘 발생한 이슈/예외** (각 팀 리포트의 `blocked`/`rejected`/`flagged`
+   항목 기준, 콘텐츠 파이프라인 반려 재순환 횟수 포함)
 3. **내일 사람 승인이 필요한 항목 예고**
 
 ## 산출물 스키마
@@ -56,10 +60,10 @@ model: haiku
 }
 ```
 
-JSON은 `automation/reports/daily-briefing/YYYY-MM-DD-morning.json` 또는
+JSON은 `outputs/daily-briefing/YYYY-MM-DD-morning.json` 또는
 `-evening.json`(+ `latest.json`)에 저장한다. 사람이 읽는 텍스트 브리핑은
 같은 이름의 `.md` 파일로 나란히 저장한다
-(`automation/reports/daily-briefing/YYYY-MM-DD-morning.md` 등).
+(`outputs/daily-briefing/YYYY-MM-DD-morning.md` 등).
 
 ## 하지 말아야 할 것
 

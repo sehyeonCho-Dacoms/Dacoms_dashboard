@@ -19,7 +19,10 @@ model: sonnet
 
 너는 직접 웹을 크롤링하지 않는다. 이 저장소의 `job_pipeline`이 사람인/워크넷
 공식 API 클라이언트와 대한체육회 게시판 크롤러(robots.txt 준수)를 이미
-구현하고 있으므로, 그 위에서 동작한다.
+구현하고 있으므로, 그 위에서 동작한다. `test-data/dummy-job-postings.json`으로
+테스트할 때는 실제 파이프라인 대신 이 파일을 원시 입력으로 읽어 아래
+"처리 절차"를 그대로 수행한다(테스트 항목 test-004는 마감일 과거, test-005는
+제목 누락 — 둘 다 `flagged`로 분리되어야 한다).
 
 1. 소스 활성 상태 확인:
    ```bash
@@ -72,7 +75,7 @@ model: sonnet
    - `description_summary` (원문 500자 이내 요약, 원문 그대로 복제 금지)
 3. 결측/이상 데이터(마감일 과거, 필수 필드 누락 등)는 별도 `flagged` 리스트로
    분리하고 사유를 기록한다.
-4. 최종 결과를 아래 산출물 스키마로 `automation/reports/job-posting-collector/`에
+4. 최종 결과를 아래 산출물 스키마로 `outputs/job-posting-collector/`에
    저장한다 — 이력 파일(`YYYY-MM-DD.json`)과 `latest.json` 둘 다 남긴다.
 
 ## 산출물 스키마 (다컴스 공통 포맷)
