@@ -20,15 +20,27 @@ model: sonnet
 - **채용 수요 축은 지금 바로 분석 가능하다**: `data/dashboard.json`
   (`.github/workflows/deploy.yml`이 하루 2회 갱신)에 종목/직군별 `fit`
   스코어와 리드 데이터가 이미 있다. 이걸 원시 데이터로 사용한다.
-- **콘텐츠 축(SNS 카드뉴스 성과)은 아직 실데이터 소스가 없다**.
-  `card_news_pipeline`은 카피 생성·렌더링까지만 담당하며 게시 후 성과
-  추적(노출/저장/공유/클릭)은 이 저장소에 구현되어 있지 않다. 이 축을
-  요청받으면 **데이터 소스 미연결 상태임을 먼저 보고**하고, 만약 사람이
-  CSV/API 응답 등 원시 데이터를 직접 제공하면 그것으로만 분석한다.
-  추정치나 예시 데이터를 실제 성과인 것처럼 만들어내지 않는다.
-  `test-data/dummy-metrics.csv`는 테스트 전용 더미 데이터다(cn-003,
-  cn-006은 노출 100 미만으로 일부러 저신뢰 케이스로 만들어 두었다 —
-  반드시 `low_confidence_flags`로 분리되어야 한다).
+- **콘텐츠 축(SNS 카드뉴스 성과)은 `metrics_pipeline`(인스타그램 Meta Graph
+  API 연동)이 공급한다.** 분석 전 아래를 실행해 최신 데이터를 만든다:
+  ```bash
+  PYTHONPATH=metrics_pipeline python -m pipeline.cli run
+  ```
+  결과는 `data/card_news_metrics.csv`에 쓰여진다(`test-data/dummy-metrics.csv`와
+  동일한 컬럼 스키마). 이 파일을 읽어 분석해라.
+- **주의 — 이 CSV의 일부 컬럼은 구조적으로 비어 있을 수 있다.** Instagram
+  API가 게시물 단위로 신뢰성 있게 주지 못하는 값(`profile_visits`,
+  `clicks`, `apply_clicks`, 종종 `impressions`)은 `metrics_pipeline`이
+  임의로 채우지 않고 빈 값으로 남긴다(`metrics_pipeline/README.md` 참고).
+  빈 값은 "표본 부족"이 아니라 "데이터 소스 없음"이므로, 이 둘을
+  구분해서 보고해라 — 빈 값을 0으로 취급해 낮은 성과로 해석하지 마라.
+- **`METRICS_SOURCES`에 인스타그램 자격증명이 아직 없으면 자동으로
+  샘플 데이터로 폴백된다.** 이 경우 `payload`와 보고에 "실인스타그램
+  데이터 아님, 자격증명 연결 전까지 프로덕션 의사결정에 쓰지 말 것"이라고
+  명시해라(CLI 실행 로그의 소스 활성 상태로 실데이터 여부를 확인할 수 있다).
+- `test-data/dummy-metrics.csv`는 별도의 테스트 전용 더미 데이터다(cn-003,
+  cn-006은 노출 100 미만으로 일부러 저신뢰 케이스로 만들어 두었다 — 반드시
+  `low_confidence_flags`로 분리되어야 한다). 실행 맥락이 "테스트"라고
+  명시된 경우에만 이 파일을 쓴다.
 
 ## 분석 대상 데이터
 
@@ -83,6 +95,9 @@ model: sonnet
   반드시 신뢰도 표시와 함께 전달한다.
 - 콘텐츠 축처럼 실데이터가 없는 축을 가상의 수치로 채워 있는 것처럼
   보고하지 않는다.
+- `card_news_metrics.csv`의 빈 값(`profile_visits`, `clicks`,
+  `apply_clicks` 등)을 0이나 "성과 저조"로 해석하지 않는다 — 데이터
+  소스 자체가 없다는 뜻이다.
 
 ## 보고 형식
 

@@ -1,3 +1,6 @@
 # 서브에이전트 실행 결과(팀별 JSON/브리핑). 계속 쌓이는 산출물이므로 git에 커밋하지 않는다.
 outputs/*
 !outputs/.gitkeep
+
+# metrics_pipeline이 생성하는 카드뉴스 성과 CSV — 실행할 때마다 갱신되는 산출물
+data/card_news_metrics.csv

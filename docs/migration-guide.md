@@ -42,19 +42,27 @@ Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지
   처리했다(설계안 원본의 `outputs/` 컨벤션을 그대로 채택). 실행할 때마다
   쌓이는 결과물이라 git 이력에 남기지 않는다 — 이전 시도에서 썼던
   `automation/reports/`(git 추적) 컨벤션은 폐기했다.
-- `metrics-analyzer`가 다루는 SNS 카드뉴스 성과 데이터는 이 저장소에
-  아직 실데이터 소스가 없다. 채용 수요 축은 `data/dashboard.json`으로
-  바로 분석 가능하지만, 콘텐츠 축은 실데이터 연결 전까지 표본 부족으로
-  표시하도록 명시했다.
+- **`metrics_pipeline`을 신설했다.** `metrics-analyzer`가 다루는 SNS
+  카드뉴스 성과 데이터를 인스타그램(Meta Graph API)에서 가져와
+  `data/card_news_metrics.csv`로 export한다(`job_pipeline`과 동일한
+  공식 API/키 없으면 sample 폴백 구조). Instagram API가 게시물 단위로
+  주지 못하는 값(`profile_visits`, `clicks`, `apply_clicks`)은 추정치로
+  채우지 않고 빈 값 + 사유로 남기도록 설계했다 — 자세한 이유는
+  `metrics_pipeline/README.md` 참고. 채용 수요 축은 `data/dashboard.json`으로
+  바로 분석 가능하다.
 
 ## 아직 채워야 할 부분 (실제 연동 전 필수)
 
 - 사람인 오픈API 키(`SARAMIN_ACCESS_KEY`), 워크넷 공공데이터포털
   인증키(`WORKNET_AUTH_KEY`) 실제 발급·연결 (현재 `deploy.yml` 기본값은
   `ksoc`만 활성).
-- 드래프트온 SNS 성과 데이터를 가져올 실제 데이터 소스(API/DB/CSV
-  export) 구축 — `metrics-analyzer`의 콘텐츠 축, `card-news-planner`의
-  근거 데이터에 필요.
+- 인스타그램 비즈니스 계정의 `IG_ACCESS_TOKEN`/`IG_BUSINESS_ACCOUNT_ID`
+  실제 발급·연결(`metrics_pipeline/.env.example` 참고) — 현재는 sample
+  데이터로만 동작. 그리고 카드뉴스 게시 시마다 `metrics_pipeline/data/
+  post_registry.csv`에 post_id↔topic/sport_category/format을 기록하는
+  운영 절차 정착 필요.
+- `clicks`/`apply_clicks`(지원 전환) 확보를 위한 링크 클릭 트래킹
+  (카드뉴스 CTA에 UTM/단축링크 부여) — 아직 미구현.
 - 헤드헌팅 파트너팀이 아직 없어 `cold-email-team`의 기업 리스트를
   `job-posting-collector` 데이터로 임시 대체 중 — 매 실행마다 이 사실을
   사람에게 고지하도록 이미 명시되어 있다.

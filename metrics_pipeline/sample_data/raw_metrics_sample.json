@@ -1,0 +1,65 @@
+[
+  {
+    "id": "17895512233440011",
+    "caption": "[채용] 축구단 마케팅 담당자를 찾습니다 ⚽",
+    "timestamp": "2026-07-28T09:00:00+0000",
+    "media_type": "CAROUSEL_ALBUM",
+    "media_product_type": "FEED",
+    "permalink": "https://www.instagram.com/p/sample0011/",
+    "insights": {
+      "reach": 13500,
+      "saved": 380,
+      "shares": 190,
+      "likes": 420,
+      "comments": 12,
+      "total_interactions": 1002,
+      "profile_activity": 120
+    }
+  },
+  {
+    "id": "17895512233440022",
+    "caption": "[정보] 스포츠 업계 이직 시즌, 지금이 적기인 이유",
+    "timestamp": "2026-07-30T09:00:00+0000",
+    "media_type": "CAROUSEL_ALBUM",
+    "media_product_type": "FEED",
+    "permalink": "https://www.instagram.com/p/sample0022/",
+    "insights": {
+      "reach": 17200,
+      "saved": 890,
+      "shares": 520,
+      "likes": 610,
+      "comments": 28,
+      "total_interactions": 2050
+    }
+  },
+  {
+    "id": "17895512233440033",
+    "caption": "[채용] 배드민턴 협회 실무자 채용 소식",
+    "timestamp": "2026-08-01T09:00:00+0000",
+    "media_type": "CAROUSEL_ALBUM",
+    "media_product_type": "FEED",
+    "permalink": "https://www.instagram.com/p/sample0033/",
+    "insights": {
+      "reach": 45,
+      "saved": 1,
+      "shares": 0,
+      "likes": 5,
+      "comments": 0
+    }
+  },
+  {
+    "id": "17895512233440044",
+    "caption": "[채용] 아직 레지스트리에 등록 안 된 신규 게시물",
+    "timestamp": "2026-08-03T09:00:00+0000",
+    "media_type": "CAROUSEL_ALBUM",
+    "media_product_type": "FEED",
+    "permalink": "https://www.instagram.com/p/sample0044/",
+    "insights": {
+      "reach": 8100,
+      "saved": 140,
+      "shares": 60,
+      "likes": 200,
+      "comments": 4
+    }
+  }
+]

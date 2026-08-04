@@ -59,10 +59,15 @@
   결정하고, (b) 파이프라인이 만든 카피 초안이 실제 공고 데이터·인사이트와
   어긋나지 않는지 재점검하는 역할을 맡는다. 아래 각 에이전트 파일의
   "이 저장소 기준" 절 참고.
-- `metrics-analyzer`가 다루는 "SNS 카드뉴스 성과 데이터"는 아직 이 저장소에
-  수집 파이프라인이 없다(`card_news_pipeline`은 카피 생성·렌더링만 담당,
-  게시 후 성과 추적은 미구현). 콘텐츠 축 인사이트는 실데이터 연결 전까지
-  `low_confidence_flags`로 표시하고 단정적 결론을 내지 않는다. 채용 수요 축은
+- **`metrics_pipeline`**: `metrics-analyzer`가 다루는 "SNS 카드뉴스 성과
+  데이터"를 인스타그램(Meta Graph API)에서 가져와 `data/card_news_metrics.csv`로
+  export하는 파이프라인. `job_pipeline`과 같은 구조(공식 API, 키 없으면
+  자동 sample 폴백)다. 단, Instagram API가 게시물 단위로 신뢰성 있게 주지
+  못하는 값(`profile_visits`, `clicks`, `apply_clicks`, 종종 `impressions`)은
+  추정치로 채우지 않고 빈 값으로 남기도록 설계했다 —
+  `metrics_pipeline/README.md` 참고. `IG_ACCESS_TOKEN`/`IG_BUSINESS_ACCOUNT_ID`
+  발급 전까지는 sample 데이터로 동작하며, `metrics-analyzer`는 이 경우 반드시
+  "실인스타그램 데이터 아님"을 보고에 명시한다. 채용 수요 축은
   `data/dashboard.json`으로 지금 바로 분석 가능하다.
 
 ## 실행 순서 (1~2단계 통합)
