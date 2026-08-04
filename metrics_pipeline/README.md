@@ -87,9 +87,35 @@ cd metrics_pipeline && python -m pytest -q     # 네트워크 불필요 (sample/
 설계 원칙(추정치로 채우지 않기)에 대한 회귀 테스트다 — 이 두 테스트가 깨지면
 스키마를 다시 확인할 것.
 
+## GitHub Actions로 자격증명 연결하기
+
+`.github/workflows/metrics.yml`이 매주 월요일(수동 실행도 가능) 소스 활성
+상태를 출력하고 수집을 시도한다. **토큰/ID는 절대 코드나 채팅에 붙여넣지
+말고 GitHub 저장소 Secrets에만 넣는다.**
+
+1. **IG_BUSINESS_ACCOUNT_ID 확인** — 액세스 토큰이 있다면 본인 컴퓨터(이
+   저장소를 다루는 이 AI 세션 말고)에서 아래처럼 직접 조회한다(토큰이
+   외부로 나가지 않게 로컬에서 실행):
+   ```bash
+   curl "https://graph.facebook.com/v21.0/me/accounts?access_token=<TOKEN>"
+   # → page id 확인 후
+   curl "https://graph.facebook.com/v21.0/<PAGE_ID>?fields=instagram_business_account&access_token=<TOKEN>"
+   ```
+2. **GitHub Settings → Secrets and variables → Actions → Secrets**에
+   `IG_ACCESS_TOKEN`, `IG_BUSINESS_ACCOUNT_ID` 추가.
+3. **Actions 탭 → Collect Card News Metrics → Run workflow**로 수동
+   실행해 "소스 활성 상태 확인" 스텝 로그에 `instagram ✅ 활성`이 뜨는지
+   확인한다. 여기서 인증 오류가 나면 토큰 권한
+   (`instagram_basic`, `instagram_manage_insights`,
+   `pages_read_engagement`, `pages_show_list`)이나 만료 여부를 점검한다.
+4. Graph API Explorer에서 바로 받은 토큰은 보통 **단기(1~2시간) 토큰**이다.
+   매주 자동 실행되게 하려면 장기 토큰(60일) 또는 시스템 사용자 토큰으로
+   교환해 Secret을 갱신해야 한다 — 단기 토큰 그대로 두면 다음 주 실행이
+   조용히 sample로 폴백된다(에러는 나지 않으니 로그를 주기적으로 확인할 것).
+
 ## 다음 단계
 
 - `clicks`/`apply_clicks` 확보를 위한 링크 클릭 트래킹(카드뉴스 CTA에 UTM
   파라미터 또는 bit.ly 단축링크 부여 후 그 클릭 로그 연동) 구축
-- GitHub Actions로 주간 자동 수집(`job_pipeline`의 `deploy.yml`과 동일 패턴)
-  연결 — 인스타그램 토큰이 실제로 발급된 뒤 진행
+- 장기 액세스 토큰으로 교환해 매주 자동 실행이 조용히 sample로 폴백되지
+  않도록 유지
