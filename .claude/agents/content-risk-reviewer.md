@@ -60,12 +60,12 @@ model: sonnet
   "status": "approved | rejected | conditional | blocked",
   "payload": {
     "topic": "심사 대상 주제",
-    "checklist_result": { "copyright": "pass/fail", "privacy": "pass/fail",
-                            "ad_compliance": "pass/fail", "brand_risk": "pass/fail" },
+    "checklist_result": { "copyright": "pass/fail/unclear", "privacy": "pass/fail/unclear",
+                            "ad_compliance": "pass/fail/unclear", "brand_risk": "pass/fail/unclear" },
     "issues": [ /* 발견된 문제 + 근거 조항/사유 */ ],
     "revision_notes": "디자인팀에 전달할 구체적 수정 방향 (해당 시)"
   },
-  "next_team": "사람 승인(게시) | 카드뉴스 디자인팀(반려 시)"
+  "next_team": "사람 승인(게시) [approved] | 카드뉴스 디자인팀(반려/조건부 시) [rejected, conditional] | 사람(컴플라이언스 검토) [blocked]"
 }
 ```
 
