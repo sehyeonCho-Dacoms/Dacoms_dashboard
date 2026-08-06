@@ -23,6 +23,7 @@ GitHub Actions)와 어떻게 통합했는지**를 남기는 것이 목적이다.
 | `docs/testing-checklist.md` | 실제 연동 전 테스트 순서 | `docs/` |
 | `data/target_companies.csv` | 헤드헌팅 파트너팀 임시 CRM 초안 | `data/` |
 | `ops_dashboard/` | 운영 대시보드 — 구글 시트 동기화(`sync_sheet.py`, 설치 없이 URL로 관리) + 로컬 서버(`server.py`) 두 가지 | 루트 |
+| `docs/compliance-ksoc.md` | 대한체육회(ksoc) robots.txt·저작권 정책 검토 기록 | `docs/` |
 
 Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지 확인한다.
 
@@ -76,13 +77,13 @@ Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지
   동기화되며, 사람은 시트에서 직접 편집하고 `cold-email-team`은 실행 전
   `pull`로 최신 상태를 받아온다 — `ops_dashboard/README.md`의 "A. 구글
   시트" 절 참고.
-- `sports.or.kr`(ksoc)의 robots.txt/이용약관 컴플라이언스 문서화는
-  시도했으나, 이 저장소 세션의 네트워크 정책상 해당 도메인에 직접
-  접근이 막혀 있어(curl/WebFetch 모두 403) 원문을 직접 확인하지
-  못했다. 검색 기반 간접 정보(대한체육회 저작권 정책 페이지, 공공저작물
-  자유이용 관련)만 있고 확정 근거로 쓰기엔 부족하다 — 사람이 직접
-  `sports.or.kr/robots.txt`와 저작권 정책 페이지를 확인해 전달하면
-  정식 컴플라이언스 메모를 작성할 수 있다.
+- ~~`sports.or.kr`(ksoc)의 robots.txt/이용약관 컴플라이언스 문서화~~ —
+  **완료.** 이 저장소 세션은 네트워크 정책상 `sports.or.kr`에 직접
+  접근할 수 없어(허용 도메인 목록 밖), 사람이 브라우저로 직접 확인한
+  robots.txt·저작권 정책 원문을 전달받아 검토했다. 결론과 근거는
+  `docs/compliance-ksoc.md` 참고 — 현재 수집 경로(`/sports/` 하위)는
+  robots.txt상 허용되어 있음을 확인. robots.txt는 바뀔 수 있으므로 분기
+  1회 정도 재확인을 권장(문서 하단 확인 이력 표에 날짜 추가).
 - 콘텐츠 게시/콜드메일 발송 실행 도구는 의도적으로 비워둔 상태다. 실제
   SNS 게시 API·이메일 발송 API를 연결할 때는 **오케스트레이터가 사람
   승인 후에만 호출하는 별도 스크립트**로 분리 구현해야 한다(서브에이전트
