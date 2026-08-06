@@ -171,5 +171,11 @@ outputs/<team-slug>/latest.json                          # 최신본(덮어쓰�
 자동화 운영팀, 컴플라이언스팀은 아직 서브에이전트로 구현되지 않았다.
 이 팀들에 대한 요청이 들어오면 "아직 구현되지 않은 팀"이라고 명시하고
 임의로 대신 수행하지 않는다. 특히 헤드헌팅 파트너팀이 아직 없으므로,
-`cold-email-team`의 기업 대상 리스트는 당분간 `job-posting-collector`
+`cold-email-team`의 기업 대상 리스트는 사람이 직접 관리하는
+`data/target_companies.csv`(임시 CRM 초안, `contact_status` 컬럼으로
+검토 상태 추적)를 우선 사용하고, 비어 있으면 `job-posting-collector`
 데이터에서 임시로 대체 추출한다는 점을 사람에게 매번 고지한다.
+`target_companies.csv`의 `source` 컬럼에 "실데이터 아님"이라고 적힌 행은
+아직 job_pipeline sample(오프라인) 데이터 기반 예시 후보일 뿐이므로,
+사람인/워크넷/ksoc 실데이터가 연결된 뒤 실제 기업으로 교체·검증해야
+한다.

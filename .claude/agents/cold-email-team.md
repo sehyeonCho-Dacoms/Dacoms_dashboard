@@ -16,8 +16,18 @@ model: sonnet
 
 ## 입력
 
-- 헤드헌팅 파트너팀의 우선순위 기업 리스트 (구현 전이라면, 임시로
-  `job-posting-collector`의 신규 공고 데이터에서 기업 정보를 대체 활용)
+- **기업 타겟 리스트**: `data/target_companies.csv`를 우선 사용한다 (헤드헌팅
+  파트너팀이 아직 없어 사람이 직접 큐레이션하는 임시 CRM 파일 —
+  `company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes`
+  컬럼). `contact_status`가 "검토 필요"인 행은 아직 사람이 컨택을 확정하지
+  않은 후보이므로, 이 행을 근거로 메일 초안을 만들 수는 있지만 실제
+  컨택은 여전히 "헤드헌팅 파트너 기업에 대한 최초 컨택" 사람 승인 게이트를
+  거쳐야 한다. `source` 컬럼에 "실데이터 아님"이 적힌 행은 아직 job_pipeline
+  sample(오프라인) 데이터에서 뽑은 예시일 뿐 실제 리서치 대상이 아님을
+  메일 초안의 `rationale`에도 반드시 반영한다(실존 기업 정보인 것처럼
+  단정하지 않는다). 이 파일이 비어 있거나 없으면, 이전처럼
+  `job-posting-collector`의 신규 공고 데이터에서 기업 정보를 임시로 대체
+  활용한다.
 - 최신 채용공고 데이터 (기업 대상 메일의 소재)
 - 후보자 소싱팀/매칭팀 산출물 (구현된 경우, 후보자 대상 메일의 소재)
 
