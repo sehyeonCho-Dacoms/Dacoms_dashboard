@@ -16,26 +16,27 @@ model: sonnet
 
 ## 입력
 
-- **기업 타겟 리스트**: 사람이 구글 시트("타겟기업" 탭)에서 직접 관리한다.
-  `data/target_companies.csv`를 읽기 전에, 시트 연동이 설정되어 있으면
+- **기업 타겟 리스트**: `headhunting-partner-team`이 관리하는
+  `data/target_companies.csv`를 사용한다(사람이 구글 시트 "타겟기업" 탭에서
+  최종 검토·상태 변경). 읽기 전에, 시트 연동이 설정되어 있으면
   (`SPREADSHEET_ID` 환경변수 존재) 항상 먼저 최신 상태를 반영해라:
   ```bash
   SPREADSHEET_ID=<값> python3 ops_dashboard/sync_sheet.py pull
   ```
   이 명령 없이 `data/target_companies.csv`를 바로 읽으면, 사람이 시트에서
-  방금 바꾼 컨택 상태를 놓칠 수 있다. pull 후 `data/target_companies.csv`를
-  우선 사용한다 (헤드헌팅
-  파트너팀이 아직 없어 사람이 직접 큐레이션하는 임시 CRM 파일 —
-  `id,company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes`
-  컬럼). `contact_status`가 "검토 필요"인 행은 아직 사람이 컨택을 확정하지
+  방금 바꾼 컨택 상태를 놓칠 수 있다. 컬럼:
+  `id,company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes`.
+  `contact_status`가 "검토 필요"인 행은 아직 사람이 컨택을 확정하지
   않은 후보이므로, 이 행을 근거로 메일 초안을 만들 수는 있지만 실제
   컨택은 여전히 "헤드헌팅 파트너 기업에 대한 최초 컨택" 사람 승인 게이트를
-  거쳐야 한다. `source` 컬럼에 "실데이터 아님"이 적힌 행은 아직 job_pipeline
+  거쳐야 한다. `contact_status`가 "거절" 또는 "보류"인 행은 메일 초안
+  대상에서 제외한다 — 사람이 이미 컨택하지 않기로 정한 기업이다.
+  `source` 컬럼에 "실데이터 아님"이 적힌 행은 아직 job_pipeline
   sample(오프라인) 데이터에서 뽑은 예시일 뿐 실제 리서치 대상이 아님을
   메일 초안의 `rationale`에도 반드시 반영한다(실존 기업 정보인 것처럼
-  단정하지 않는다). 이 파일이 비어 있거나 없으면, 이전처럼
-  `job-posting-collector`의 신규 공고 데이터에서 기업 정보를 임시로 대체
-  활용한다.
+  단정하지 않는다). 이 파일이 비어 있거나 없으면(예: 아직
+  headhunting-partner-team을 한 번도 안 돌린 경우), `job-posting-collector`의
+  신규 공고 데이터에서 기업 정보를 임시로 대체 활용한다.
 - 최신 채용공고 데이터 (기업 대상 메일의 소재)
 - 후보자 소싱팀/매칭팀 산출물 (구현된 경우, 후보자 대상 메일의 소재)
 

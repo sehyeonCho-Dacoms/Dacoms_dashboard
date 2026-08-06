@@ -18,6 +18,9 @@ GitHub Actions)와 어떻게 통합했는지**를 남기는 것이 목적이다.
 | `card-news-designer.md` | 카드뉴스 디자인팀 | `.claude/agents/` |
 | `content-risk-reviewer.md` | 콘텐츠·리스크 심사팀 | `.claude/agents/` |
 | `cold-email-team.md` | 콜드메일팀 | `.claude/agents/` |
+| `headhunting-partner-team.md` | 헤드헌팅 파트너팀 (부분 대체 → 정식 승격) | `.claude/agents/` |
+| `automation-ops-team.md` | 자동화 운영팀 (부분 대체 → 정식 승격) | `.claude/agents/` |
+| `compliance-team.md` | 컴플라이언스팀 (부분 대체 → 정식 승격) | `.claude/agents/` |
 | `test-data/dummy-job-postings.json` | 0단계 테스트용 더미 공고 | 루트 |
 | `test-data/dummy-metrics.csv` | 0단계 테스트용 더미 성과 데이터 | 루트 |
 | `docs/testing-checklist.md` | 실제 연동 전 테스트 순서 | `docs/` |
@@ -25,7 +28,7 @@ GitHub Actions)와 어떻게 통합했는지**를 남기는 것이 목적이다.
 | `ops_dashboard/` | 운영 대시보드 — 구글 시트 동기화(`sync_sheet.py`, 설치 없이 URL로 관리) + 로컬 서버(`server.py`) 두 가지 | 루트 |
 | `docs/compliance-ksoc.md` | 대한체육회(ksoc) robots.txt·저작권 정책 검토 기록 | `docs/` |
 
-Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지 확인한다.
+Claude Code에서 `/agents`로 10개 서브에이전트가 모두 인식되는지 확인한다.
 
 ## 기존 자동화와 통합한 결정
 
@@ -66,17 +69,15 @@ Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지
   운영 절차 정착 필요.
 - `clicks`/`apply_clicks`(지원 전환) 확보를 위한 링크 클릭 트래킹
   (카드뉴스 CTA에 UTM/단축링크 부여) — 아직 미구현.
-- 헤드헌팅 파트너팀이 아직 없다. `data/target_companies.csv`(사람이 직접
-  관리하는 임시 CRM 초안)를 신설했고, `job_pipeline` sample(오프라인)
-  스코어링의 Hot/Warm 리드(스마트스코어·골프존·갤럭시아SM·스포츠투아이)를
-  검토용 후보로 시드해 두었다 — **아직 실데이터가 아니므로 실제 컨택
-  전 반드시 사람이 검증·교체해야 한다.** 사람인/워크넷/ksoc 실데이터
-  연결 후 진짜 리드로 교체하는 것이 다음 순서. 비어 있으면
-  `cold-email-team`은 이전처럼 `job-posting-collector` 데이터로 임시
-  대체한다. 이 CSV는 이제 구글 시트(`ops_dashboard/sync_sheet.py`)와
-  동기화되며, 사람은 시트에서 직접 편집하고 `cold-email-team`은 실행 전
-  `pull`로 최신 상태를 받아온다 — `ops_dashboard/README.md`의 "A. 구글
-  시트" 절 참고.
+- ~~헤드헌팅 파트너팀이 아직 없다~~ — **완료.** `headhunting-partner-team`
+  서브에이전트로 승격했다. `job_pipeline`의 리드 스코어링(Hot/Warm/Nurture)
+  결과에서 `data/target_companies.csv`(구글 시트와 동기화)로 신규 후보를
+  자동 반영하고, 사람이 이미 "거절"/"보류"로 정리한 기업은 되돌리지
+  않는다. 현재 시드된 후보(스마트스코어·골프존·갤럭시아SM·스포츠투아이)는
+  `job_pipeline` sample(오프라인) 기준이라 **아직 실데이터가 아니므로
+  실제 컨택 전 반드시 사람이 검증·교체해야 한다** — 사람인/워크넷/ksoc
+  실데이터 연결 후 진짜 리드로 자연스럽게 교체된다. 시트 연동은
+  `ops_dashboard/README.md`의 "A. 구글 시트" 절 참고.
 - ~~`sports.or.kr`(ksoc)의 robots.txt/이용약관 컴플라이언스 문서화~~ —
   **완료.** 이 저장소 세션은 네트워크 정책상 `sports.or.kr`에 직접
   접근할 수 없어(허용 도메인 목록 밖), 사람이 브라우저로 직접 확인한
@@ -105,7 +106,8 @@ Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지
 
 ## 다음 단계 제안 (3단계, 아직 미구현)
 
-후보자 소싱팀, 매칭팀, 헤드헌팅 파트너팀 서브에이전트 설계, `outputs/`를
-실제 DB로 전환, 자동화 운영팀(예외 처리·품질평가) 에이전트 구축,
-컴플라이언스팀 에이전트(대한체육회 크롤링 적법성·개인정보 처리 기준
-문서화)를 권장한다.
+후보자 소싱팀, 매칭팀, 성과리뷰팀, 재무정산팀 서브에이전트 설계와
+`outputs/`를 실제 DB로 전환하는 것을 권장한다. 헤드헌팅 파트너팀·자동화
+운영팀·컴플라이언스팀은 이미 서브에이전트로 승격되었다(위 참고) — 다만
+`automation-ops-team`의 "프롬프트 버전관리" 기능(각 `.md` 파일 변경 이력
+추적)은 범위 밖으로 남겨뒀으니, 필요해지면 별도로 설계할 것.
