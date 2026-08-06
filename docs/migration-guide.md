@@ -22,7 +22,7 @@ GitHub Actions)와 어떻게 통합했는지**를 남기는 것이 목적이다.
 | `test-data/dummy-metrics.csv` | 0단계 테스트용 더미 성과 데이터 | 루트 |
 | `docs/testing-checklist.md` | 실제 연동 전 테스트 순서 | `docs/` |
 | `data/target_companies.csv` | 헤드헌팅 파트너팀 임시 CRM 초안 | `data/` |
-| `ops_dashboard/` | 운영 통합 대시보드(로컬 전용, 타겟 기업 CRM 편집 가능) | 루트 |
+| `ops_dashboard/` | 운영 대시보드 — 구글 시트 동기화(`sync_sheet.py`, 설치 없이 URL로 관리) + 로컬 서버(`server.py`) 두 가지 | 루트 |
 
 Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지 확인한다.
 
@@ -72,7 +72,10 @@ Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지
   전 반드시 사람이 검증·교체해야 한다.** 사람인/워크넷/ksoc 실데이터
   연결 후 진짜 리드로 교체하는 것이 다음 순서. 비어 있으면
   `cold-email-team`은 이전처럼 `job-posting-collector` 데이터로 임시
-  대체한다.
+  대체한다. 이 CSV는 이제 구글 시트(`ops_dashboard/sync_sheet.py`)와
+  동기화되며, 사람은 시트에서 직접 편집하고 `cold-email-team`은 실행 전
+  `pull`로 최신 상태를 받아온다 — `ops_dashboard/README.md`의 "A. 구글
+  시트" 절 참고.
 - `sports.or.kr`(ksoc)의 robots.txt/이용약관 컴플라이언스 문서화는
   시도했으나, 이 저장소 세션의 네트워크 정책상 해당 도메인에 직접
   접근이 막혀 있어(curl/WebFetch 모두 403) 원문을 직접 확인하지

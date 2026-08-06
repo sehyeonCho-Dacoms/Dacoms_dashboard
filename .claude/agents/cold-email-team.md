@@ -16,7 +16,15 @@ model: sonnet
 
 ## 입력
 
-- **기업 타겟 리스트**: `data/target_companies.csv`를 우선 사용한다 (헤드헌팅
+- **기업 타겟 리스트**: 사람이 구글 시트("타겟기업" 탭)에서 직접 관리한다.
+  `data/target_companies.csv`를 읽기 전에, 시트 연동이 설정되어 있으면
+  (`SPREADSHEET_ID` 환경변수 존재) 항상 먼저 최신 상태를 반영해라:
+  ```bash
+  SPREADSHEET_ID=<값> python3 ops_dashboard/sync_sheet.py pull
+  ```
+  이 명령 없이 `data/target_companies.csv`를 바로 읽으면, 사람이 시트에서
+  방금 바꾼 컨택 상태를 놓칠 수 있다. pull 후 `data/target_companies.csv`를
+  우선 사용한다 (헤드헌팅
   파트너팀이 아직 없어 사람이 직접 큐레이션하는 임시 CRM 파일 —
   `id,company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes`
   컬럼). `contact_status`가 "검토 필요"인 행은 아직 사람이 컨택을 확정하지
