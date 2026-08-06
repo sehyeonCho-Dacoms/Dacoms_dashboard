@@ -18,7 +18,7 @@ model: sonnet
 
 - **기업 타겟 리스트**: `data/target_companies.csv`를 우선 사용한다 (헤드헌팅
   파트너팀이 아직 없어 사람이 직접 큐레이션하는 임시 CRM 파일 —
-  `company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes`
+  `id,company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes`
   컬럼). `contact_status`가 "검토 필요"인 행은 아직 사람이 컨택을 확정하지
   않은 후보이므로, 이 행을 근거로 메일 초안을 만들 수는 있지만 실제
   컨택은 여전히 "헤드헌팅 파트너 기업에 대한 최초 컨택" 사람 승인 게이트를

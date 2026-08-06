@@ -21,6 +21,8 @@ GitHub Actions)와 어떻게 통합했는지**를 남기는 것이 목적이다.
 | `test-data/dummy-job-postings.json` | 0단계 테스트용 더미 공고 | 루트 |
 | `test-data/dummy-metrics.csv` | 0단계 테스트용 더미 성과 데이터 | 루트 |
 | `docs/testing-checklist.md` | 실제 연동 전 테스트 순서 | `docs/` |
+| `data/target_companies.csv` | 헤드헌팅 파트너팀 임시 CRM 초안 | `data/` |
+| `ops_dashboard/` | 운영 통합 대시보드(로컬 전용, 타겟 기업 CRM 편집 가능) | 루트 |
 
 Claude Code에서 `/agents`로 7개 서브에이전트가 모두 인식되는지 확인한다.
 

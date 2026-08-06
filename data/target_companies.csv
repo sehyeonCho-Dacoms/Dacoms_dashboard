@@ -1,5 +1,5 @@
-company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes
-스마트스코어,스포츠테크,Hot,64,3개 직무 동시 채용 — 스케일업 정황,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,담당자 확인 후 컨택 여부 결정,사람인/워크넷/ksoc 실데이터 연결 전까지는 예시 후보일 뿐 확정 타겟 아님
-골프존,스포츠테크,Warm,61,시니어 비중 높음 → 수수료 단가 상승,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,,
-갤럭시아SM,에이전시,Warm,61,시니어 비중 높음 · 헤드헌팅 저경쟁 · 선점 가치 큼,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,,
-스포츠투아이,스포츠테크,Warm,61,시니어 비중 높음 → 수수료 단가 상승,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,,
+id,company,sector,tier,lead_score,rationale,source,contact_status,next_action,notes
+co-001,스마트스코어,스포츠테크,Hot,64,3개 직무 동시 채용 — 스케일업 정황,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,담당자 확인 후 컨택 여부 결정,사람인/워크넷/ksoc 실데이터 연결 전까지는 예시 후보일 뿐 확정 타겟 아님
+co-002,골프존,스포츠테크,Warm,61,시니어 비중 높음 → 수수료 단가 상승,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,,
+co-003,갤럭시아SM,에이전시,Warm,61,시니어 비중 높음 · 헤드헌팅 저경쟁 · 선점 가치 큼,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,,
+co-004,스포츠투아이,스포츠테크,Warm,61,시니어 비중 높음 → 수수료 단가 상승,job_pipeline sample(오프라인) — 실데이터 아님,검토 필요,,

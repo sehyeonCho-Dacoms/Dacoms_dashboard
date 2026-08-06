@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다컴스 운영 대시보드</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { darkMode: 'class' };</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --surface-1:#fcfcfb; --page:#f9f9f7;
+    --ink-1:#0b0b0b; --ink-2:#52514e; --ink-muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+    --accent:#2a78d6;
+  }
+  html.dark{
+    --surface-1:#1a1a19; --page:#0d0d0d;
+    --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-muted:#898781;
+    --grid:#2c2c2a; --axis:#383835;
+  }
+  *{ font-family:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif; }
+  body{ background:var(--page); color:var(--ink-1); }
+  .card{ background:var(--surface-1); border:1px solid rgba(11,11,11,.08); border-radius:14px; }
+  html.dark .card{ border-color:rgba(255,255,255,.10); }
+  .tab-btn{ color:var(--ink-muted); border-bottom:2px solid transparent; }
+  .tab-btn.active{ color:var(--ink-1); border-color:var(--accent); }
+  table{ border-collapse:separate; border-spacing:0; }
+  th{ color:var(--ink-muted); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.02em; text-align:left; padding:8px 10px; border-bottom:1px solid var(--grid); white-space:nowrap; }
+  td{ padding:8px 10px; border-bottom:1px solid var(--grid); font-size:13px; vertical-align:top; }
+  tr:hover td{ background:color-mix(in srgb, var(--accent) 4%, transparent); }
+  .badge{ display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:999px; font-size:11px; font-weight:700; }
+  .dot{ width:7px; height:7px; border-radius:999px; display:inline-block; }
+  .muted{ color:var(--ink-muted); }
+  input.cell, select.cell, textarea.cell{
+    width:100%; background:transparent; border:1px solid transparent; border-radius:6px;
+    padding:4px 6px; font-size:13px; color:var(--ink-1);
+  }
+  input.cell:hover, select.cell:hover, textarea.cell:hover{ border-color:var(--grid); }
+  input.cell:focus, select.cell:focus, textarea.cell:focus{ outline:none; border-color:var(--accent); background:var(--surface-1); }
+  .kpi-num{ font-variant-numeric:tabular-nums; }
+  .empty-state{ padding:48px 20px; text-align:center; color:var(--ink-muted); }
+  .empty-state code{ background:var(--grid); padding:2px 8px; border-radius:6px; font-size:12px; color:var(--ink-1); }
+  pre.json-view{ background:var(--page); border:1px solid var(--grid); border-radius:10px; padding:12px; font-size:11px; overflow:auto; max-height:340px; white-space:pre-wrap; word-break:break-all; }
+  .toast{ position:fixed; bottom:20px; right:20px; padding:10px 16px; border-radius:10px; font-size:13px; font-weight:600; z-index:50; box-shadow:0 6px 20px rgba(0,0,0,.15); opacity:0; transform:translateY(6px); transition:all .2s; pointer-events:none; }
+  .toast.show{ opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body class="min-h-screen">
+
+<header class="sticky top-0 z-30 backdrop-blur border-b" style="background:color-mix(in srgb, var(--page) 85%, transparent); border-color:var(--grid);">
+  <div class="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-white text-sm" style="background:var(--accent);">D</div>
+      <div>
+        <p class="font-bold text-sm leading-none">다컴스 운영 대시보드</p>
+        <p class="text-[11px] mt-1" style="color:var(--ink-muted)">로컬 전용 · 이 컴퓨터의 실제 파일과 직접 연동</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="lastUpdated" class="hidden sm:block text-[11px] px-2.5 py-1 rounded-lg card" style="color:var(--ink-muted)"></span>
+      <button id="refreshBtn" class="text-xs font-semibold px-3 py-1.5 rounded-lg card hover:opacity-80">새로고침</button>
+      <button id="themeToggle" class="w-8 h-8 rounded-lg card flex items-center justify-center hover:opacity-80" title="테마 전환">🌓</button>
+    </div>
+  </div>
+  <nav class="max-w-7xl mx-auto px-5 flex items-center gap-5 -mb-px overflow-x-auto text-sm font-semibold">
+    <button class="tab-btn active py-2.5 whitespace-nowrap" data-tab="jobs">채용 리드</button>
+    <button class="tab-btn py-2.5 whitespace-nowrap" data-tab="targets">타겟 기업 CRM</button>
+    <button class="tab-btn py-2.5 whitespace-nowrap" data-tab="metrics">카드뉴스 성과</button>
+    <button class="tab-btn py-2.5 whitespace-nowrap" data-tab="agents">자동화 실행 현황</button>
+  </nav>
+</header>
+
+<main class="max-w-7xl mx-auto px-5 py-6 space-y-6">
+
+  <!-- ── 채용 리드 ───────────────────────────────────────────── -->
+  <section id="tab-jobs" class="tab-panel space-y-4">
+    <div id="jobsKpis" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+    <div class="card overflow-x-auto">
+      <table class="w-full" id="jobsTable">
+        <thead><tr>
+          <th>기업</th><th>섹터</th><th>티어</th><th>점수</th><th>오픈</th><th>증감</th><th>시니어</th><th>예상 수수료</th><th>시그널</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="jobsEmpty" class="empty-state hidden">
+        아직 채용 리드 데이터가 없습니다.<br>
+        <code>PYTHONPATH=job_pipeline python -m pipeline.cli run</code> 을 먼저 실행하세요.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 타겟 기업 CRM ───────────────────────────────────────── -->
+  <section id="tab-targets" class="tab-panel hidden space-y-4">
+    <div class="flex items-center justify-between">
+      <p class="text-xs" style="color:var(--ink-muted)">
+        이 표는 <code class="px-1.5 py-0.5 rounded" style="background:var(--grid)">data/target_companies.csv</code>를
+        직접 읽고 씁니다 — 편집하면 바로 파일에 저장되고, <code class="px-1.5 py-0.5 rounded" style="background:var(--grid)">cold-email-team</code>
+        서브에이전트가 다음 실행 때 그대로 읽습니다.
+      </p>
+      <button id="addTargetBtn" class="text-xs font-semibold px-3 py-1.5 rounded-lg text-white hover:opacity-90" style="background:var(--accent)">+ 새 기업 추가</button>
+    </div>
+    <div class="card overflow-x-auto">
+      <table class="w-full" id="targetsTable">
+        <thead><tr>
+          <th>기업</th><th>섹터</th><th>티어</th><th>점수</th><th style="min-width:220px">근거</th><th style="min-width:180px">출처</th>
+          <th>컨택 상태</th><th style="min-width:160px">다음 액션</th><th style="min-width:160px">메모</th><th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="targetsEmpty" class="empty-state hidden">
+        아직 타겟 기업이 없습니다. "+ 새 기업 추가"로 시작하세요.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 카드뉴스 성과 ───────────────────────────────────────── -->
+  <section id="tab-metrics" class="tab-panel hidden space-y-4">
+    <div class="card overflow-x-auto">
+      <table class="w-full" id="metricsTable">
+        <thead><tr>
+          <th>게시일</th><th style="min-width:220px">주제</th><th>종목</th><th>포맷</th>
+          <th>노출</th><th>도달</th><th>저장</th><th>공유</th><th>클릭</th><th>프로필유입</th><th>지원클릭</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="metricsEmpty" class="empty-state hidden">
+        아직 카드뉴스 성과 데이터가 없습니다.<br>
+        <code>PYTHONPATH=metrics_pipeline python -m pipeline.cli run</code> 을 먼저 실행하세요.<br>
+        <span class="text-[11px]">빈 칸(—)은 "0"이 아니라 "이 채널이 게시물 단위로 주지 않는 값"입니다 — 추정치로 채우지 않습니다.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 자동화 실행 현황 ─────────────────────────────────────── -->
+  <section id="tab-agents" class="tab-panel hidden space-y-3">
+    <div id="agentsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+  </section>
+
+</main>
+
+<div id="toast" class="toast card"></div>
+
+<!-- 새 기업 추가 모달 -->
+<div id="addModal" class="hidden fixed inset-0 z-40 items-center justify-center" style="background:rgba(0,0,0,.4)">
+  <div class="card w-full max-w-md mx-4 p-5 space-y-3">
+    <p class="font-bold text-sm">새 타겟 기업 추가</p>
+    <div class="grid grid-cols-2 gap-2">
+      <input id="f_company" class="cell border rounded-lg px-2 py-1.5" style="border-color:var(--grid)" placeholder="기업명 *">
+      <input id="f_sector" class="cell border rounded-lg px-2 py-1.5" style="border-color:var(--grid)" placeholder="섹터">
+      <select id="f_tier" class="cell border rounded-lg px-2 py-1.5" style="border-color:var(--grid)">
+        <option>Hot</option><option selected>Warm</option><option>Nurture</option>
+      </select>
+      <input id="f_lead_score" class="cell border rounded-lg px-2 py-1.5" style="border-color:var(--grid)" placeholder="점수(0-100)">
+    </div>
+    <textarea id="f_rationale" class="cell border rounded-lg px-2 py-1.5 w-full" style="border-color:var(--grid)" placeholder="근거 (왜 이 기업인가)" rows="2"></textarea>
+    <input id="f_source" class="cell border rounded-lg px-2 py-1.5 w-full" style="border-color:var(--grid)" placeholder="출처 (예: 사람인 실공고 / 직접 리서치)">
+    <div class="flex justify-end gap-2 pt-1">
+      <button id="cancelAddBtn" class="text-xs font-semibold px-3 py-1.5 rounded-lg card">취소</button>
+      <button id="submitAddBtn" class="text-xs font-semibold px-3 py-1.5 rounded-lg text-white" style="background:var(--accent)">추가</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TIER_COLOR = {'Hot':'var(--critical)','Warm':'var(--warning)','Nurture':'var(--ink-muted)'};
+const STATUS_COLOR = {
+  draft:'var(--ink-muted)', reviewed:'var(--accent)', approved:'var(--good)',
+  rejected:'var(--critical)', conditional:'var(--warning)', blocked:'var(--critical)',
+};
+const CONTACT_STATUSES = ['검토 필요','컨택 예정','컨택중','미팅완료','파트너 확정','보류','거절'];
+const TEAM_LABEL = {
+  'job-posting-collector':'공고 수집팀', 'metrics-analyzer':'지표 분석팀', 'daily-briefing':'비서실',
+  'card-news-planner':'카드뉴스 기획팀', 'card-news-designer':'카드뉴스 디자인팀',
+  'content-risk-reviewer':'콘텐츠·리스크 심사팀', 'cold-email-team':'콜드메일팀',
+};
+
+let STATE = null;
+
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function showToast(msg, ok=true){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.color = ok ? 'var(--good)' : 'var(--critical)';
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+async function loadState(){
+  const res = await fetch('/api/state');
+  STATE = await res.json();
+  document.getElementById('lastUpdated').textContent = '갱신: ' + new Date(STATE.generatedAt).toLocaleString('ko-KR');
+  renderJobs();
+  renderTargets();
+  renderMetrics();
+  renderAgents();
+}
+
+// ── 채용 리드 (읽기 전용) ─────────────────────────────────────
+function renderJobs(){
+  const jobs = STATE.jobs;
+  const kpisEl = document.getElementById('jobsKpis');
+  const tbody = document.querySelector('#jobsTable tbody');
+  const empty = document.getElementById('jobsEmpty');
+  if(!jobs || jobs.__error__){
+    kpisEl.innerHTML = '';
+    tbody.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  const k = jobs.kpis || {};
+  const kpiDefs = [
+    ['수집 공고', k.collected, ''],
+    ['업로드 적합', k.uploadReady, (k.uploadReadyPct!=null? k.uploadReadyPct+'%' : '')],
+    ['Hot 리드', k.hotLeads, '곳'],
+    ['파이프라인 가치', k.pipelineValueLabel ?? k.pipelineValue, ''],
+  ];
+  kpisEl.innerHTML = kpiDefs.map(([label,val,suf]) => `
+    <div class="card p-4">
+      <p class="text-[11px] font-semibold" style="color:var(--ink-muted)">${esc(label)}</p>
+      <p class="text-2xl font-extrabold kpi-num mt-1">${esc(val ?? '—')}<span class="text-xs font-bold opacity-50 ml-1">${esc(suf)}</span></p>
+    </div>`).join('');
+
+  const leads = jobs.leads || [];
+  tbody.innerHTML = leads.map(l => `
+    <tr>
+      <td class="font-semibold">${esc(l.company)}</td>
+      <td class="muted">${esc(l.sector)}</td>
+      <td><span class="badge" style="background:color-mix(in srgb, ${TIER_COLOR[l.tier]||'var(--ink-muted)'} 14%, transparent); color:${TIER_COLOR[l.tier]||'var(--ink-muted)'}"><span class="dot" style="background:${TIER_COLOR[l.tier]||'var(--ink-muted)'}"></span>${esc(l.tier)}</span></td>
+      <td class="kpi-num">${esc(l.score)}</td>
+      <td class="kpi-num">${esc(l.open)}</td>
+      <td class="muted">${esc(l.growth)}</td>
+      <td class="kpi-num">${esc(l.senior)}</td>
+      <td class="kpi-num">₩${esc(l.fee)}만</td>
+      <td class="muted" style="max-width:280px">${esc(l.signal)}</td>
+    </tr>`).join('');
+  if(leads.length===0){
+    tbody.innerHTML = `<tr><td colspan="9" class="muted text-center py-6">리드 데이터가 비어 있습니다.</td></tr>`;
+  }
+}
+
+// ── 타겟 기업 CRM (편집 가능) ─────────────────────────────────
+function targetRowHtml(t){
+  const isSample = (t.source||'').includes('실데이터 아님');
+  return `
+    <tr data-id="${esc(t.id)}">
+      <td>
+        <input class="cell font-semibold" data-field="company" value="${esc(t.company)}">
+        ${isSample ? `<span class="text-[10px] font-bold ml-1 px-1.5 py-0.5 rounded" style="background:color-mix(in srgb, var(--warning) 18%, transparent); color:var(--warning)">샘플</span>` : ''}
+      </td>
+      <td><input class="cell" data-field="sector" value="${esc(t.sector)}"></td>
+      <td>
+        <select class="cell" data-field="tier">
+          ${['Hot','Warm','Nurture'].map(x=>`<option ${t.tier===x?'selected':''}>${x}</option>`).join('')}
+        </select>
+      </td>
+      <td><input class="cell kpi-num" style="width:56px" data-field="lead_score" value="${esc(t.lead_score)}"></td>
+      <td><textarea class="cell" data-field="rationale" rows="2">${esc(t.rationale)}</textarea></td>
+      <td><input class="cell muted" data-field="source" value="${esc(t.source)}"></td>
+      <td>
+        <select class="cell" data-field="contact_status">
+          ${CONTACT_STATUSES.map(x=>`<option ${t.contact_status===x?'selected':''}>${x}</option>`).join('')}
+        </select>
+      </td>
+      <td><input class="cell" data-field="next_action" value="${esc(t.next_action)}"></td>
+      <td><input class="cell" data-field="notes" value="${esc(t.notes)}"></td>
+      <td><button class="delete-btn text-xs px-2 py-1 rounded-lg hover:opacity-80" style="color:var(--critical)" title="삭제">삭제</button></td>
+    </tr>`;
+}
+
+function renderTargets(){
+  const targets = STATE.targets || [];
+  const tbody = document.querySelector('#targetsTable tbody');
+  const empty = document.getElementById('targetsEmpty');
+  tbody.innerHTML = targets.map(targetRowHtml).join('');
+  empty.classList.toggle('hidden', targets.length>0);
+
+  tbody.querySelectorAll('tr').forEach(tr => {
+    const id = tr.dataset.id;
+    tr.querySelectorAll('[data-field]').forEach(el => {
+      const commit = () => updateTarget(id, el.dataset.field, el.value);
+      el.addEventListener('change', commit);
+      if(el.tagName !== 'SELECT') el.addEventListener('blur', commit);
+    });
+    tr.querySelector('.delete-btn').addEventListener('click', () => deleteTarget(id, tr));
+  });
+}
+
+async function updateTarget(id, field, value){
+  try{
+    const res = await fetch(`/api/targets/${encodeURIComponent(id)}`, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({[field]: value}),
+    });
+    if(!res.ok) throw new Error((await res.json()).error || res.statusText);
+    showToast('저장됨');
+  }catch(e){ showToast('저장 실패: '+e.message, false); }
+}
+
+async function deleteTarget(id, tr){
+  if(!confirm('이 기업을 목록에서 삭제할까요? (data/target_companies.csv에서 즉시 삭제됩니다)')) return;
+  try{
+    const res = await fetch(`/api/targets/${encodeURIComponent(id)}`, {method:'DELETE'});
+    if(!res.ok) throw new Error((await res.json()).error || res.statusText);
+    tr.remove();
+    showToast('삭제됨');
+  }catch(e){ showToast('삭제 실패: '+e.message, false); }
+}
+
+document.getElementById('addTargetBtn').onclick = () => {
+  document.getElementById('addModal').classList.remove('hidden');
+  document.getElementById('addModal').classList.add('flex');
+};
+document.getElementById('cancelAddBtn').onclick = () => {
+  document.getElementById('addModal').classList.add('hidden');
+  document.getElementById('addModal').classList.remove('flex');
+};
+document.getElementById('submitAddBtn').onclick = async () => {
+  const body = {
+    company: document.getElementById('f_company').value.trim(),
+    sector: document.getElementById('f_sector').value.trim(),
+    tier: document.getElementById('f_tier').value,
+    lead_score: document.getElementById('f_lead_score').value.trim(),
+    rationale: document.getElementById('f_rationale').value.trim(),
+    source: document.getElementById('f_source').value.trim() || '직접 리서치',
+    contact_status: '검토 필요', next_action: '', notes: '',
+  };
+  if(!body.company){ showToast('기업명은 필수입니다', false); return; }
+  try{
+    const res = await fetch('/api/targets', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+    if(!res.ok) throw new Error((await res.json()).error || res.statusText);
+    document.getElementById('addModal').classList.add('hidden');
+    document.getElementById('addModal').classList.remove('flex');
+    ['f_company','f_sector','f_lead_score','f_rationale','f_source'].forEach(id => document.getElementById(id).value='');
+    await loadState();
+    showToast('추가됨');
+  }catch(e){ showToast('추가 실패: '+e.message, false); }
+};
+
+// ── 카드뉴스 성과 (읽기 전용) ─────────────────────────────────
+function renderMetrics(){
+  const metrics = STATE.metrics;
+  const tbody = document.querySelector('#metricsTable tbody');
+  const empty = document.getElementById('metricsEmpty');
+  if(!metrics){
+    tbody.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  const dash = v => (v===''||v==null) ? '<span class="muted">—</span>' : esc(v);
+  tbody.innerHTML = metrics.map(m => `
+    <tr>
+      <td class="muted">${esc(m.date)}</td>
+      <td>${esc(m.topic) || '<span class="muted">(미등록)</span>'}</td>
+      <td class="muted">${esc(m.sport_category)}</td>
+      <td class="muted">${esc(m.format)}</td>
+      <td class="kpi-num">${dash(m.impressions)}</td>
+      <td class="kpi-num">${dash(m.reach)}</td>
+      <td class="kpi-num">${dash(m.saves)}</td>
+      <td class="kpi-num">${dash(m.shares)}</td>
+      <td class="kpi-num">${dash(m.clicks)}</td>
+      <td class="kpi-num">${dash(m.profile_visits)}</td>
+      <td class="kpi-num">${dash(m.apply_clicks)}</td>
+    </tr>`).join('');
+  if(metrics.length===0){
+    tbody.innerHTML = `<tr><td colspan="11" class="muted text-center py-6">수집된 게시물이 없습니다.</td></tr>`;
+  }
+}
+
+// ── 자동화 실행 현황 (읽기 전용) ───────────────────────────────
+function renderAgents(){
+  const agents = STATE.agents || {};
+  const grid = document.getElementById('agentsGrid');
+  grid.innerHTML = Object.keys(TEAM_LABEL).map(slug => {
+    const out = agents[slug];
+    if(!out){
+      return `<div class="card p-4">
+        <p class="font-bold text-sm">${esc(TEAM_LABEL[slug])}</p>
+        <p class="text-xs muted mt-1">아직 실행 이력 없음</p>
+      </div>`;
+    }
+    const color = STATUS_COLOR[out.status] || 'var(--ink-muted)';
+    const id = 'agent-json-' + slug;
+    return `<div class="card p-4">
+      <div class="flex items-center justify-between">
+        <p class="font-bold text-sm">${esc(TEAM_LABEL[slug])}</p>
+        <span class="badge" style="background:color-mix(in srgb, ${color} 14%, transparent); color:${color}">
+          <span class="dot" style="background:${color}"></span>${esc(out.status||'-')}
+        </span>
+      </div>
+      <p class="text-[11px] muted mt-1">${out.created_at ? new Date(out.created_at).toLocaleString('ko-KR') : ''}</p>
+      ${out.next_team ? `<p class="text-xs mt-2"><span class="muted">next_team</span> → ${esc(out.next_team)}</p>` : ''}
+      <button class="toggle-json text-[11px] font-semibold mt-2" style="color:var(--accent)" data-target="${id}">상세 보기 ▾</button>
+      <pre class="json-view hidden mt-2" id="${id}">${esc(JSON.stringify(out.payload ?? out, null, 2))}</pre>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.toggle-json').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pre = document.getElementById(btn.dataset.target);
+      pre.classList.toggle('hidden');
+      btn.textContent = pre.classList.contains('hidden') ? '상세 보기 ▾' : '접기 ▴';
+    });
+  });
+}
+
+// ── 탭 전환 ────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+  });
+});
+
+// ── 테마/새로고침 ──────────────────────────────────────────
+const root = document.documentElement;
+if (matchMedia('(prefers-color-scheme: dark)').matches) root.classList.add('dark');
+document.getElementById('themeToggle').onclick = () => root.classList.toggle('dark');
+document.getElementById('refreshBtn').onclick = () => loadState();
+
+loadState();
+</script>
+</body>
+</html>
