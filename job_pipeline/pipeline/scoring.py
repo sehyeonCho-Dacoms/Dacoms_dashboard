@@ -60,7 +60,11 @@ def score_job(job: JobPosting) -> JobPosting:
         excl = 12
 
     job.drafton_fit = max(0, min(100, rel + role_pts + excl))
-    job.fit_reasons = reasons[:3]
+    reasons_final = reasons[:3]
+    if not job.verified_company:
+        # 검색 스니펫만으로 회사명을 확정 못한 공고는 근거 목록 맨 앞에 경고를 둔다
+        reasons_final = (["⚠️ 회사명 미확인 — 원문 링크 확인 필요"] + reasons_final)[:3]
+    job.fit_reasons = reasons_final
     return job
 
 
@@ -85,6 +89,9 @@ def build_leads(
     prev_open: {회사명: 직전 수집 공개 공고 수} — 주간 증가폭(weekly_growth) 계산용.
     """
     prev_open = prev_open or {}
+    # 회사명을 확정 못한 공고(검색 스니펫 추정 실패)는 회사 집계에서 제외 —
+    # 잘못된 회사명으로 헤드헌팅 리드가 만들어지는 것을 막는다.
+    jobs = [j for j in jobs if j.verified_company]
     by_company: dict[str, list[JobPosting]] = defaultdict(list)
     for j in jobs:
         by_company[j.company].append(j)

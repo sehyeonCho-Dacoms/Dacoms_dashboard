@@ -15,6 +15,7 @@ from .saramin import SaraminSource
 from .worknet import WorknetSource
 from .wanted import WantedSource
 from .ksoc import KsocSource
+from .gsearch import GoogleSearchSource
 
 _REGISTRY: dict[str, type[Source]] = {
     "sample": SampleSource,
@@ -22,6 +23,7 @@ _REGISTRY: dict[str, type[Source]] = {
     "worknet": WorknetSource,
     "wanted": WantedSource,
     "ksoc": KsocSource,
+    "gsearch": GoogleSearchSource,
 }
 
 

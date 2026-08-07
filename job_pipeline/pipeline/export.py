@@ -63,6 +63,7 @@ def _job_view(j: JobPosting) -> dict:
         "reasons": j.fit_reasons,
         "status": j.status,
         "url": j.url,
+        "verified": j.verified_company,
     }
 
 
@@ -88,11 +89,11 @@ def _build_actions(jobs: list[JobPosting], leads: list[CompanyLead]) -> dict:
         if j.status == "업로드완료" or j.drafton_fit < UPLOAD_FIT_THRESHOLD:
             continue
         supply.append({
-            "pr": "P0" if j.drafton_fit >= 88 else "P1",
+            "pr": "P0" if (j.drafton_fit >= 88 and j.verified_company) else "P1",
             "title": f"{j.company} · {j.title} 업로드",
             "company": f"{_platform_label(j.source)} · 적합도 {j.drafton_fit}",
             "why": " / ".join(j.fit_reasons) or "스포츠 연관 공고 — 인벤토리 확대",
-            "cta": "지금 업로드",
+            "cta": "지금 업로드" if j.verified_company else "원문 확인 후 업로드",
         })
         if len(supply) >= 3:
             break
@@ -163,6 +164,8 @@ def _weekly_series(jobs: list[JobPosting]) -> dict:
 _PLATFORM = {
     "saramin": "사람인", "worknet": "워크넷", "wanted": "원티드",
     "jumpit": "점핏", "jobkorea": "잡코리아", "ksoc": "대한체육회", "sample": "샘플",
+    "gsearch_saramin": "사람인(구글검색)", "gsearch_jobkorea": "잡코리아(구글검색)",
+    "gsearch": "구글검색",
 }
 
 

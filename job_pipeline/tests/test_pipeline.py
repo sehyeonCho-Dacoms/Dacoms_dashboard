@@ -241,3 +241,149 @@ def test_ksoc_scores_prioritize_sports_roles():
     assert jobs["스포츠 마케팅 담당자 채용"].drafton_fit >= 70
     # 일반 행정직도 협회 직접공고라 최소한 검토 대상(중간 점수)
     assert jobs["2026년 대한체육회 일반직 직원 채용 공고"].drafton_fit >= 50
+
+
+# --------------------------------------------------------------------------- #
+# 구글 검색(Custom Search API) 소스 — 순수 파싱/정규화만 (네트워크 불필요)
+# --------------------------------------------------------------------------- #
+from pipeline.sources.gsearch import (
+    GoogleSearchSource,
+    _clean_title,
+    _guess_company,
+    _looks_like_posting,
+)
+
+
+def test_gsearch_needs_credentials_to_enable():
+    # API 키/cx 없으면 자동 skip → sample 로 폴백
+    assert Config(sources=["gsearch"]).enabled_source_keys() == ["sample"]
+    cfg = Config(sources=["gsearch"], google_cse_api_key="k", google_cse_id="cx")
+    assert cfg.enabled_source_keys() == ["gsearch"]
+
+
+@pytest.mark.parametrize("link,expected", [
+    ("https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=12345", True),
+    ("https://www.jobkorea.co.kr/Recruit/GI_Read/98765?Gno=1", True),
+    ("https://www.saramin.co.kr/zf_user/help/notice", False),
+    ("https://www.jobkorea.co.kr/", False),
+])
+def test_looks_like_posting_filters_noise(link, expected):
+    assert _looks_like_posting(link) is expected
+
+
+def test_guess_company_extracts_when_pattern_clear():
+    # "회사명 - 공고제목" 형태: 직무 신호가 있는 쪽이 아닌, 짧은 쪽을 회사명으로
+    company, confident = _guess_company("나이키코리아 - 스포츠 마케팅 매니저 채용")
+    assert confident is True
+    assert company == "나이키코리아"
+
+
+def test_guess_company_gives_up_when_ambiguous():
+    # 구분자가 없거나 양쪽 다 애매하면 확신 없음(False) 처리
+    company, confident = _guess_company("스포츠 산업 채용 트렌드 총정리")
+    assert confident is False
+    assert company is None
+
+
+def test_clean_title_strips_site_suffix():
+    assert _clean_title("스포츠 마케팅 매니저 채용 - 사람인") == "스포츠 마케팅 매니저 채용"
+    assert _clean_title("골프존 채용공고 | 잡코리아") == "골프존 채용공고"
+
+
+def _gsearch_source():
+    return GoogleSearchSource(Config(sources=["gsearch"], google_cse_api_key="k", google_cse_id="cx"))
+
+
+def test_gsearch_normalize_confident_company_is_verified():
+    src = _gsearch_source()
+    raw = {
+        "title": "나이키코리아 - 스포츠 마케팅 매니저 채용",
+        "link": "https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=1",
+        "snippet": "나이키코리아에서 스포츠 마케팅 매니저를 채용합니다.",
+        "_site": "saramin.co.kr",
+    }
+    job = src.normalize(raw)
+    assert job is not None
+    assert job.verified_company is True
+    assert job.company == "나이키코리아"
+    assert job.source == "gsearch_saramin"
+
+
+def test_gsearch_normalize_ambiguous_company_is_unverified():
+    src = _gsearch_source()
+    raw = {
+        "title": "2026 스포츠 업계 채용 동향 리포트",
+        "link": "https://www.jobkorea.co.kr/Recruit/GI_Read/5555?Gno=1",
+        "snippet": "스포츠 업계 채용이 활발합니다.",
+        "_site": "jobkorea.co.kr",
+    }
+    job = src.normalize(raw)
+    assert job is not None
+    assert job.verified_company is False
+    assert job.company == "확인필요(원문 참조)"
+    assert job.source == "gsearch_jobkorea"
+
+
+def test_gsearch_normalize_rejects_non_posting_links():
+    src = _gsearch_source()
+    raw = {"title": "사람인 공지사항", "link": "https://www.saramin.co.kr/zf_user/help/notice",
+           "snippet": "", "_site": "saramin.co.kr"}
+    assert src.normalize(raw) is None
+
+
+def test_gsearch_fetch_respects_daily_query_cap(monkeypatch):
+    import pipeline.sources.gsearch as gsearch_mod
+
+    calls = {"n": 0}
+
+    def fake_get_json(url, params=None, headers=None, timeout=15):
+        calls["n"] += 1
+        return {"items": []}
+
+    monkeypatch.setattr(gsearch_mod._http, "get_json", fake_get_json)
+    cfg = Config(
+        sources=["gsearch"], google_cse_api_key="k", google_cse_id="cx",
+        keywords=["스포츠", "골프", "구단"], google_cse_sites=["saramin.co.kr", "jobkorea.co.kr"],
+        google_cse_daily_cap=3,
+    )
+    GoogleSearchSource(cfg).fetch()
+    # 2사이트 x 3키워드 = 6개 쿼리가 가능하지만 캡(3)에서 멈춰야 함
+    assert calls["n"] == 3
+
+
+# --------------------------------------------------------------------------- #
+# 회사명 미확인(verified_company=False) 공고의 다운스트림 처리
+# --------------------------------------------------------------------------- #
+def test_unverified_company_excluded_from_lead_building():
+    jobs = [
+        JobPosting(source="gsearch_jobkorea", source_id="1", company="확인필요(원문 참조)",
+                   title="스포츠 마케터 채용", verified_company=False, sector="브랜드"),
+        JobPosting(source="ksoc", source_id="2", company="대한체육회",
+                   title="운영 담당자", verified_company=True, sector="협회"),
+    ]
+    leads = build_leads(jobs)
+    companies = {l.company for l in leads}
+    assert "확인필요(원문 참조)" not in companies
+    assert "대한체육회" in companies
+
+
+def test_unverified_company_downgrades_supply_action_cta():
+    # 구단(고독점성) 섹터 + 핵심 직무로 고의로 고득점(>=88)을 만들어, 확신이었다면
+    # P0가 나올 상황에서도 verified_company=False면 P0로 올라가지 않는지 검증.
+    job = JobPosting(source="gsearch_saramin", source_id="1", company="확인필요(원문 참조)",
+                      title="스포츠 마케팅 구단 담당자 채용", role="마케팅", sector="구단",
+                      verified_company=False)
+    score_job(job)
+    assert job.drafton_fit >= 88
+    payload = build_payload([job], [])
+    assert payload["actions"]["supply"], "적합도 임계값을 넘어 supply 액션이 생성돼야 함"
+    action = payload["actions"]["supply"][0]
+    assert action["cta"] == "원문 확인 후 업로드"
+    assert action["pr"] == "P1"  # 미확인 공고는 고득점이어도 P0(지금 업로드)로 올라가지 않음
+
+
+def test_score_job_flags_unverified_company_reason():
+    job = JobPosting(source="gsearch_saramin", source_id="1", company="확인필요(원문 참조)",
+                      title="스포츠 마케팅 담당자", verified_company=False)
+    score_job(job)
+    assert any("회사명 미확인" in r for r in job.fit_reasons)

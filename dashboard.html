@@ -375,7 +375,7 @@ let actions = [
 ];
 
 /* ─────────── 배지 색 ─────────── */
-const platClass = {'원티드':'#2a78d6','사람인':'#1baf7a','잡코리아':'#4a3aa7','점핏':'#eb6834','워크넷':'#eda100','대한체육회':'#008300'};
+const platClass = {'원티드':'#2a78d6','사람인':'#1baf7a','잡코리아':'#4a3aa7','점핏':'#eb6834','워크넷':'#eda100','대한체육회':'#008300','사람인(구글검색)':'#1baf7a','잡코리아(구글검색)':'#4a3aa7'};
 const sizeClass = {'대기업':'#2a78d6','중견기업':'#1baf7a','중소기업':'#eda100','스타트업':'#4a3aa7','공공/협회':'#e87ba4'};
 const statusClass = {'신규':'var(--good)','검토중':'var(--warning)','업로드완료':'var(--ink-muted)'};
 const tierClass = {'Hot':'var(--critical)','Warm':'var(--warning)','Nurture':'var(--ink-muted)'};
@@ -394,7 +394,8 @@ function renderIngest(){
     <tr class="row-hover border-b transition-colors" style="border-color:var(--grid)">
       <td class="px-4 py-3 whitespace-nowrap">${pill(j.platform,platClass[j.platform]||'#898781')}</td>
       <td class="px-4 py-3 font-bold whitespace-nowrap">${j.company}
-        <span class="block text-[11px] font-medium" style="color:var(--ink-muted)">${j.size}</span></td>
+        <span class="block text-[11px] font-medium" style="color:var(--ink-muted)">${j.size}</span>
+        ${j.verified===false ? `<span class="block text-[10px] font-bold" style="color:var(--warning)">⚠ 회사명 확인필요</span>` : ''}</td>
       <td class="px-4 py-3" style="color:var(--ink-2)">${j.title}</td>
       <td class="px-4 py-3 whitespace-nowrap" style="color:var(--ink-2)">${j.role}<span class="block text-[11px]" style="color:var(--ink-muted)">${j.level}</span></td>
       <td class="px-4 py-3 whitespace-nowrap">

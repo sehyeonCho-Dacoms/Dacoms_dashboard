@@ -59,6 +59,8 @@ jobs:
           JOB_KEYWORDS: ${{ vars.JOB_KEYWORDS || '스포츠,피트니스,골프,구단,스포츠마케팅' }}
           SARAMIN_ACCESS_KEY: ${{ secrets.SARAMIN_ACCESS_KEY }}
           WORKNET_AUTH_KEY: ${{ secrets.WORKNET_AUTH_KEY }}
+          GOOGLE_CSE_API_KEY: ${{ secrets.GOOGLE_CSE_API_KEY }}
+          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
         run: PYTHONPATH=job_pipeline python -m pipeline.cli run
 
       - name: 정적 사이트 구성 (_site)
