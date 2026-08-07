@@ -1,0 +1,68 @@
+name: Collect Card News Metrics
+
+# 인스타그램 카드뉴스 성과를 주기 수집해 data/card_news_metrics.csv 를 만든다.
+# job_pipeline의 deploy.yml과 동일한 패턴: 자격증명(Secrets)이 없으면
+# 자동으로 sample 소스로 폴백하므로, 이 워크플로는 항상 성공한다 — 로그의
+# "등록된 소스" 출력으로 실제 인스타그램 자격증명이 인식됐는지 확인한다.
+#
+# 결과 CSV는 커밋하지 않는다(job_pipeline의 dashboard.json과 달리 이 저장소
+# 어디에도 게시하지 않음 — metrics-analyzer 서브에이전트가 필요할 때 직접
+# `pipeline.cli run`을 실행해 최신 데이터를 만든다). 이 워크플로는 주로
+# (1) 인스타그램 자격증명이 실제로 동작하는지 확인하는 스모크 테스트,
+# (2) 스토어 캐시를 유지해 주간 히스토리를 쌓는 용도다.
+
+on:
+  schedule:
+    - cron: "0 22 * * 1"     # 매주 월요일 07:00 KST (UTC 22:00 일요일)
+  workflow_dispatch:            # Actions 탭에서 "Run workflow" 수동 실행(자격증명 확인용)
+  push:
+    branches: [main]
+    paths:
+      - "metrics_pipeline/**"
+      - ".github/workflows/metrics.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r metrics_pipeline/requirements.txt
+
+      # 실행 간 수집 스토어를 유지 → 주간 히스토리 누적(전주 대비 변화율 계산용)
+      - name: 스토어 캐시 복원/저장
+        uses: actions/cache@v4
+        with:
+          path: metrics_pipeline/data
+          key: metricsstore-${{ github.run_id }}
+          restore-keys: |
+            metricsstore-
+
+      - name: 소스 활성 상태 확인
+        env:
+          METRICS_SOURCES: ${{ vars.METRICS_SOURCES || 'instagram' }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_BUSINESS_ACCOUNT_ID: ${{ secrets.IG_BUSINESS_ACCOUNT_ID }}
+        run: PYTHONPATH=metrics_pipeline python -m pipeline.cli sources
+
+      - name: 수집 + export
+        env:
+          METRICS_SOURCES: ${{ vars.METRICS_SOURCES || 'instagram' }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_BUSINESS_ACCOUNT_ID: ${{ secrets.IG_BUSINESS_ACCOUNT_ID }}
+        run: PYTHONPATH=metrics_pipeline python -m pipeline.cli run
+
+      - name: 결과 CSV를 아티팩트로 첨부 (커밋하지 않음 — 확인용)
+        uses: actions/upload-artifact@v4
+        with:
+          name: card-news-metrics
+          path: data/card_news_metrics.csv
+          retention-days: 14

@@ -107,3 +107,39 @@ def render_angle(
         browser.close()
 
     return paths
+
+
+def render_job_posting_card(data: dict, out_path: Path) -> Path:
+    """드래프트온 채용공고 카드(무료형/유료형) 1장을 렌더링한다.
+
+    P.D.A. 5앵글 카드뉴스와 별개의 카드 타입이다 — 실제 운영 중인
+    "채용공고형" 카드 디자인(피그마 레퍼런스 기준, docs는
+    .claude/agents/card-news-designer.md 참고)을 그대로 재현한다.
+
+    data 필드:
+        tier: "free" | "paid"
+        company, job_title, category_tag, deadline
+        dday: free 타입에서만 사용 (예: "D-12")
+        responsibilities, qualifications: list[str]
+        experience, location, employment_type: str
+        company_logo_url, hero_image_url(paid만), cta_text: 선택
+    """
+    from playwright.sync_api import sync_playwright
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    template = _env().get_template("job_posting_card.html")
+    html = template.render(**data)
+
+    with sync_playwright() as p:
+        launch_kwargs: dict = {"args": ["--no-sandbox"]}
+        exe = os.getenv("PLAYWRIGHT_CHROMIUM_EXECUTABLE") or "/opt/pw-browsers/chromium"
+        if Path(exe).exists():
+            launch_kwargs["executable_path"] = exe
+        browser = p.chromium.launch(**launch_kwargs)
+        page = browser.new_page(viewport={"width": 1080, "height": 1350}, device_scale_factor=2)
+        page.set_content(html, wait_until="load")
+        page.wait_for_timeout(150)
+        page.screenshot(path=str(out_path))
+        browser.close()
+
+    return out_path

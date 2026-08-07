@@ -1,0 +1,4 @@
+# server.py(로컬 대시보드)는 표준 라이브러리만 사용 — 여기 의존성은 sync_sheet.py 전용.
+gspread>=6.0
+google-auth>=2.30
+python-dotenv>=1.0
