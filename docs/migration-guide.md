@@ -44,6 +44,14 @@ Claude Code에서 `/agents`로 10개 서브에이전트가 모두 인식되는�
   입력할지"를 결정하는 역할로, `card-news-designer`는 파이프라인이 만든
   초안을 사실 검증·과장 표현 순화하는 역할로 좁혔다(각 에이전트 파일의
   "이 저장소 기준" 절 참고).
+- **채용공고형 카드 실제 템플릿을 피그마 레퍼런스로 재현했다(2026-08-07).**
+  Figma MCP로 "드래프트온 공고 포스트" 파일(무료형/유료형)의 정확한 색상
+  (`#edf3f9`/`#6fc4ff`/`#6e8098`/`#0b1523`)·폰트 크기·레이아웃을 추출해
+  `card_news_pipeline/pipeline/templates/job_posting_card.html` +
+  `renderer.py`의 `render_job_posting_card()`로 구현했다. P.D.A. 5앵글과는
+  별개의 카드 1장짜리 포맷이다 — `card-news-designer.md`의 "채용공고형
+  카드" 절 참고. 회사 로고·유료형 히어로 이미지 에셋은 Figma에서
+  다운로드가 막혀(네트워크 정책) 플레이스홀더로 대체했다.
 - **산출물 저장 규칙을 `outputs/<team-slug>/`로 통일**하고 `.gitignore`
   처리했다(설계안 원본의 `outputs/` 컨벤션을 그대로 채택). 실행할 때마다
   쌓이는 결과물이라 git 이력에 남기지 않는다 — 이전 시도에서 썼던
