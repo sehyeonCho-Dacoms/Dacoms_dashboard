@@ -215,7 +215,25 @@ function Show-CredentialInputForm {
 
 function Get-SanitizedGraphErrorMessage {
     param([Parameter(Mandatory)]$ErrorRecord)
-    $message = $ErrorRecord.Exception.Message
+
+    # PowerShell은 HTTP 오류 응답 본문(Instagram이 실제로 보낸 JSON 에러 메시지)을
+    # $ErrorRecord.ErrorDetails.Message에 담아둡니다. 이게 있으면 "(400) 잘못된 요청"
+    # 같은 뭉뚱그린 메시지 대신 실제 원인(예: 유효하지 않은 토큰, 만료된 코드 등)을 보여줍니다.
+    $detail = $ErrorRecord.ErrorDetails.Message
+    if (-not [string]::IsNullOrWhiteSpace($detail)) {
+        try {
+            $parsed = $detail | ConvertFrom-Json -ErrorAction Stop
+            if ($parsed.error) {
+                $detail = '{0} (code={1}, type={2})' -f $parsed.error.message, $parsed.error.code, $parsed.error.type
+            }
+        } catch {
+            # JSON이 아니면 원문 그대로 사용
+        }
+        $message = $detail
+    } else {
+        $message = $ErrorRecord.Exception.Message
+    }
+
     $message = $message -replace '(access_token=)[^&\s"]+', '$1***REDACTED***'
     $message = $message -replace '(client_secret=)[^&\s"]+', '$1***REDACTED***'
     return "Instagram Graph API 호출 실패: $message"
