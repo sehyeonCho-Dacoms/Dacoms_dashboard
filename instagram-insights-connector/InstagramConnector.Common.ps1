@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Instagram Insights Windows Connector가 공유하는 함수 모음.
 .DESCRIPTION

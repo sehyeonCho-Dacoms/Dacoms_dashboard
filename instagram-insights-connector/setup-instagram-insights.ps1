@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Instagram Insights Windows Connector - 초기 설정 (재사용 가능).
 .DESCRIPTION
