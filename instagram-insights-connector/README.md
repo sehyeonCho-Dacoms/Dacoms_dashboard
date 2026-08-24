@@ -83,6 +83,25 @@ Unregister-ScheduledTask -TaskName 'InstagramCodexConnector-TokenRenew' -Confirm
 Remove-Item "$env:LOCALAPPDATA\InstagramCodexConnector" -Recurse -Force
 ```
 
+## 웹 대시보드(`dashboard.html`) 연동
+
+`collect-instagram-insights.ps1`을 이 저장소 안에서 실행하면(`instagram-insights-connector`
+폴더가 리포 루트의 형제 폴더인 경우), `%USERPROFILE%\Documents\InstagramInsights\`뿐 아니라
+리포 루트의 `data/instagram.json`도 함께 갱신합니다. 이 파일에는 계정명·게시물 수·조회수·도달·
+저장·공유 등 **수치 데이터만** 담기며, 토큰이나 앱 시크릿은 어떤 경우에도 포함되지 않습니다.
+
+`dashboard.html`의 "인스타그램" 탭은 이 `data/instagram.json`을 불러와 표시합니다. 최신 수치를
+실제 라이브 대시보드(GitHub Pages)에 반영하려면:
+
+```powershell
+git add data/instagram.json
+git commit -m "Instagram 인사이트 갱신"
+git push
+```
+
+커밋을 main 브랜치에 푸시하면 `deploy.yml`이 자동으로 사이트를 다시 빌드해 배포합니다. 이 파일을
+커밋하지 않으면 대시보드는 예시(Mock) 데이터를 계속 표시합니다.
+
 ## 문제 해결
 
 - **`instagram_business_basic` / `instagram_business_manage_insights` 누락**: Meta 개발자
