@@ -593,6 +593,12 @@ function baseOpts(){
 function gridScale(){const c=P();return {grid:{color:c.grid},ticks:{color:c.muted,font:{size:11,family:'Pretendard'}},border:{display:false}};}
 
 function buildCharts(){
+  // 차트 그리기(Chart.js CDN 로드 실패 등)가 실패해도 탭 전환 등 나머지 UI는
+  // 계속 동작해야 하므로, 여기서 예외를 삼키고 콘솔에만 남긴다.
+  try{ buildChartsInner(); }
+  catch(e){ console.error('buildCharts 실패:', e); }
+}
+function buildChartsInner(){
   charts.forEach(ch=>ch.destroy()); charts=[];
   const c=P();
 
