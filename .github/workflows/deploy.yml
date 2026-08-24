@@ -16,6 +16,7 @@ on:
     paths:
       - "dashboard.html"
       - "job_pipeline/**"
+      - "data/instagram.json"
       - ".github/workflows/deploy.yml"
 
 # Pages 배포에 필요한 권한
