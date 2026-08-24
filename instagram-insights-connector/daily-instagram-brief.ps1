@@ -21,6 +21,7 @@
 [CmdletBinding()]
 param(
     [int]$MediaCount = 5,
+    [int]$WeeklyMediaCount = 25,
     [string]$OutputDir = (Join-Path $env:USERPROFILE 'Documents\InstagramInsights')
 )
 
@@ -44,9 +45,13 @@ try {
     $token = Get-DecryptedAccessToken -Config $config
 
     Write-Host '프로필 및 최근 콘텐츠 정보 가져오는 중...' -ForegroundColor Cyan
-    $snapshot = Get-InstagramInsightsSnapshot -AccessToken $token -MediaCount $MediaCount
+    # 대시보드의 "저장률 공통점 분석"/"이번 주 TOP3"는 최근 5개보다 더 넓은 표본이 필요하므로,
+    # 한 번에 더 많이 가져와서 브리프 본문은 그중 최근 5개만, 대시보드는 전체를 사용합니다.
+    $fetchCount = [Math]::Max($MediaCount, $WeeklyMediaCount)
+    $snapshot = Get-InstagramInsightsSnapshot -AccessToken $token -MediaCount $fetchCount
     $igProfile = $snapshot.Profile
-    $mediaResults = $snapshot.Media
+    $weeklyMediaResults = $snapshot.Media
+    $mediaResults = @($weeklyMediaResults | Select-Object -First $MediaCount)
 
     $today = (Get-Date).ToString('yyyy-MM-dd')
     $followers = 0
@@ -101,8 +106,9 @@ try {
             mediaCount     = $igProfile.media_count
             followersCount = $followers
         }
-        media = $mediaResults
-        brief = $brief
+        media       = $mediaResults
+        weeklyMedia = $weeklyMediaResults
+        brief       = $brief
     }
 
     if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }

@@ -362,6 +362,23 @@
     </div>
   </div>
 
+  <div class="mb-4">
+    <h3 class="text-[15px] font-bold">이번 주 분석</h3>
+    <p class="text-xs" style="color:var(--ink-muted)">최근 게시물 표본을 기반으로 자동 계산 · <span id="igAnalysisSampleNote">-</span></p>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
+    <div class="card rounded-2xl p-5 lg:col-span-3">
+      <h3 class="text-[15px] font-bold">🏆 이번 주 성과 TOP3</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">종합 점수 = 조회수 + 도달 + (저장+공유)×10</p>
+      <div id="igTop3List" class="space-y-3"></div>
+    </div>
+    <div class="card rounded-2xl p-5 lg:col-span-2">
+      <h3 class="text-[15px] font-bold">💡 저장률 높은 콘텐츠 공통점</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">저장률 = 저장 수 ÷ 도달 수</p>
+      <ul id="igSaveRateInsights" class="space-y-2.5 text-[13px]" style="color:var(--ink-2)"></ul>
+    </div>
+  </div>
+
   <div class="card rounded-2xl overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -454,6 +471,7 @@ let actions = [
 ];
 
 /* ─────────── 인스타그램 데이터 (기본값 = Mock, 라이브 로드 시 교체) ─────────── */
+const igDaysAgo = (n)=> new Date(Date.now() - n*86400000).toISOString();
 let igData = {
   generatedAt: null,
   account: { username: 'drafton.co.kr', id: '0', accountType: 'BUSINESS', mediaCount: 128, followersCount: null },
@@ -463,6 +481,15 @@ let igData = {
     {id:'3', caption:'이번 주 인기 채용공고 TOP5', mediaType:'IMAGE',          permalink:'#', timestamp:'2026-08-14T09:00:00+0000', views:3100, reach:2600, saved:65,  shares:19},
     {id:'4', caption:'스포츠 산업 트렌드 요약',    mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:'2026-08-11T09:00:00+0000', views:4600, reach:3800, saved:98,  shares:27},
     {id:'5', caption:'구단 채용 인터뷰 릴스',      mediaType:'VIDEO',          permalink:'#', timestamp:'2026-08-08T09:00:00+0000', views:11200,reach:9400, saved:305, shares:88},
+  ],
+  weeklyMedia: [
+    {id:'w1', caption:'스포츠 채용 소식 카드뉴스 #채용 #스포츠',   mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(1), views:5200, reach:4100, saved:120, shares:38},
+    {id:'w2', caption:'헤드헌팅 인사이트 릴스 #커리어',            mediaType:'VIDEO',          permalink:'#', timestamp:igDaysAgo(2), views:8900, reach:7200, saved:210, shares:64},
+    {id:'w3', caption:'이번 주 인기 채용공고 TOP5 #채용공고',      mediaType:'IMAGE',          permalink:'#', timestamp:igDaysAgo(3), views:3100, reach:2600, saved:65,  shares:19},
+    {id:'w4', caption:'스포츠 산업 트렌드 요약 카드뉴스 #스포츠',  mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(4), views:4600, reach:3800, saved:280, shares:27},
+    {id:'w5', caption:'구단 채용 인터뷰 릴스 #커리어 #인터뷰',     mediaType:'VIDEO',          permalink:'#', timestamp:igDaysAgo(5), views:11200,reach:9400, saved:305, shares:88},
+    {id:'w6', caption:'연봉 협상 꿀팁 카드뉴스 #커리어 #채용',     mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(6), views:6100, reach:5000, saved:410, shares:52},
+    {id:'w7', caption:'주말 채용 공고 모음 #채용공고',             mediaType:'IMAGE',          permalink:'#', timestamp:igDaysAgo(9), views:2200, reach:1900, saved:30,  shares:8},
   ],
   brief: null
 };
@@ -509,6 +536,83 @@ function renderInstagram(){
   setText('igUpdatedNote', igData.generatedAt
     ? `데이터 생성: ${igData.generatedAt.replace('T',' ').slice(0,16)} · collect-instagram-insights.ps1 수집 결과`
     : '데이터는 예시(Mock)입니다 · collect-instagram-insights.ps1 실행 후 data/instagram.json을 커밋하면 실데이터로 교체됩니다.');
+
+  renderInstagramAnalysis();
+}
+
+/* ─────────── 인스타그램: 이번 주 TOP3 · 저장률 공통점 분석 ─────────── */
+function igScore(m){
+  const views=Number(m.views)||0, reach=Number(m.reach)||0, saved=Number(m.saved)||0, shares=Number(m.shares)||0;
+  return views + reach + (saved+shares)*10;
+}
+function igSaveRate(m){
+  const reach=Number(m.reach)||0, saved=Number(m.saved)||0;
+  return reach>0 ? saved/reach : 0;
+}
+function igHashtags(caption){
+  if(!caption) return [];
+  return (caption.match(/#[\p{L}\p{N}_]+/gu) || []).map(h=>h.toLowerCase());
+}
+const igDayNames = ['일','월','화','수','목','금','토'];
+
+function renderInstagramAnalysis(){
+  const pool = (igData.weeklyMedia && igData.weeklyMedia.length) ? igData.weeklyMedia : (igData.media || []);
+  const now = Date.now(), weekMs = 7*86400000;
+  let weekly = pool.filter(m=>{ const t=Date.parse(m.timestamp); return !isNaN(t) && (now-t)>=0 && (now-t)<=weekMs; });
+  let usedFallback = false;
+  if (weekly.length < 3) { weekly = pool.slice(); usedFallback = true; }
+
+  setText('igAnalysisSampleNote', weekly.length===0 ? '분석할 게시물 없음'
+    : usedFallback ? `이번 주 게시물이 부족해 최근 게시물 ${weekly.length}개 기준으로 분석`
+    : `이번 주 게시물 ${weekly.length}개 기준`);
+
+  const medal = ['🥇','🥈','🥉'];
+  const ranked = weekly.map(m=>({...m, _score: igScore(m)})).sort((a,b)=>b._score-a._score).slice(0,3);
+  document.getElementById('igTop3List').innerHTML = ranked.map((m,i)=>{
+    let d = m.timestamp;
+    try{ d = new Date(m.timestamp).toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'}); }catch(e){}
+    return `<div class="flex items-start gap-3 p-3 rounded-xl" style="background:color-mix(in srgb,var(--ink-muted) 6%,transparent)">
+      <div class="text-2xl leading-none">${medal[i]||'🏅'}</div>
+      <div class="flex-1 min-w-0">
+        <p class="text-[13px] font-bold truncate">${(m.caption||'(캡션 없음)').slice(0,50)}</p>
+        <p class="text-[11px] mt-0.5" style="color:var(--ink-muted)">${d} · ${igTypeLabel[m.mediaType]||m.mediaType||'-'} · 종합점수 ${Math.round(m._score).toLocaleString()}</p>
+        <div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5 text-[11px] font-semibold" style="color:var(--ink-2)">
+          <span>조회 ${(m.views??0).toLocaleString()}</span><span>도달 ${(m.reach??0).toLocaleString()}</span><span>저장 ${(m.saved??0).toLocaleString()}</span><span>공유 ${(m.shares??0).toLocaleString()}</span>
+        </div>
+      </div>
+      <a href="${m.permalink}" target="_blank" rel="noopener" class="text-xs font-bold shrink-0" style="color:#2a78d6">열기 ↗</a>
+    </div>`;
+  }).join('') || `<p class="text-sm py-6 text-center" style="color:var(--ink-muted)">분석할 게시물이 없습니다.</p>`;
+
+  const withRate = weekly.map(m=>({...m, _saveRate: igSaveRate(m)}));
+  const insights = [];
+  if (withRate.length < 3) {
+    insights.push('표본이 적어(3개 미만) 신뢰도 높은 공통점 분석이 어렵습니다. 콘텐츠가 더 쌓이면 다시 확인해 주세요.');
+  } else {
+    const avgRate = withRate.reduce((s,m)=>s+m._saveRate,0)/withRate.length;
+    const topN = Math.max(1, Math.min(5, Math.ceil(withRate.length/3)));
+    const topGroup = withRate.slice().sort((a,b)=>b._saveRate-a._saveRate).slice(0, topN);
+    const topGroupAvgRate = topGroup.reduce((s,m)=>s+m._saveRate,0)/topGroup.length;
+
+    const typeCounts = {};
+    topGroup.forEach(m=>{ const k=igTypeLabel[m.mediaType]||m.mediaType||'기타'; typeCounts[k]=(typeCounts[k]||0)+1; });
+    const topType = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1])[0];
+    if (topType) insights.push(`저장률 상위 ${topGroup.length}개 중 <b>${topType[1]}개(${Math.round(topType[1]/topGroup.length*100)}%)</b>가 <b>${topType[0]}</b> 형식입니다.`);
+
+    const tagCounts = {};
+    topGroup.forEach(m=> igHashtags(m.caption).forEach(t=> tagCounts[t]=(tagCounts[t]||0)+1));
+    const topTags = Object.entries(tagCounts).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
+    if (topTags.length) insights.push(`자주 등장한 해시태그: <b>${topTags.join(', ')}</b>`);
+
+    insights.push(`저장률 상위 게시물 평균 <b>${(topGroupAvgRate*100).toFixed(1)}%</b> vs 전체 평균 <b>${(avgRate*100).toFixed(1)}%</b>`);
+
+    const dowCounts = {};
+    topGroup.forEach(m=>{ try{ const d=igDayNames[new Date(m.timestamp).getDay()]; dowCounts[d]=(dowCounts[d]||0)+1; }catch(e){} });
+    const topDow = Object.entries(dowCounts).sort((a,b)=>b[1]-a[1])[0];
+    if (topDow) insights.push(`주로 <b>${topDow[0]}요일</b>에 게시된 콘텐츠입니다.`);
+  }
+  document.getElementById('igSaveRateInsights').innerHTML = insights.map(t=>`<li class="flex gap-2"><span style="color:#e87ba4">●</span><span>${t}</span></li>`).join('')
+    || `<li class="text-sm" style="color:var(--ink-muted)">분석할 데이터가 없습니다.</li>`;
 }
 renderInstagram();
 
@@ -778,7 +882,7 @@ function applyLiveData(d){
 // 파일이 없으면(아직 실행 전) 조용히 목업을 유지한다.
 function applyInstagramData(d){
   if(!d || !d.account) return;
-  igData = { generatedAt: d.generatedAt || null, account: d.account, media: Array.isArray(d.media) ? d.media : [], brief: d.brief || null };
+  igData = { generatedAt: d.generatedAt || null, account: d.account, media: Array.isArray(d.media) ? d.media : [], weeklyMedia: Array.isArray(d.weeklyMedia) ? d.weeklyMedia : [], brief: d.brief || null };
   renderInstagram();
   buildCharts();
 }
