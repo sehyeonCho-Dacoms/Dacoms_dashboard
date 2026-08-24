@@ -224,7 +224,7 @@ function Get-SanitizedGraphErrorMessage {
         try {
             $parsed = $detail | ConvertFrom-Json -ErrorAction Stop
             if ($parsed.error) {
-                $detail = '{0} (code={1}, type={2})' -f $parsed.error.message, $parsed.error.code, $parsed.error.type
+                $detail = '{0} (code={1}, subcode={2}, type={3})' -f $parsed.error.message, $parsed.error.code, $parsed.error.error_subcode, $parsed.error.type
             }
         } catch {
             # JSON이 아니면 원문 그대로 사용
@@ -272,6 +272,25 @@ function Invoke-InstagramTokenRefresh {
     return Invoke-InstagramGraphGet -Path 'refresh_access_token' -QueryParams @{
         grant_type   = 'ig_refresh_token'
         access_token = $LongLivedToken
+    }
+}
+
+function Get-InstagramLongLivedToken {
+    <#
+        Meta의 "API setup with Instagram login" 대시보드 화면에서 발급받은 토큰은
+        이미 장기 토큰인 경우가 있어, 단기 토큰 전용인 ig_exchange_token 교환이
+        "Session key invalid (code=452)"로 거부될 수 있습니다. 이 경우 입력된 토큰이
+        이미 장기 토큰이라고 가정하고 ig_refresh_token으로 유효성과 만료일을 확인합니다.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$InputToken,
+        [Parameter(Mandatory)][string]$AppSecret
+    )
+    try {
+        return Invoke-InstagramTokenExchange -ShortLivedToken $InputToken -AppSecret $AppSecret
+    } catch {
+        Write-Host '단기 토큰 교환이 거부되었습니다. 입력된 토큰이 이미 장기 토큰인 경우를 가정하고 갱신을 시도합니다...' -ForegroundColor Yellow
+        return Invoke-InstagramTokenRefresh -LongLivedToken $InputToken
     }
 }
 

@@ -38,7 +38,7 @@ $taskRegistered = $false
 
 try {
     Write-Host '장기 액세스 토큰으로 교환 중...' -ForegroundColor Cyan
-    $exchange = Invoke-InstagramTokenExchange -ShortLivedToken $creds.AccessToken -AppSecret $creds.AppSecret
+    $exchange = Get-InstagramLongLivedToken -InputToken $creds.AccessToken -AppSecret $creds.AppSecret
     $longLivedToken = $exchange.access_token
     $expiresAt = New-ExpiryTimestamp -ExpiresInSeconds $exchange.expires_in
 
