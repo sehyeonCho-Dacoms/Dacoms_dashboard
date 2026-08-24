@@ -97,18 +97,58 @@ try {
         topPost        = if ($topPost) { [ordered]@{ caption = $topCaption; views = (& $numOrZero $topPost.views); permalink = $topPost.permalink } } else { $null }
     }
 
+    $repoDataDir = Get-InstagramRepoDataDir
+    $prevDashboardData = if ($repoDataDir) { Get-InstagramDashboardData -RepoDataDir $repoDataDir } else { $null }
+
+    # 팔로워 이력(최근 60일) 누적 - 대시보드의 "팔로워 증가 & 콘텐츠 발행" 그래프에 사용합니다.
+    $followerHistory = @()
+    if ($prevDashboardData -and $prevDashboardData.followerHistory) {
+        $followerHistory = @($prevDashboardData.followerHistory | Where-Object { $_.date -ne $today })
+    }
+    $followerHistory += [ordered]@{ date = $today; followers = $followers }
+    $followerHistory = @($followerHistory | Sort-Object date)
+    if ($followerHistory.Count -gt 60) { $followerHistory = @($followerHistory | Select-Object -Last 60) }
+
+    # 어제 대비 조회수 급상승 콘텐츠 감지 - 직전 실행의 weeklyMedia와 같은 게시물 ID를 비교합니다.
+    # (게시 빈도가 높으면 하루 이틀 지난 게시물만 비교 가능할 수 있습니다.)
+    $surging = @()
+    if ($prevDashboardData -and $prevDashboardData.weeklyMedia) {
+        $prevViewsById = @{}
+        foreach ($pm in $prevDashboardData.weeklyMedia) { $prevViewsById[$pm.id] = & $numOrZero $pm.views }
+        foreach ($m in $weeklyMediaResults) {
+            if (-not $prevViewsById.ContainsKey($m.id)) { continue }
+            $prevViews = $prevViewsById[$m.id]
+            $curViews = & $numOrZero $m.views
+            $delta = $curViews - $prevViews
+            if ($prevViews -le 0 -or $delta -le 0) { continue }
+            $deltaPct = [math]::Round(($delta / $prevViews) * 100, 1)
+            if ($deltaPct -lt 30 -and $delta -lt 1000) { continue }
+            $caption = ''
+            if ($m.caption) { $caption = ($m.caption -replace '\s+', ' ').Trim() }
+            if ($caption.Length -gt 50) { $caption = $caption.Substring(0, 50) + '…' }
+            $surging += [ordered]@{
+                id = $m.id; caption = $caption
+                viewsYesterday = $prevViews; viewsToday = $curViews
+                delta = $delta; deltaPct = $deltaPct; permalink = $m.permalink
+            }
+        }
+        $surging = @($surging | Sort-Object { $_.delta } -Descending | Select-Object -First 5)
+    }
+
     $report = [ordered]@{
-        generatedAt = (Get-Date).ToUniversalTime().ToString('o')
-        account     = [ordered]@{
+        generatedAt     = (Get-Date).ToUniversalTime().ToString('o')
+        account         = [ordered]@{
             username       = $igProfile.username
             id             = $igProfile.id
             accountType    = $igProfile.account_type
             mediaCount     = $igProfile.media_count
             followersCount = $followers
         }
-        media       = $mediaResults
-        weeklyMedia = $weeklyMediaResults
-        brief       = $brief
+        media           = $mediaResults
+        weeklyMedia     = $weeklyMediaResults
+        brief           = $brief
+        followerHistory = $followerHistory
+        surging         = $surging
     }
 
     if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }
@@ -148,10 +188,10 @@ try {
     # 이 저장소 클론 안에서 실행 중일 때만 동작하며, 토큰/시크릿은 절대 포함되지 않습니다.
     $pushed = $false
     $repoRoot = $null
-    $repoDataDir = Join-Path $PSScriptRoot '..\data'
-    if (Test-Path $repoDataDir) {
-        $repoInstagramJson = Join-Path $repoDataDir 'instagram.json'
-        $report | ConvertTo-Json -Depth 6 | Set-Content -Path $repoInstagramJson -Encoding UTF8
+    if ($repoDataDir) {
+        Save-InstagramDashboardData -RepoDataDir $repoDataDir `
+            -Account $report.account -Media $mediaResults -WeeklyMedia $weeklyMediaResults `
+            -Brief $brief -FollowerHistory $followerHistory -Surging $surging | Out-Null
 
         $candidateRoot = Join-Path $PSScriptRoot '..'
         if (Test-Path (Join-Path $candidateRoot '.git')) {
@@ -182,6 +222,9 @@ try {
     Write-Host ("팔로워   : {0}명 ({1})" -f $followers, $deltaText)
     Write-Host ("요약     : {0}" -f $summary)
     Write-Host ("로컬 파일: {0}" -f $briefMdPath)
+    if ($surging.Count -gt 0) {
+        Write-Host ("급상승   : {0}건 감지 (어제 대비 조회수 급증)" -f $surging.Count) -ForegroundColor Magenta
+    }
     if ($repoRoot) {
         $dashboardStatus = if ($pushed) { '자동 반영 완료 (git push)' } else { '변경 없음 또는 반영 대기' }
         Write-Host ("대시보드 : {0}" -f $dashboardStatus)

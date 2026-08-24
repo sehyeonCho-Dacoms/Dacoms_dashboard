@@ -432,6 +432,63 @@ function Save-InstagramBriefState {
     $State | ConvertTo-Json | Set-Content -Path $script:BriefStatePath -Encoding UTF8
 }
 
+function Get-InstagramRepoDataDir {
+    <#
+        이 커넥터가 Dacoms_dashboard 저장소 안에서 실행 중이면(리포 루트의 data 폴더가
+        형제 폴더로 존재하면) 그 경로를 반환하고, 아니면 $null을 반환합니다.
+    #>
+    $candidate = Join-Path $PSScriptRoot '..\data'
+    if (Test-Path $candidate) { return $candidate }
+    return $null
+}
+
+function Get-InstagramDashboardData {
+    <#
+        현재 저장소의 data/instagram.json을 읽어옵니다 (없으면 $null).
+        followerHistory/surging처럼 "누적" 성격의 필드를 다음 실행에서
+        이어받기 위해 사용합니다.
+    #>
+    param([Parameter(Mandatory)][string]$RepoDataDir)
+    $path = Join-Path $RepoDataDir 'instagram.json'
+    if (-not (Test-Path $path)) { return $null }
+    try { return Get-Content -Path $path -Raw | ConvertFrom-Json }
+    catch { return $null }
+}
+
+function Save-InstagramDashboardData {
+    <#
+        data/instagram.json을 갱신합니다. Brief/FollowerHistory/Surging을 생략(= $null)하면
+        기존 파일에 있던 값을 그대로 유지합니다 — collect-instagram-insights.ps1처럼
+        해당 값을 계산하지 않는 스크립트가 실행돼도 daily-instagram-brief.ps1이 쌓아온
+        팔로워 이력/급상승 감지 데이터가 지워지지 않도록 하기 위함입니다.
+        토큰/시크릿은 이 파일에 절대 포함되지 않습니다.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$RepoDataDir,
+        [Parameter(Mandatory)]$Account,
+        [Parameter(Mandatory)][array]$Media,
+        [Parameter(Mandatory)][array]$WeeklyMedia,
+        $Brief = $null,
+        $FollowerHistory = $null,
+        $Surging = $null
+    )
+    $prev = Get-InstagramDashboardData -RepoDataDir $RepoDataDir
+
+    $report = [ordered]@{
+        generatedAt     = (Get-Date).ToUniversalTime().ToString('o')
+        account         = $Account
+        media           = $Media
+        weeklyMedia     = $WeeklyMedia
+        brief           = if ($null -ne $Brief) { $Brief } elseif ($prev -and $prev.PSObject.Properties.Name -contains 'brief') { $prev.brief } else { $null }
+        followerHistory = if ($null -ne $FollowerHistory) { $FollowerHistory } elseif ($prev -and $prev.followerHistory) { @($prev.followerHistory) } else { @() }
+        surging         = if ($null -ne $Surging) { $Surging } elseif ($prev -and $prev.surging) { @($prev.surging) } else { @() }
+    }
+
+    $path = Join-Path $RepoDataDir 'instagram.json'
+    $report | ConvertTo-Json -Depth 8 | Set-Content -Path $path -Encoding UTF8
+    return $path
+}
+
 function Register-InstagramScheduledTask {
     <#
         지정한 스크립트를 매일 특정 시각에 조용히(백그라운드) 실행하는

@@ -71,12 +71,14 @@ try {
     # 이 커넥터가 Dacoms_dashboard 저장소 안에서 실행 중이면(리포 루트의 data 폴더가 있으면),
     # 웹 대시보드(dashboard.html)가 읽는 data/instagram.json도 함께 갱신합니다.
     # 토큰/시크릿은 이 파일에 절대 포함되지 않으며, 조회수 등 수치 데이터만 담깁니다.
+    # 이 스크립트는 브리프/팔로워 이력/급상승 감지를 계산하지 않으므로, 기존에
+    # daily-instagram-brief.ps1이 쌓아둔 값은 그대로 유지됩니다.
     # 라이브 대시보드(GitHub Pages)에 반영하려면 이 파일을 git add/commit/push 해야 합니다.
-    $repoDataDir = Join-Path $PSScriptRoot '..\data'
-    if (Test-Path $repoDataDir) {
-        $repoInstagramJson = Join-Path $repoDataDir 'instagram.json'
-        $report | ConvertTo-Json -Depth 6 | Set-Content -Path $repoInstagramJson -Encoding UTF8
-        Write-Host ("대시보드용 데이터 갱신: {0}" -f $repoInstagramJson) -ForegroundColor Cyan
+    $repoDataDir = Get-InstagramRepoDataDir
+    if ($repoDataDir) {
+        $repoPath = Save-InstagramDashboardData -RepoDataDir $repoDataDir `
+            -Account $report.account -Media $mediaResults -WeeklyMedia $weeklyMediaResults
+        Write-Host ("대시보드용 데이터 갱신: {0}" -f $repoPath) -ForegroundColor Cyan
         Write-Host '  (git add/commit/push 하면 라이브 대시보드에도 반영됩니다)' -ForegroundColor DarkGray
     }
 
