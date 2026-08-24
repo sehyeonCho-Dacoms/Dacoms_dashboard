@@ -135,20 +135,30 @@ try {
         $surging = @($surging | Sort-Object { $_.delta } -Descending | Select-Object -First 5)
     }
 
+    # 팔로워 전체의 연령대×성별 인구통계 스냅샷 - 대시보드의 "연령대별/성별 선호도"
+    # 섹션에 사용합니다. 계정 전체 지표라 게시물별 교차분석에는 쓰이지 않습니다.
+    # 조회 실패(팔로워 수 부족 등)는 치명적 오류가 아니므로 이전 값을 그대로 유지합니다.
+    $followerDemographics = Get-InstagramFollowerDemographics -AccessToken $token -IgUserId $igProfile.id
+    if ($null -eq $followerDemographics -and $prevDashboardData -and $prevDashboardData.followerDemographics) {
+        $followerDemographics = @($prevDashboardData.followerDemographics)
+    }
+    if ($null -eq $followerDemographics) { $followerDemographics = @() }
+
     $report = [ordered]@{
-        generatedAt     = (Get-Date).ToUniversalTime().ToString('o')
-        account         = [ordered]@{
+        generatedAt          = (Get-Date).ToUniversalTime().ToString('o')
+        account              = [ordered]@{
             username       = $igProfile.username
             id             = $igProfile.id
             accountType    = $igProfile.account_type
             mediaCount     = $igProfile.media_count
             followersCount = $followers
         }
-        media           = $mediaResults
-        weeklyMedia     = $weeklyMediaResults
-        brief           = $brief
-        followerHistory = $followerHistory
-        surging         = $surging
+        media                = $mediaResults
+        weeklyMedia          = $weeklyMediaResults
+        brief                = $brief
+        followerHistory      = $followerHistory
+        surging              = $surging
+        followerDemographics = $followerDemographics
     }
 
     if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }
@@ -191,7 +201,8 @@ try {
     if ($repoDataDir) {
         Save-InstagramDashboardData -RepoDataDir $repoDataDir `
             -Account $report.account -Media $mediaResults -WeeklyMedia $weeklyMediaResults `
-            -Brief $brief -FollowerHistory $followerHistory -Surging $surging | Out-Null
+            -Brief $brief -FollowerHistory $followerHistory -Surging $surging `
+            -FollowerDemographics $followerDemographics | Out-Null
 
         $candidateRoot = Join-Path $PSScriptRoot '..'
         if (Test-Path (Join-Path $candidateRoot '.git')) {

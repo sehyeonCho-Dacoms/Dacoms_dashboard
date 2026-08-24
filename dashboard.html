@@ -401,6 +401,42 @@
     </div>
   </div>
 
+  <div class="mb-3">
+    <h3 class="text-[13px] font-bold tracking-wide" style="color:var(--ink-muted)">🎯 콘텐츠 성과 분석</h3>
+  </div>
+  <div class="card rounded-2xl p-5 mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-1">
+      <div>
+        <h3 class="text-[15px] font-bold">직무별 인기 순위</h3>
+        <p class="text-xs" style="color:var(--ink-muted)">캡션의 직무 해시태그(#개발, #마케팅 등)로 분류 · 태그가 없으면 캡션 키워드로 추정</p>
+      </div>
+      <select id="igJobSortSelect" class="text-xs font-semibold px-3 py-1.5 rounded-lg card" style="color:var(--ink-2)">
+        <option value="reach">도달수 기준</option>
+        <option value="saved">저장수 기준</option>
+        <option value="engagement">참여율 기준</option>
+      </select>
+    </div>
+    <div id="igJobCategoryList" class="space-y-2 mt-3"></div>
+    <p class="text-[11px] mt-2" style="color:var(--ink-muted)">참여율 = (저장+공유) ÷ 도달</p>
+    <p id="igJobCategoryInsight" class="text-xs mt-4 pt-3 border-t leading-relaxed" style="border-color:var(--grid); color:var(--ink-2)"></p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
+    <div class="card rounded-2xl p-5 lg:col-span-3">
+      <h3 class="text-[15px] font-bold">연령대별 선호도</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">계정 전체 팔로워 인구통계 스냅샷 (특정 게시물과 연결된 수치가 아닙니다)</p>
+      <div class="h-64"><canvas id="igAgeChart"></canvas></div>
+      <p id="igAgeInsight" class="text-xs mt-4 pt-3 border-t leading-relaxed" style="border-color:var(--grid); color:var(--ink-2)"></p>
+    </div>
+    <div class="card rounded-2xl p-5 lg:col-span-2">
+      <h3 class="text-[15px] font-bold">성별별 선호도</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">계정 전체 팔로워 인구통계 스냅샷 · 성별 격차가 큰 연령대</p>
+      <div class="h-40 flex items-center justify-center"><canvas id="igGenderChart"></canvas></div>
+      <div id="igGenderGapList" class="space-y-2 mt-4"></div>
+      <p id="igGenderInsight" class="text-xs mt-4 pt-3 border-t leading-relaxed" style="border-color:var(--grid); color:var(--ink-2)"></p>
+    </div>
+  </div>
+
   <div class="card rounded-2xl overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -505,18 +541,24 @@ let igData = {
     {id:'5', caption:'구단 채용 인터뷰 릴스',      mediaType:'VIDEO',          permalink:'#', timestamp:'2026-08-08T09:00:00+0000', views:11200,reach:9400, saved:305, shares:88},
   ],
   weeklyMedia: [
-    {id:'w1', caption:'스포츠 채용 소식 카드뉴스 #채용 #스포츠',   mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(1), views:5200, reach:4100, saved:120, shares:38},
-    {id:'w2', caption:'헤드헌팅 인사이트 릴스 #커리어',            mediaType:'VIDEO',          permalink:'#', timestamp:igDaysAgo(2), views:8900, reach:7200, saved:210, shares:64},
-    {id:'w3', caption:'이번 주 인기 채용공고 TOP5 #채용공고',      mediaType:'IMAGE',          permalink:'#', timestamp:igDaysAgo(3), views:3100, reach:2600, saved:65,  shares:19},
-    {id:'w4', caption:'스포츠 산업 트렌드 요약 카드뉴스 #스포츠',  mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(4), views:4600, reach:3800, saved:280, shares:27},
-    {id:'w5', caption:'구단 채용 인터뷰 릴스 #커리어 #인터뷰',     mediaType:'VIDEO',          permalink:'#', timestamp:igDaysAgo(5), views:11200,reach:9400, saved:305, shares:88},
-    {id:'w6', caption:'연봉 협상 꿀팁 카드뉴스 #커리어 #채용',     mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(6), views:6100, reach:5000, saved:410, shares:52},
-    {id:'w7', caption:'주말 채용 공고 모음 #채용공고',             mediaType:'IMAGE',          permalink:'#', timestamp:igDaysAgo(9), views:2200, reach:1900, saved:30,  shares:8},
+    {id:'w1', caption:'[스마트스코어] 백엔드 개발자 채용 카드뉴스 #개발 #채용',   mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(1), views:5200, reach:4100, saved:120, shares:38},
+    {id:'w2', caption:'[FC서울] 스폰서십 담당자 채용 릴스 #사업개발 #커리어',     mediaType:'VIDEO',          permalink:'#', timestamp:igDaysAgo(2), views:8900, reach:7200, saved:210, shares:64},
+    {id:'w3', caption:'이번 주 인기 채용공고 TOP5 #채용공고',                     mediaType:'IMAGE',          permalink:'#', timestamp:igDaysAgo(3), views:3100, reach:2600, saved:65,  shares:19},
+    {id:'w4', caption:'[골프존] 프로덕트 매니저 채용 카드뉴스 #기획PM #스포츠',   mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(4), views:4600, reach:3800, saved:280, shares:27},
+    {id:'w5', caption:'대학생 서포터즈 8기 모집 릴스 #대외활동 #서포터즈',        mediaType:'VIDEO',          permalink:'#', timestamp:igDaysAgo(5), views:11200,reach:9400, saved:305, shares:88},
+    {id:'w6', caption:'[나이키코리아] 디지털 마케터 채용 카드뉴스 #마케팅 #채용', mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:igDaysAgo(6), views:6100, reach:5000, saved:410, shares:52},
+    {id:'w7', caption:'주말 채용 공고 모음 #채용공고',                            mediaType:'IMAGE',          permalink:'#', timestamp:igDaysAgo(9), views:2200, reach:1900, saved:30,  shares:8},
   ],
   brief: null,
   followerHistory: Array.from({length:14},(_,i)=>({ date:new Date(Date.now()-(13-i)*86400000).toISOString().slice(0,10), followers: 4820 + i*9 + (i%3===0?4:0) })),
   surging: [
-    {id:'w2', caption:'헤드헌팅 인사이트 릴스 #커리어', viewsYesterday:6200, viewsToday:8900, delta:2700, deltaPct:43.5, permalink:'#'},
+    {id:'w2', caption:'[FC서울] 스폰서십 담당자 채용 릴스 #사업개발 #커리어', viewsYesterday:6200, viewsToday:8900, delta:2700, deltaPct:43.5, permalink:'#'},
+  ],
+  followerDemographics: [
+    {ageRange:'18-24', gender:'F', value:320}, {ageRange:'18-24', gender:'M', value:280},
+    {ageRange:'25-34', gender:'F', value:610}, {ageRange:'25-34', gender:'M', value:540},
+    {ageRange:'35-44', gender:'F', value:190}, {ageRange:'35-44', gender:'M', value:260},
+    {ageRange:'45-54', gender:'F', value:40},  {ageRange:'45-54', gender:'M', value:55},
   ]
 };
 const igTypeLabel = {IMAGE:'이미지', VIDEO:'릴스/동영상', CAROUSEL_ALBUM:'캐러셀'};
@@ -564,6 +606,8 @@ function renderInstagram(){
     : '데이터는 예시(Mock)입니다 · collect-instagram-insights.ps1 실행 후 data/instagram.json을 커밋하면 실데이터로 교체됩니다.');
 
   renderInstagramAnalysis();
+  renderInstagramJobCategoryRanking();
+  renderInstagramGenderGap();
 }
 
 /* ─────────── 인스타그램: 이번 주 TOP3 · 저장률 공통점 분석 ─────────── */
@@ -580,6 +624,110 @@ function igHashtags(caption){
   return (caption.match(/#[\p{L}\p{N}_]+/gu) || []).map(h=>h.toLowerCase());
 }
 const igDayNames = ['일','월','화','수','목','금','토'];
+
+/* ─────────── 인스타그램: 직무별 인기 순위 ───────────
+   job_pipeline(taxonomy.py)의 직무 분류 체계를 그대로 재사용한다. 캡션에 붙은
+   직무 해시태그(#개발, #마케팅 등)가 있으면 그걸 우선 신뢰하고, 없는 과거
+   게시물은 캡션 키워드로 추정한다 (job_pipeline의 ROLE_RULES와 동일 사전). */
+const IG_JOB_HASHTAGS = {
+  '마케팅': ['마케팅','브랜드마케팅','퍼포먼스마케팅'],
+  'MD': ['md','상품기획','머천다이징'],
+  '데이터': ['데이터','데이터분석'],
+  '개발': ['개발','백엔드','프론트엔드','개발자'],
+  '기획/PM': ['기획pm','기획','pm','프로덕트'],
+  '운영': ['운영','매장운영'],
+  '미디어': ['미디어','콘텐츠','영상'],
+  '사업개발': ['사업개발','영업','bd'],
+  '코치/트레이너': ['코치트레이너','코치','트레이너'],
+  '대외활동': ['대외활동','공모전','서포터즈','인턴','체험단'],
+};
+const IG_JOB_KEYWORD_RULES = [
+  [['스포츠마케팅','브랜드마케','퍼포먼스마케','마케터','마케팅','그로스','crm','홍보','브랜딩'], '마케팅'],
+  [['md','머천다이','바이어','상품기획'], 'MD'],
+  [['데이터','analyst','분석','ml','머신러닝','ai'], '데이터'],
+  [['백엔드','프론트','개발','engineer','developer','sw','서버','ios','android','devops'], '개발'],
+  [['pm','프로덕트','기획','product manager'], '기획/PM'],
+  [['운영','operation','매장','스토어','cs','고객'], '운영'],
+  [['콘텐츠','pd','미디어','영상','에디터','크리에이터','방송'], '미디어'],
+  [['bd','사업개발','제휴','세일즈','영업','스폰서십'], '사업개발'],
+  [['코치','트레이너','강사','감독','선수'], '코치/트레이너'],
+];
+const IG_ACTIVITY_KEYWORDS = ['대외활동','공모전','서포터즈','인턴','체험단','아카데미','부트캠프'];
+const IG_JOB_CATEGORY_COLOR = {
+  '마케팅':'#2a78d6','MD':'#eb6834','데이터':'#4a3aa7','개발':'#1baf7a','기획/PM':'#eda100',
+  '운영':'#e34948','미디어':'#008300','사업개발':'#e87ba4','코치/트레이너':'#898781','대외활동':'#9085e9','기타':'#c3c2b7'
+};
+
+function igJobCategoryOf(caption){
+  if (!caption) return '기타';
+  const tags = igHashtags(caption).map(t=>t.replace('#',''));
+  for (const label in IG_JOB_HASHTAGS) {
+    if (IG_JOB_HASHTAGS[label].some(a=>tags.includes(a))) return label;
+  }
+  const blob = caption.toLowerCase();
+  for (const [keys, label] of IG_JOB_KEYWORD_RULES) {
+    if (keys.some(k=>blob.includes(k))) return label;
+  }
+  if (IG_ACTIVITY_KEYWORDS.some(k=>blob.includes(k))) return '대외활동';
+  return '기타';
+}
+
+let igJobSortMetric = 'reach';
+function renderInstagramJobCategoryRanking(){
+  const listEl = document.getElementById('igJobCategoryList');
+  const insightEl = document.getElementById('igJobCategoryInsight');
+  if (!listEl) return;
+  const pool = (igData.weeklyMedia && igData.weeklyMedia.length) ? igData.weeklyMedia : (igData.media || []);
+
+  if (pool.length === 0) {
+    listEl.innerHTML = `<p class="text-sm py-6 text-center" style="color:var(--ink-muted)">분석할 게시물이 없습니다.</p>`;
+    setText('igJobCategoryInsight', '');
+    return;
+  }
+
+  const groups = {};
+  pool.forEach(m=>{
+    const cat = igJobCategoryOf(m.caption);
+    if (!groups[cat]) groups[cat] = { category:cat, count:0, reach:0, saved:0, shares:0, views:0 };
+    const g = groups[cat];
+    g.count++; g.reach += Number(m.reach)||0; g.saved += Number(m.saved)||0;
+    g.shares += Number(m.shares)||0; g.views += Number(m.views)||0;
+  });
+  const rows = Object.values(groups).map(g=>({...g, engagement: g.reach>0 ? (g.saved+g.shares)/g.reach : 0}));
+  const classified = rows.filter(r=>r.category!=='기타');
+
+  if (classified.length === 0) {
+    listEl.innerHTML = `<p class="text-sm py-6 text-center" style="color:var(--ink-muted)">직무 해시태그가 태깅된 게시물이 아직 없습니다. 게시물 캡션에 #개발, #마케팅처럼 직무 해시태그를 추가하면 이 순위가 채워집니다.</p>`;
+    setText('igJobCategoryInsight', '');
+    return;
+  }
+
+  const sortKey = igJobSortMetric;
+  const sorted = rows.slice().sort((a,b)=> b[sortKey]-a[sortKey]);
+  const maxVal = Math.max(...sorted.map(r=>r[sortKey]), 1);
+  const metricLabel = { reach:'도달', saved:'저장', engagement:'참여율' }[sortKey];
+  const fmt = (r)=> sortKey==='engagement' ? (r.engagement*100).toFixed(1)+'%' : r[sortKey].toLocaleString();
+
+  listEl.innerHTML = sorted.map((r,i)=>{
+    const color = IG_JOB_CATEGORY_COLOR[r.category] || '#898781';
+    const pct = Math.max(4, Math.round((r[sortKey]/maxVal)*100));
+    return `<div class="flex items-center gap-3">
+      <span class="text-xs font-bold w-5 text-center shrink-0" style="color:var(--ink-muted)">${i+1}</span>
+      <span class="text-[13px] font-bold w-24 shrink-0 truncate">${r.category}</span>
+      <div class="meter flex-1 h-2"><div style="width:${pct}%;height:100%;background:${color}"></div></div>
+      <span class="text-xs font-bold w-20 text-right shrink-0 tabular-nums">${fmt(r)}</span>
+      <span class="text-[11px] w-14 text-right shrink-0" style="color:var(--ink-muted)">${r.count}건</span>
+    </div>`;
+  }).join('');
+
+  const best = classified.slice().sort((a,b)=>b[sortKey]-a[sortKey])[0];
+  const worst = classified.slice().sort((a,b)=>a[sortKey]-b[sortKey])[0];
+  if (best && worst && best.category !== worst.category) {
+    setText('igJobCategoryInsight', `${metricLabel} 기준 가장 반응이 좋은 직무는 "${best.category}"(${fmt(best)}), 가장 약한 직무는 "${worst.category}"(${fmt(worst)})입니다. "${best.category}" 관련 채용 콘텐츠를 더 자주 다뤄보세요.`);
+  } else if (best) {
+    setText('igJobCategoryInsight', `${metricLabel} 기준 "${best.category}" 카테고리 게시물이 가장 좋은 성과를 보이고 있습니다.`);
+  }
+}
 
 function renderInstagramAnalysis(){
   const pool = (igData.weeklyMedia && igData.weeklyMedia.length) ? igData.weeklyMedia : (igData.media || []);
@@ -718,6 +866,58 @@ function renderInstagramTopicRecs(weekly){
       <p class="text-[12.5px] leading-relaxed" style="color:var(--ink-2)">${r.reason}</p>
     </div>`).join('');
 }
+
+/* ─────────── 인스타그램: 연령/성별 (계정 전체 팔로워 인구통계 스냅샷) ───────────
+   follower_demographics API는 "이 게시물에 어떤 연령/성별이 반응했는지"가 아니라
+   계정 전체 팔로워의 연령×성별 분포만 알려준다 (Instagram API의 한계). 그래서
+   콘텐츠별 교차분석이 아니라 계정 전체 스냅샷이라는 점을 라벨로 명시한다. */
+const IG_AGE_ORDER = ['13-17','18-24','25-34','35-44','45-54','55-64','65+'];
+function igAgeGenderPivot(){
+  const rows = igData.followerDemographics || [];
+  const ages = [...new Set(rows.map(r=>r.ageRange))].sort((a,b)=> IG_AGE_ORDER.indexOf(a)-IG_AGE_ORDER.indexOf(b));
+  const byAge = ages.map(age=>{
+    const forAge = rows.filter(r=>r.ageRange===age);
+    const m = forAge.find(r=>r.gender==='M')?.value || 0;
+    const f = forAge.find(r=>r.gender==='F')?.value || 0;
+    const u = forAge.filter(r=>r.gender!=='M'&&r.gender!=='F').reduce((s,r)=>s+(r.value||0),0);
+    return { age, M:m, F:f, U:u, total:m+f+u };
+  });
+  return { ages, byAge };
+}
+
+function renderInstagramGenderGap(){
+  const gapList = document.getElementById('igGenderGapList');
+  if (!gapList) return;
+  const rows = igData.followerDemographics || [];
+  if (rows.length === 0) {
+    gapList.innerHTML = '';
+    setText('igGenderInsight', '');
+    setText('igAgeInsight', '');
+    return;
+  }
+  const { byAge } = igAgeGenderPivot();
+  const totalM = byAge.reduce((s,a)=>s+a.M,0), totalF = byAge.reduce((s,a)=>s+a.F,0), totalU = byAge.reduce((s,a)=>s+a.U,0);
+  const grand = totalM+totalF+totalU || 1;
+
+  const withGap = byAge.map(a=>{
+    const t = a.total || 1;
+    const mPct = a.M/t*100, fPct = a.F/t*100;
+    return { ...a, gap: Math.abs(mPct-fPct), mPct, fPct, lean: mPct>=fPct ? 'M' : 'F' };
+  }).filter(a=>a.total>0).sort((a,b)=>b.gap-a.gap).slice(0,3);
+
+  gapList.innerHTML = withGap.map(a=>`
+    <div class="flex items-center justify-between text-[12.5px]">
+      <span class="font-semibold" style="color:var(--ink-2)">${a.age}세</span>
+      <span class="font-bold" style="color:${a.lean==='F'?'#e87ba4':'#2a78d6'}">${a.lean==='F'?'여성':'남성'} 우세 · 격차 ${a.gap.toFixed(0)}%p</span>
+    </div>`).join('') || `<p class="text-sm py-2 text-center" style="color:var(--ink-muted)">비교할 데이터가 없습니다.</p>`;
+
+  setText('igGenderInsight', `전체 팔로워 중 여성 ${(totalF/grand*100).toFixed(0)}% · 남성 ${(totalM/grand*100).toFixed(0)}%${totalU>0?` · 미상 ${(totalU/grand*100).toFixed(0)}%`:''}. 격차가 가장 큰 연령대를 참고해 타깃 콘텐츠 비중을 조정해 보세요.`);
+
+  const topAge = byAge.slice().sort((a,b)=>b.total-a.total)[0];
+  if (topAge) {
+    setText('igAgeInsight', `팔로워가 가장 많은 연령대는 ${topAge.age}세(전체의 ${(topAge.total/grand*100).toFixed(0)}%)입니다. 이 연령대가 선호할 만한 직무/콘텐츠 유형을 우선 기획해 보세요.`);
+  }
+}
 renderInstagram();
 
 /* ─────────── 배지 색 ─────────── */
@@ -760,6 +960,7 @@ populatePlatformFilter();
 document.getElementById('platformFilter').addEventListener('change',renderIngest);
 document.getElementById('fitFilter').addEventListener('change',renderIngest);
 renderIngest();
+document.getElementById('igJobSortSelect').addEventListener('change', (e)=>{ igJobSortMetric = e.target.value; renderInstagramJobCategoryRanking(); });
 
 /* ─────────── 액션 카드 ─────────── */
 function actionCard(a){
@@ -965,6 +1166,24 @@ function buildChartsInner(){
         y1:{position:'right',beginAtZero:true,ticks:{color:c.muted,font:{size:11,family:'Pretendard'},precision:0},grid:{display:false},border:{display:false}},
         x:{...gridScale(),grid:{display:false}}
       }}}));
+
+  // 인스타그램 연령대별/성별 팔로워 인구통계 (계정 전체 스냅샷)
+  const igDemo = igData.followerDemographics || [];
+  const { ages: igAges, byAge: igByAge } = igAgeGenderPivot();
+  renderChartSafely('igAgeChart', igDemo.length===0, '팔로워 인구통계 데이터가 아직 없습니다. daily-instagram-brief.ps1이 자동으로 수집하면 표시됩니다.', ()=> new Chart(document.getElementById('igAgeChart'),{type:'bar',
+    data:{labels:igAges,
+      datasets:[
+        {label:'여성', data:igByAge.map(a=>a.F), backgroundColor:c.cat[4], borderRadius:4, maxBarThickness:36},
+        {label:'남성', data:igByAge.map(a=>a.M), backgroundColor:c.cat[0], borderRadius:4, maxBarThickness:36},
+      ]},
+    options:{...baseOpts(),scales:{y:{beginAtZero:true,stacked:true,...gridScale()},x:{stacked:true,...gridScale(),grid:{display:false}}}}}));
+
+  const igGenderTotals = { F: igByAge.reduce((s,a)=>s+a.F,0), M: igByAge.reduce((s,a)=>s+a.M,0), U: igByAge.reduce((s,a)=>s+a.U,0) };
+  const igGenderLabels = ['여성','남성',...(igGenderTotals.U>0?['미상']:[])];
+  const igGenderValues = [igGenderTotals.F, igGenderTotals.M, ...(igGenderTotals.U>0?[igGenderTotals.U]:[])];
+  renderChartSafely('igGenderChart', igDemo.length===0, '데이터 없음', ()=> new Chart(document.getElementById('igGenderChart'),{type:'doughnut',
+    data:{labels:igGenderLabels,datasets:[{data:igGenderValues,backgroundColor:[c.cat[4],c.cat[0],c.cat[6]],borderWidth:3,borderColor:c.surface,hoverOffset:6}]},
+    options:{...baseOpts(),cutout:'62%',plugins:{...baseOpts().plugins,legend:{position:'bottom',labels:baseOpts().plugins.legend.labels}}}}));
 }
 buildCharts();
 
@@ -1050,7 +1269,8 @@ function applyLiveData(d){
 function applyInstagramData(d){
   if(!d || !d.account) return;
   igData = { generatedAt: d.generatedAt || null, account: d.account, media: Array.isArray(d.media) ? d.media : [], weeklyMedia: Array.isArray(d.weeklyMedia) ? d.weeklyMedia : [], brief: d.brief || null,
-    followerHistory: Array.isArray(d.followerHistory) ? d.followerHistory : [], surging: Array.isArray(d.surging) ? d.surging : [] };
+    followerHistory: Array.isArray(d.followerHistory) ? d.followerHistory : [], surging: Array.isArray(d.surging) ? d.surging : [],
+    followerDemographics: Array.isArray(d.followerDemographics) ? d.followerDemographics : [] };
   renderInstagram();
   buildCharts();
 }

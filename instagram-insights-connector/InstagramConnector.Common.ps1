@@ -381,6 +381,44 @@ function Get-MediaInsights {
     return $result
 }
 
+function Get-InstagramFollowerDemographics {
+    <#
+        팔로워 전체의 연령대×성별 분포 스냅샷을 가져옵니다. 이 지표는 계정 전체
+        지표이며, 특정 게시물의 조회/참여와는 연결되지 않습니다 (Instagram API가
+        게시물 단위 인구통계를 제공하지 않기 때문). 팔로워 수가 Meta의 최소 요건
+        (일반적으로 100명 이상)에 못 미치거나 계정 유형이 지원되지 않으면 실패할
+        수 있어, 이 경우 치명적 오류로 처리하지 않고 $null을 반환합니다 —
+        대시보드는 $null/빈 배열일 때 "데이터 연동 준비 중" 빈 상태를 표시합니다.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$AccessToken,
+        [Parameter(Mandatory)][string]$IgUserId
+    )
+    try {
+        $resp = Invoke-InstagramGraphGet -Path "$IgUserId/insights" -QueryParams @{
+            metric       = 'follower_demographics'
+            period       = 'lifetime'
+            metric_type  = 'total_value'
+            breakdown    = 'age,gender'
+            access_token = $AccessToken
+        }
+        $results = $resp.data[0].total_value.breakdowns[0].results
+        $out = @()
+        foreach ($r in $results) {
+            # dimension_values 순서는 breakdown 파라미터 순서(age,gender)를 따릅니다.
+            $out += [ordered]@{
+                ageRange = $r.dimension_values[0]
+                gender   = $r.dimension_values[1]
+                value    = $r.value
+            }
+        }
+        return @($out)
+    } catch {
+        Write-Warning "팔로워 인구통계 조회 실패(선택 항목이므로 무시 가능): $($_.Exception.Message)"
+        return $null
+    }
+}
+
 function Get-InstagramInsightsSnapshot {
     <#
         프로필과 최근 콘텐츠 N개의 인사이트를 한 번에 가져옵니다.
@@ -470,18 +508,20 @@ function Save-InstagramDashboardData {
         [Parameter(Mandatory)][array]$WeeklyMedia,
         $Brief = $null,
         $FollowerHistory = $null,
-        $Surging = $null
+        $Surging = $null,
+        $FollowerDemographics = $null
     )
     $prev = Get-InstagramDashboardData -RepoDataDir $RepoDataDir
 
     $report = [ordered]@{
-        generatedAt     = (Get-Date).ToUniversalTime().ToString('o')
-        account         = $Account
-        media           = $Media
-        weeklyMedia     = $WeeklyMedia
-        brief           = if ($null -ne $Brief) { $Brief } elseif ($prev -and $prev.PSObject.Properties.Name -contains 'brief') { $prev.brief } else { $null }
-        followerHistory = if ($null -ne $FollowerHistory) { $FollowerHistory } elseif ($prev -and $prev.followerHistory) { @($prev.followerHistory) } else { @() }
-        surging         = if ($null -ne $Surging) { $Surging } elseif ($prev -and $prev.surging) { @($prev.surging) } else { @() }
+        generatedAt          = (Get-Date).ToUniversalTime().ToString('o')
+        account              = $Account
+        media                = $Media
+        weeklyMedia          = $WeeklyMedia
+        brief                = if ($null -ne $Brief) { $Brief } elseif ($prev -and $prev.PSObject.Properties.Name -contains 'brief') { $prev.brief } else { $null }
+        followerHistory      = if ($null -ne $FollowerHistory) { $FollowerHistory } elseif ($prev -and $prev.followerHistory) { @($prev.followerHistory) } else { @() }
+        surging              = if ($null -ne $Surging) { $Surging } elseif ($prev -and $prev.surging) { @($prev.surging) } else { @() }
+        followerDemographics = if ($null -ne $FollowerDemographics) { $FollowerDemographics } elseif ($prev -and $prev.followerDemographics) { @($prev.followerDemographics) } else { @() }
     }
 
     $path = Join-Path $RepoDataDir 'instagram.json'
