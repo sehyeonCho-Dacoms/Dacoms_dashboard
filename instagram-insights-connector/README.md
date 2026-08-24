@@ -190,6 +190,21 @@ git push
 유료 홍보(부스트)했을 때만 Marketing API의 광고 인사이트에서 얻을 수 있습니다 — 이건
 별도의 광고 계정 연동이 필요한 완전히 다른 작업입니다.
 
+### 성과 추이 히스토리
+
+`daily-instagram-brief.ps1`이 매일 실행될 때마다 그날의 핵심 지표를 한 건씩
+`data/instagram.json`의 `analysisHistory` 필드(최근 60일 누적)에 남깁니다:
+
+- `followers`, `viewsAvg`(평균 조회수), `reachSum`(도달 합계), `engagementSum`(저장+공유 합계)
+- `topCategory`: 그날 표본에서 도달 합계가 가장 큰 직무 카테고리 (`Get-InstagramJobCategory`로
+  분류 — dashboard.html의 `igJobCategoryOf()`와 동일한 규칙을 PowerShell로 옮긴 것이며,
+  분류 규칙을 바꿀 때는 두 파일을 함께 수정해야 합니다)
+- `surgingCount`: 그날 감지된 급상승 콘텐츠 건수
+
+대시보드의 "📅 성과 추이 히스토리" 섹션이 이 값들을 일별 추이 그래프와
+"최근 N일간 가장 자주 1위였던 직무" 같은 요약 인사이트로 보여줍니다. 최소 2일치가
+쌓여야 그래프가 나타나며, 그 전에는 안내 문구만 표시됩니다.
+
 커밋을 main 브랜치에 푸시하면 `deploy.yml`이 자동으로 사이트를 다시 빌드해 배포합니다. 이 파일을
 커밋하지 않으면 대시보드는 예시(Mock) 데이터를 계속 표시합니다.
 

@@ -146,6 +146,36 @@ try {
     }
     if ($null -eq $engagedDemographics) { $engagedDemographics = @() }
 
+    # 분석 히스토리(최근 60일) 누적 - "대시보드로 분석한 내용을 시간이 지나면서
+    # 누적해 추이를 볼 수 있게" 해달라는 요청에 따라, 매일 브리프 실행 시점의
+    # 핵심 지표 스냅샷을 하루 1건씩 쌓습니다. 오늘의 1위 직무는 weeklyMedia
+    # 표본에서 도달 합계가 가장 큰 카테고리로 계산합니다(기타 제외).
+    $categoryReach = @{}
+    foreach ($m in $weeklyMediaResults) {
+        $cat = Get-InstagramJobCategory -Caption $m.caption
+        if ($cat -eq '기타') { continue }
+        if (-not $categoryReach.ContainsKey($cat)) { $categoryReach[$cat] = 0 }
+        $categoryReach[$cat] += & $numOrZero $m.reach
+    }
+    $topCategoryEntry = $categoryReach.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1
+    $topCategory = if ($topCategoryEntry) { $topCategoryEntry.Key } else { $null }
+
+    $analysisHistory = @()
+    if ($prevDashboardData -and $prevDashboardData.analysisHistory) {
+        $analysisHistory = @($prevDashboardData.analysisHistory | Where-Object { $_.date -ne $today })
+    }
+    $analysisHistory += [ordered]@{
+        date          = $today
+        followers     = $followers
+        viewsAvg      = $viewsAvg
+        reachSum      = $reachSum
+        engagementSum = ($savedSum + $sharesSum)
+        topCategory   = $topCategory
+        surgingCount  = $surging.Count
+    }
+    $analysisHistory = @($analysisHistory | Sort-Object date)
+    if ($analysisHistory.Count -gt 60) { $analysisHistory = @($analysisHistory | Select-Object -Last 60) }
+
     $report = [ordered]@{
         generatedAt          = (Get-Date).ToUniversalTime().ToString('o')
         account              = [ordered]@{
@@ -161,6 +191,7 @@ try {
         followerHistory      = $followerHistory
         surging              = $surging
         engagedDemographics  = $engagedDemographics
+        analysisHistory      = $analysisHistory
     }
 
     if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }
@@ -204,7 +235,7 @@ try {
         Save-InstagramDashboardData -RepoDataDir $repoDataDir `
             -Account $report.account -Media $mediaResults -WeeklyMedia $weeklyMediaResults `
             -Brief $brief -FollowerHistory $followerHistory -Surging $surging `
-            -EngagedDemographics $engagedDemographics | Out-Null
+            -EngagedDemographics $engagedDemographics -AnalysisHistory $analysisHistory | Out-Null
 
         $candidateRoot = Join-Path $PSScriptRoot '..'
         if (Test-Path (Join-Path $candidateRoot '.git')) {

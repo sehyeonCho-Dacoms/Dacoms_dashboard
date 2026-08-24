@@ -33,6 +33,69 @@ $script:ConfigPath    = Join-Path $script:ConfigDir 'config.json'
 $script:GraphBase     = 'https://graph.instagram.com'
 $script:RequiredScopes = @('instagram_business_basic', 'instagram_business_manage_insights')
 
+# 직무 카테고리 분류 규칙 - dashboard.html의 igJobCategoryOf()와 동일한 규칙을
+# PowerShell로 옮긴 것입니다 (해시태그 우선, 없으면 캡션 키워드로 추정).
+# 대시보드는 이 분류를 매번 weeklyMedia로 다시 계산하지만, 여기서는 일별 히스토리에
+# "오늘의 1위 직무"를 남기기 위해 같은 규칙을 다시 구현했습니다. 분류 규칙을 바꿀 때는
+# 두 곳(이 파일과 dashboard.html)을 함께 수정해야 어긋나지 않습니다.
+$script:JobHashtagMap = [ordered]@{
+    '마케팅'        = @('마케팅', '브랜드마케팅', '퍼포먼스마케팅')
+    'MD'            = @('md', '상품기획', '머천다이징')
+    '데이터'        = @('데이터', '데이터분석')
+    '개발'          = @('개발', '백엔드', '프론트엔드', '개발자')
+    '기획/PM'       = @('기획pm', '기획', 'pm', '프로덕트')
+    '운영'          = @('운영', '매장운영')
+    '미디어'        = @('미디어', '콘텐츠', '영상')
+    '사업개발'      = @('사업개발', '영업', 'bd')
+    '코치/트레이너' = @('코치트레이너', '코치', '트레이너')
+    '대외활동'      = @('대외활동', '공모전', '서포터즈', '인턴', '체험단')
+}
+$script:JobKeywordRules = @(
+    @{ Keys = @('스포츠마케팅', '브랜드마케', '퍼포먼스마케', '마케터', '마케팅', '그로스', 'crm', '홍보', '브랜딩'); Label = '마케팅' },
+    @{ Keys = @('md', '머천다이', '바이어', '상품기획'); Label = 'MD' },
+    @{ Keys = @('데이터', 'analyst', '분석', 'ml', '머신러닝', 'ai'); Label = '데이터' },
+    @{ Keys = @('백엔드', '프론트', '개발', 'engineer', 'developer', 'sw', '서버', 'ios', 'android', 'devops'); Label = '개발' },
+    @{ Keys = @('pm', '프로덕트', '기획', 'product manager'); Label = '기획/PM' },
+    @{ Keys = @('운영', 'operation', '매장', '스토어', 'cs', '고객'); Label = '운영' },
+    @{ Keys = @('콘텐츠', 'pd', '미디어', '영상', '에디터', '크리에이터', '방송'); Label = '미디어' },
+    @{ Keys = @('bd', '사업개발', '제휴', '세일즈', '영업', '스폰서십'); Label = '사업개발' },
+    @{ Keys = @('코치', '트레이너', '강사', '감독', '선수'); Label = '코치/트레이너' }
+)
+$script:ActivityKeywords = @('대외활동', '공모전', '서포터즈', '인턴', '체험단', '아카데미', '부트캠프')
+
+function Get-InstagramCaptionHashtags {
+    param([string]$Caption)
+    if ([string]::IsNullOrWhiteSpace($Caption)) { return @() }
+    $found = [regex]::Matches($Caption, '#[\p{L}\p{N}_]+')
+    return @($found | ForEach-Object { $_.Value.TrimStart('#').ToLowerInvariant() })
+}
+
+function Get-InstagramJobCategory {
+    <#
+        게시물 캡션을 직무 카테고리로 분류합니다 (해시태그 우선, 없으면 캡션 키워드로
+        추정, 그것도 없으면 대외활동 키워드, 최종적으로 '기타'). dashboard.html의
+        igJobCategoryOf()와 동일한 규칙입니다.
+    #>
+    param([string]$Caption)
+    if ([string]::IsNullOrWhiteSpace($Caption)) { return '기타' }
+    $tags = Get-InstagramCaptionHashtags -Caption $Caption
+    foreach ($label in $script:JobHashtagMap.Keys) {
+        foreach ($alias in $script:JobHashtagMap[$label]) {
+            if ($tags -contains $alias) { return $label }
+        }
+    }
+    $blob = $Caption.ToLowerInvariant()
+    foreach ($rule in $script:JobKeywordRules) {
+        foreach ($k in $rule.Keys) {
+            if ($blob.Contains($k)) { return $rule.Label }
+        }
+    }
+    foreach ($k in $script:ActivityKeywords) {
+        if ($blob.Contains($k)) { return '대외활동' }
+    }
+    return '기타'
+}
+
 function Get-InstagramConfigPath { return $script:ConfigPath }
 
 function Protect-PlainText {
@@ -514,7 +577,8 @@ function Save-InstagramDashboardData {
         $Brief = $null,
         $FollowerHistory = $null,
         $Surging = $null,
-        $EngagedDemographics = $null
+        $EngagedDemographics = $null,
+        $AnalysisHistory = $null
     )
     $prev = Get-InstagramDashboardData -RepoDataDir $RepoDataDir
 
@@ -527,6 +591,7 @@ function Save-InstagramDashboardData {
         followerHistory      = if ($null -ne $FollowerHistory) { $FollowerHistory } elseif ($prev -and $prev.followerHistory) { @($prev.followerHistory) } else { @() }
         surging              = if ($null -ne $Surging) { $Surging } elseif ($prev -and $prev.surging) { @($prev.surging) } else { @() }
         engagedDemographics  = if ($null -ne $EngagedDemographics) { $EngagedDemographics } elseif ($prev -and $prev.engagedDemographics) { @($prev.engagedDemographics) } else { @() }
+        analysisHistory      = if ($null -ne $AnalysisHistory) { $AnalysisHistory } elseif ($prev -and $prev.analysisHistory) { @($prev.analysisHistory) } else { @() }
     }
 
     $path = Join-Path $RepoDataDir 'instagram.json'
