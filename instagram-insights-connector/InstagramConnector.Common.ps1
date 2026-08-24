@@ -303,11 +303,25 @@ function Get-InstagramProfile {
 }
 
 function Get-InstagramGrantedPermissions {
+    <#
+        graph.instagram.com(Instagram API with Instagram Login)에는 Facebook Graph API의
+        /me/permissions 같은 별도 권한 조회 엔드포인트가 없습니다. 이 호출은 항상
+        "Tried accessing nonexisting field (permissions)" (code=100)로 실패하므로,
+        이 경우 "확인 불가(알 수 없음)"를 뜻하는 $null을 반환합니다. 실제 권한 부여 여부는
+        토큰 발급 시 대시보드에서 선택하며, 부족하면 데이터 수집 시 명확한 오류로 드러납니다.
+    #>
     param([Parameter(Mandatory)][string]$AccessToken)
-    $resp = Invoke-InstagramGraphGet -Path 'me/permissions' -QueryParams @{
-        access_token = $AccessToken
+    try {
+        $resp = Invoke-InstagramGraphGet -Path 'me/permissions' -QueryParams @{
+            access_token = $AccessToken
+        }
+        return @($resp.data | Where-Object { $_.status -eq 'granted' } | Select-Object -ExpandProperty permission)
+    } catch {
+        if ($_.Exception.Message -match 'nonexisting field') {
+            return $null
+        }
+        throw
     }
-    return @($resp.data | Where-Object { $_.status -eq 'granted' } | Select-Object -ExpandProperty permission)
 }
 
 function Get-RecentMedia {

@@ -47,7 +47,11 @@ try {
 
     Write-Host '권한 확인 중...' -ForegroundColor Cyan
     $granted = Get-InstagramGrantedPermissions -AccessToken $longLivedToken
-    $missing = @($script:RequiredScopes | Where-Object { $granted -notcontains $_ })
+    if ($null -eq $granted) {
+        $missing = @()
+    } else {
+        $missing = @($script:RequiredScopes | Where-Object { $granted -notcontains $_ })
+    }
 
     $config = @{
         encryptedAccessToken = Protect-PlainText -PlainText $longLivedToken
@@ -83,7 +87,10 @@ Write-Host ("계정명        : {0}" -f $igProfile.username)
 Write-Host ("연결 성공 여부 : {0}" -f 'YES')
 Write-Host ("토큰 만료일    : {0}" -f ([datetime]::Parse($expiresAt).ToLocalTime().ToString('yyyy-MM-dd HH:mm')))
 
-if ($missing.Count -gt 0) {
+if ($null -eq $granted) {
+    Write-Host '필수 권한 확인 : graph.instagram.com은 권한 조회 API를 지원하지 않아 자동 확인은 생략되었습니다.' -ForegroundColor Yellow
+    Write-Host '                 (토큰 발급 시 대시보드에서 instagram_business_basic, instagram_business_manage_insights를 선택했는지 확인하세요.)' -ForegroundColor Yellow
+} elseif ($missing.Count -gt 0) {
     Write-Host ("누락된 필수 권한: {0}" -f ($missing -join ', ')) -ForegroundColor Yellow
 } else {
     Write-Host '필수 권한 확인 : instagram_business_basic, instagram_business_manage_insights 모두 부여됨' -ForegroundColor Green
