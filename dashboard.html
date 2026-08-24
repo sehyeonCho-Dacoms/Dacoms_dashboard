@@ -349,6 +349,15 @@
     </div>
   </div>
 
+  <div class="card rounded-2xl p-5 mb-6" style="background:color-mix(in srgb,var(--critical) 5%,var(--surface-1))">
+    <h3 class="text-[15px] font-bold">🚀 조회수 급상승 콘텐츠</h3>
+    <p class="text-xs mb-4" style="color:var(--ink-muted)">어제 대비 조회수 +30% 이상 또는 +1,000회 이상 증가 · 확인이 필요한 콘텐츠입니다</p>
+    <div id="igSurgingList" class="space-y-3"></div>
+  </div>
+
+  <div class="mb-3">
+    <h3 class="text-[13px] font-bold tracking-wide" style="color:var(--ink-muted)">📊 성과 차트</h3>
+  </div>
   <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
     <div class="card rounded-2xl p-5 lg:col-span-3">
       <h3 class="text-[15px] font-bold">게시물별 성과</h3>
@@ -360,11 +369,16 @@
       <p class="text-xs mb-4" style="color:var(--ink-muted)">이미지 · 릴스 · 캐러셀</p>
       <div class="h-64 flex items-center justify-center"><canvas id="igTypeChart"></canvas></div>
     </div>
+    <div class="card rounded-2xl p-5 lg:col-span-5">
+      <h3 class="text-[15px] font-bold">📈 팔로워 증가 &amp; 콘텐츠 발행 추이</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">daily-instagram-brief.ps1이 매일 누적하는 팔로워 이력(최근 60일) 기준</p>
+      <div class="h-64"><canvas id="igGrowthChart"></canvas></div>
+      <p id="igGrowthNote" class="text-xs mt-3 text-center" style="color:var(--ink-muted)"></p>
+    </div>
   </div>
 
-  <div class="mb-4">
-    <h3 class="text-[15px] font-bold">이번 주 분석</h3>
-    <p class="text-xs" style="color:var(--ink-muted)">최근 게시물 표본을 기반으로 자동 계산 · <span id="igAnalysisSampleNote">-</span></p>
+  <div class="mb-3">
+    <h3 class="text-[13px] font-bold tracking-wide" style="color:var(--ink-muted)">💡 인사이트 &amp; 다음 액션 · <span id="igAnalysisSampleNote" class="font-medium normal-case">-</span></h3>
   </div>
   <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
     <div class="card rounded-2xl p-5 lg:col-span-3">
@@ -373,30 +387,15 @@
       <div id="igTop3List" class="space-y-3"></div>
     </div>
     <div class="card rounded-2xl p-5 lg:col-span-2">
-      <h3 class="text-[15px] font-bold">💡 저장률 높은 콘텐츠 공통점</h3>
+      <h3 class="text-[15px] font-bold">저장률 높은 콘텐츠 공통점</h3>
       <p class="text-xs mb-4" style="color:var(--ink-muted)">저장률 = 저장 수 ÷ 도달 수</p>
       <ul id="igSaveRateInsights" class="space-y-2.5 text-[13px]" style="color:var(--ink-2)"></ul>
     </div>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
-    <div class="card rounded-2xl p-5 lg:col-span-3">
-      <h3 class="text-[15px] font-bold">📈 팔로워 증가 &amp; 콘텐츠 발행 추이</h3>
-      <p class="text-xs mb-4" style="color:var(--ink-muted)">daily-instagram-brief.ps1이 매일 누적하는 팔로워 이력(최근 60일) 기준</p>
-      <div class="h-64"><canvas id="igGrowthChart"></canvas></div>
-      <p id="igGrowthNote" class="text-xs mt-3 text-center" style="color:var(--ink-muted)"></p>
+    <div class="card rounded-2xl p-5 lg:col-span-5">
+      <h3 class="text-[15px] font-bold">다음 콘텐츠 주제 추천</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">최근 성과 데이터를 기반으로 한 규칙 기반 추천입니다 (AI가 생성한 것이 아닙니다)</p>
+      <div id="igTopicRecs" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
     </div>
-    <div class="card rounded-2xl p-5 lg:col-span-2">
-      <h3 class="text-[15px] font-bold">🚀 조회수 급상승 콘텐츠</h3>
-      <p class="text-xs mb-4" style="color:var(--ink-muted)">어제 대비 조회수 +30% 이상 또는 +1,000회 이상 증가</p>
-      <div id="igSurgingList" class="space-y-3"></div>
-    </div>
-  </div>
-
-  <div class="card rounded-2xl p-5 mb-6">
-    <h3 class="text-[15px] font-bold">💡 다음 콘텐츠 주제 추천</h3>
-    <p class="text-xs mb-4" style="color:var(--ink-muted)">최근 성과 데이터를 기반으로 한 규칙 기반 추천입니다 (AI가 생성한 것이 아닙니다)</p>
-    <div id="igTopicRecs" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
   </div>
 
   <div class="card rounded-2xl overflow-hidden">
@@ -825,6 +824,45 @@ function buildCharts(){
   try{ buildChartsInner(); }
   catch(e){ console.error('buildCharts 실패:', e); }
 }
+
+// 차트 하나씩 개별적으로 try/catch — 앞선 차트 하나가 실패해도 뒤 차트들까지
+// 통째로 안 그려지는 일이 없도록 격리한다. 실패/데이터 없음/라이브러리 로드
+// 실패 시에는 빈 화면 대신 눈에 보이는 안내 문구를 캔버스 자리에 표시한다.
+function renderChartSafely(canvasId, isEmpty, emptyMsg, factory){
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const box = canvas.parentElement;
+  let note = box.querySelector('.chart-fallback-note');
+  const showNote = (msg)=>{
+    canvas.style.display = 'none';
+    if (!note) {
+      note = document.createElement('p');
+      note.className = 'chart-fallback-note text-xs text-center px-6';
+      note.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;margin:0;color:var(--ink-muted)';
+      box.appendChild(note);
+    }
+    note.textContent = msg;
+    note.style.display = 'flex';
+  };
+  const hideNote = ()=>{ canvas.style.display = ''; if (note) note.style.display = 'none'; };
+
+  if (typeof Chart === 'undefined') {
+    showNote('그래프 라이브러리를 불러오지 못했습니다. 새로고침해 주세요.');
+    return;
+  }
+  if (isEmpty) {
+    showNote(emptyMsg || '표시할 데이터가 없습니다.');
+    return;
+  }
+  try {
+    hideNote();
+    charts.push(factory());
+  } catch (e) {
+    console.error(`${canvasId} 렌더링 실패:`, e);
+    showNote('그래프를 표시하지 못했습니다.');
+  }
+}
+
 function buildChartsInner(){
   charts.forEach(ch=>ch.destroy()); charts=[];
   const c=P();
@@ -833,7 +871,7 @@ function buildChartsInner(){
   const wk=(liveTrends&&liveTrends.weekly&&liveTrends.weekly.labels&&liveTrends.weekly.labels.length)
     ? liveTrends.weekly
     : {labels:['8주전','7주','6주','5주','4주','3주','2주','이번주'],total:[98,105,112,120,118,128,124,142],uploadReady:[22,25,26,29,28,33,31,37]};
-  charts.push(new Chart(document.getElementById('trendChart'),{type:'line',
+  renderChartSafely('trendChart', !wk.labels || !wk.labels.length, '표시할 추이 데이터가 없습니다.', ()=> new Chart(document.getElementById('trendChart'),{type:'line',
     data:{labels:wk.labels,
       datasets:[
         {label:'전체 수집',data:wk.total,borderColor:c.cat[0],backgroundColor:withA(c.cat[0],.10),borderWidth:2,fill:true,tension:.35,pointRadius:3,pointBackgroundColor:c.cat[0],pointBorderColor:c.surface,pointBorderWidth:2},
@@ -845,14 +883,14 @@ function buildChartsInner(){
   // 플랫폼 도넛
   const pc={}; jobs.forEach(j=>pc[j.platform]=(pc[j.platform]||0)+1);
   const pl=Object.keys(pc);
-  charts.push(new Chart(document.getElementById('platformChart'),{type:'doughnut',
+  renderChartSafely('platformChart', pl.length===0, '표시할 공고 데이터가 없습니다.', ()=> new Chart(document.getElementById('platformChart'),{type:'doughnut',
     data:{labels:pl,datasets:[{data:pl.map(k=>pc[k]),backgroundColor:pl.map((_,i)=>c.cat[i%c.cat.length]),borderWidth:3,borderColor:c.surface,hoverOffset:6}]},
     options:{...baseOpts(),cutout:'62%',plugins:{...baseOpts().plugins,legend:{position:'bottom',labels:baseOpts().plugins.legend.labels}}}}));
 
   // 직무별 (single series)
   const rc={}; jobs.forEach(j=>rc[j.role]=(rc[j.role]||0)+1);
   const rl=Object.entries(rc).sort((a,b)=>b[1]-a[1]);
-  charts.push(new Chart(document.getElementById('roleChart'),{type:'bar',
+  renderChartSafely('roleChart', rl.length===0, '표시할 직무 데이터가 없습니다.', ()=> new Chart(document.getElementById('roleChart'),{type:'bar',
     data:{labels:rl.map(x=>x[0]),datasets:[{data:rl.map(x=>x[1]),backgroundColor:c.cat[0],borderRadius:4,maxBarThickness:34}]},
     options:{...baseOpts(),indexAxis:'y',plugins:{legend:{display:false},tooltip:baseOpts().plugins.tooltip},
       scales:{x:{beginAtZero:true,...gridScale()},y:{...gridScale(),grid:{display:false}}}}}));
@@ -861,14 +899,14 @@ function buildChartsInner(){
   const levels={'신입~주니어':0,'미들(3~5년)':0,'시니어(5년+)':0};
   jobs.forEach(j=>{ if(j.level.includes('신입')||j.level.includes('2년'))levels['신입~주니어']++;
     else if(j.level.includes('5년')||j.level.includes('6'))levels['시니어(5년+)']++; else levels['미들(3~5년)']++; });
-  charts.push(new Chart(document.getElementById('levelChart'),{type:'doughnut',
+  renderChartSafely('levelChart', jobs.length===0, '표시할 경력 데이터가 없습니다.', ()=> new Chart(document.getElementById('levelChart'),{type:'doughnut',
     data:{labels:Object.keys(levels),datasets:[{data:Object.values(levels),backgroundColor:[c.cat[3],c.cat[0],c.cat[2]],borderWidth:3,borderColor:c.surface,hoverOffset:6}]},
     options:{...baseOpts(),cutout:'62%',plugins:{...baseOpts().plugins,legend:{position:'bottom',labels:baseOpts().plugins.legend.labels}}}}));
 
   // 섹터별 (single series) — leads 기반
   const sc={}; leads.forEach(l=>sc[l.sector]=(sc[l.sector]||0)+l.open);
   const sl=Object.entries(sc).sort((a,b)=>b[1]-a[1]);
-  charts.push(new Chart(document.getElementById('sectorChart'),{type:'bar',
+  renderChartSafely('sectorChart', sl.length===0, '표시할 섹터 데이터가 없습니다.', ()=> new Chart(document.getElementById('sectorChart'),{type:'bar',
     data:{labels:sl.map(x=>x[0]),datasets:[{data:sl.map(x=>x[1]),backgroundColor:c.cat[2],borderRadius:4,maxBarThickness:40}]},
     options:{...baseOpts(),plugins:{legend:{display:false},tooltip:baseOpts().plugins.tooltip},
       scales:{y:{beginAtZero:true,...gridScale()},x:{...gridScale(),grid:{display:false}}}}}));
@@ -876,7 +914,7 @@ function buildChartsInner(){
   // 규모별 (single series)
   const zc={}; jobs.forEach(j=>zc[j.size]=(zc[j.size]||0)+1);
   const order=['대기업','중견기업','중소기업','스타트업','공공/협회'].filter(k=>zc[k]);
-  charts.push(new Chart(document.getElementById('sizeChart'),{type:'bar',
+  renderChartSafely('sizeChart', order.length===0, '표시할 규모 데이터가 없습니다.', ()=> new Chart(document.getElementById('sizeChart'),{type:'bar',
     data:{labels:order,datasets:[{data:order.map(k=>zc[k]),backgroundColor:c.cat[6],borderRadius:4,maxBarThickness:48}]},
     options:{...baseOpts(),plugins:{legend:{display:false},tooltip:baseOpts().plugins.tooltip},
       scales:{y:{beginAtZero:true,...gridScale()},x:{...gridScale(),grid:{display:false}}}}}));
@@ -884,7 +922,7 @@ function buildChartsInner(){
   // 인스타그램 게시물별 성과 (4 series)
   const igMedia = igData.media||[];
   const igLabels = igMedia.map((m,i)=>{ try{ return new Date(m.timestamp).toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'}); }catch(e){ return 'P'+(i+1); } });
-  charts.push(new Chart(document.getElementById('igPostChart'),{type:'bar',
+  renderChartSafely('igPostChart', igMedia.length===0, '최근 게시물 데이터가 없습니다. collect-instagram-insights.ps1을 실행해 주세요.', ()=> new Chart(document.getElementById('igPostChart'),{type:'bar',
     data:{labels:igLabels,
       datasets:[
         {label:'조회수',data:igMedia.map(m=>m.views||0),backgroundColor:c.cat[0],borderRadius:4,maxBarThickness:22},
@@ -897,33 +935,33 @@ function buildChartsInner(){
   // 인스타그램 콘텐츠 유형 비중
   const igTc={}; igMedia.forEach(m=>{ const k=igTypeLabel[m.mediaType]||m.mediaType||'기타'; igTc[k]=(igTc[k]||0)+1; });
   const igTl=Object.keys(igTc);
-  charts.push(new Chart(document.getElementById('igTypeChart'),{type:'doughnut',
+  renderChartSafely('igTypeChart', igTl.length===0, '최근 게시물 데이터가 없습니다.', ()=> new Chart(document.getElementById('igTypeChart'),{type:'doughnut',
     data:{labels:igTl,datasets:[{data:igTl.map(k=>igTc[k]),backgroundColor:igTl.map((_,i)=>c.cat[(i+1)%c.cat.length]),borderWidth:3,borderColor:c.surface,hoverOffset:6}]},
     options:{...baseOpts(),cutout:'62%',plugins:{...baseOpts().plugins,legend:{position:'bottom',labels:baseOpts().plugins.legend.labels}}}}));
 
   // 인스타그램 팔로워 증가 & 콘텐츠 발행 추이 (팔로워=선, 발행 수=막대, 이중 Y축)
   const igFh = (igData.followerHistory||[]).slice().sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0);
   const igGrowthNote = document.getElementById('igGrowthNote');
-  if (igFh.length >= 2) {
-    if (igGrowthNote) igGrowthNote.textContent = `최근 ${igFh.length}일 · daily-instagram-brief.ps1 자동 수집`;
-    const igPool = (igData.weeklyMedia && igData.weeklyMedia.length) ? igData.weeklyMedia : (igData.media||[]);
-    const publishCounts = {};
-    igPool.forEach(m=>{ let d=m.timestamp; try{ d=new Date(m.timestamp).toISOString().slice(0,10); }catch(e){ return; } publishCounts[d]=(publishCounts[d]||0)+1; });
-    charts.push(new Chart(document.getElementById('igGrowthChart'),{type:'bar',
-      data:{labels:igFh.map(f=>f.date.slice(5)),
-        datasets:[
-          {type:'line', label:'팔로워', data:igFh.map(f=>f.followers), borderColor:c.cat[4], backgroundColor:'transparent', borderWidth:2, tension:.35, pointRadius:3, pointBackgroundColor:c.cat[4], pointBorderColor:c.surface, pointBorderWidth:2, yAxisID:'y', order:0},
-          {type:'bar', label:'게시물 발행 수', data:igFh.map(f=>publishCounts[f.date]||0), backgroundColor:withA(c.cat[0],.5), borderRadius:4, maxBarThickness:20, yAxisID:'y1', order:1},
-        ]},
-      options:{...baseOpts(), interaction:{mode:'index',intersect:false},
-        scales:{
-          y:{position:'left',beginAtZero:false,...gridScale()},
-          y1:{position:'right',beginAtZero:true,ticks:{color:c.muted,font:{size:11,family:'Pretendard'},precision:0},grid:{display:false},border:{display:false}},
-          x:{...gridScale(),grid:{display:false}}
-        }}}));
-  } else if (igGrowthNote) {
-    igGrowthNote.textContent = '팔로워 이력이 2일 이상 쌓이면 그래프가 표시됩니다 (daily-instagram-brief.ps1 자동 실행 필요)';
+  const igPool = (igData.weeklyMedia && igData.weeklyMedia.length) ? igData.weeklyMedia : (igData.media||[]);
+  const publishCounts = {};
+  igPool.forEach(m=>{ let d=m.timestamp; try{ d=new Date(m.timestamp).toISOString().slice(0,10); }catch(e){ return; } publishCounts[d]=(publishCounts[d]||0)+1; });
+  if (igGrowthNote) {
+    igGrowthNote.textContent = igFh.length >= 2
+      ? `최근 ${igFh.length}일 · daily-instagram-brief.ps1 자동 수집`
+      : '팔로워 이력이 2일 이상 쌓이면 그래프가 표시됩니다 (daily-instagram-brief.ps1 자동 실행 필요)';
   }
+  renderChartSafely('igGrowthChart', igFh.length < 2, '팔로워 이력이 2일 이상 쌓이면 그래프가 표시됩니다.', ()=> new Chart(document.getElementById('igGrowthChart'),{type:'bar',
+    data:{labels:igFh.map(f=>f.date.slice(5)),
+      datasets:[
+        {type:'line', label:'팔로워', data:igFh.map(f=>f.followers), borderColor:c.cat[4], backgroundColor:'transparent', borderWidth:2, tension:.35, pointRadius:3, pointBackgroundColor:c.cat[4], pointBorderColor:c.surface, pointBorderWidth:2, yAxisID:'y', order:0},
+        {type:'bar', label:'게시물 발행 수', data:igFh.map(f=>publishCounts[f.date]||0), backgroundColor:withA(c.cat[0],.5), borderRadius:4, maxBarThickness:20, yAxisID:'y1', order:1},
+      ]},
+    options:{...baseOpts(), interaction:{mode:'index',intersect:false},
+      scales:{
+        y:{position:'left',beginAtZero:false,...gridScale()},
+        y1:{position:'right',beginAtZero:true,ticks:{color:c.muted,font:{size:11,family:'Pretendard'},precision:0},grid:{display:false},border:{display:false}},
+        x:{...gridScale(),grid:{display:false}}
+      }}}));
 }
 buildCharts();
 
