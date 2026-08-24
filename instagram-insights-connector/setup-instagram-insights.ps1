@@ -35,6 +35,7 @@ $expiresAt = $null
 $granted = @()
 $missing = @()
 $taskRegistered = $false
+$briefTaskRegistered = $false
 
 try {
     Write-Host '장기 액세스 토큰으로 교환 중...' -ForegroundColor Cyan
@@ -67,6 +68,9 @@ try {
 
     $renewScript = Join-Path $PSScriptRoot 'renew-instagram-token.ps1'
     $taskRegistered = Register-InstagramTokenRenewalTask -RenewScriptPath $renewScript
+
+    $briefScript = Join-Path $PSScriptRoot 'daily-instagram-brief.ps1'
+    $briefTaskRegistered = Register-InstagramDailyBriefTask -BriefScriptPath $briefScript
 }
 catch {
     Write-Host ''
@@ -100,6 +104,12 @@ if ($taskRegistered) {
     Write-Host '자동 갱신 예약 작업(InstagramCodexConnector-TokenRenew)이 등록되었습니다. (만료 10일 전 자동 갱신)' -ForegroundColor Green
 } else {
     Write-Host '자동 갱신 예약 작업 등록에 실패했습니다. renew-instagram-token.ps1을 수동으로 예약해 주세요.' -ForegroundColor Yellow
+}
+
+if ($briefTaskRegistered) {
+    Write-Host '매일 오전 10시 자동 브리프 예약 작업(InstagramCodexConnector-DailyBrief)이 등록되었습니다.' -ForegroundColor Green
+} else {
+    Write-Host '자동 브리프 예약 작업 등록에 실패했습니다. enable-daily-brief.ps1을 실행해 다시 등록해 주세요.' -ForegroundColor Yellow
 }
 
 Write-Host ''

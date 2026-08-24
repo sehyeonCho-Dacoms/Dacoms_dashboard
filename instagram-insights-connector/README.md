@@ -16,6 +16,9 @@ Windows PC에서 Instagram API(Instagram API with Instagram Login,
 | `setup-instagram-insights.ps1` | 최초 1회(또는 재설정 시) 실행. 자격 증명 입력 → DPAPI 암호화 저장 → 장기 토큰 교환 → 연결/권한 테스트 → 자동 갱신 예약 작업 등록 |
 | `renew-instagram-token.ps1` | 만료 10일 이내일 때만 토큰을 갱신 (작업 스케줄러가 매일 자동 호출) |
 | `collect-instagram-insights.ps1` | 프로필 + 최근 콘텐츠 5개 지표 수집, JSON/Markdown 저장 |
+| `daily-instagram-brief.ps1` | 매일 오전 10시, 팔로워 수·증감과 최근 콘텐츠 성과를 요약한 브리프 생성 (작업 스케줄러가 자동 호출) |
+| `enable-daily-brief.ps1` | 이미 설정을 마친 PC에서 위 브리프의 매일 10시 자동 실행만 추가로 등록 (토큰 재입력 불필요) |
+| `diagnose-instagram-token.ps1` | 토큰 교환 없이 토큰 자체의 유효성만 단독으로 진단하는 보조 스크립트 |
 
 ## 사전 준비
 
@@ -42,8 +45,17 @@ powershell -ExecutionPolicy Bypass -File .\collect-instagram-insights.ps1
 5. `instagram_business_basic`, `instagram_business_manage_insights` 권한 부여 여부를 확인합니다.
 6. 만료 10일 전부터 자동 갱신하는 작업 스케줄러 작업(`InstagramCodexConnector-TokenRenew`,
    매일 03:00 실행)을 등록합니다.
-7. 콘솔에는 **계정명 / 연결 성공 여부 / 토큰 만료일**만 출력됩니다. 토큰과 시크릿
+7. 매일 오전 10시에 팔로워/콘텐츠 성과 브리프를 자동 생성하는 작업 스케줄러 작업
+   (`InstagramCodexConnector-DailyBrief`)을 등록합니다.
+8. 콘솔에는 **계정명 / 연결 성공 여부 / 토큰 만료일**만 출력됩니다. 토큰과 시크릿
    원문은 어떤 경우에도 출력되지 않습니다.
+
+이미 예전에 `setup-instagram-insights.ps1`을 실행해 두었다면(토큰 재입력 없이),
+`enable-daily-brief.ps1`만 한 번 실행하면 매일 10시 자동 브리프가 추가로 등록됩니다:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\enable-daily-brief.ps1
+```
 
 `collect-instagram-insights.ps1`을 실행하면:
 - 저장된 토큰이 10일 이내 만료라면 수집 전에 `renew-instagram-token.ps1`을 먼저 호출해 갱신합니다.
@@ -51,6 +63,18 @@ powershell -ExecutionPolicy Bypass -File .\collect-instagram-insights.ps1
   지표를 가져옵니다.
 - 결과를 `%USERPROFILE%\Documents\InstagramInsights\` 아래에
   `instagram-insights-YYYYMMDD-HHmmss.json` / `.md`와 `latest.json` / `latest.md`로 저장합니다.
+
+`daily-instagram-brief.ps1`을 실행하면(매일 10시 자동 실행 또는 수동 실행):
+- 프로필(팔로워 수 포함)과 최근 콘텐츠 5개 지표를 가져와, 직전 실행 대비 **팔로워 증감**과
+  **최고 성과 게시물**을 포함한 한 문단 요약을 만듭니다.
+- `%USERPROFILE%\Documents\InstagramInsights\brief-YYYY-MM-DD.md`, `latest-brief.md`로 저장합니다.
+- 이 저장소 안에서 실행 중이면 `data/instagram.json`을 갱신하고, 변경 사항이 있으면
+  **자동으로 `git pull --ff-only` → `git add` → `git commit` → `git push`**를 시도해
+  라이브 대시보드에도 자동 반영합니다. 이 자동 push는 Windows의 Git 자격 증명 관리자에
+  이미 저장된 인증 정보를 사용하므로, 이전에 같은 저장소로 수동 push를 한 번이라도
+  성공한 적이 있다면 별도 설정 없이 동작합니다. push가 실패해도(네트워크/권한 등) 로컬
+  브리프 생성 자체는 실패로 처리하지 않고 경고만 출력합니다.
+- `dashboard.html`의 "인스타그램" 탭 상단 "오늘의 브리프" 카드와 "팔로워" KPI에 반영됩니다.
 
 ## 보안 설계
 
@@ -70,14 +94,16 @@ powershell -ExecutionPolicy Bypass -File .\collect-instagram-insights.ps1
 (단, 계정별로 `setup-instagram-insights.ps1`은 각 PC에서 다시 실행해 자격 증명을 입력해야 합니다 —
 DPAPI 암호화 값은 사용자/기기에 종속되어 이식되지 않습니다.)
 
-## 자동 갱신 재설정 / 제거
+## 자동 갱신 / 자동 브리프 재설정 / 제거
 
 ```powershell
 # 예약 작업 상태 확인
 Get-ScheduledTask -TaskName 'InstagramCodexConnector-TokenRenew'
+Get-ScheduledTask -TaskName 'InstagramCodexConnector-DailyBrief'
 
 # 예약 작업 제거
 Unregister-ScheduledTask -TaskName 'InstagramCodexConnector-TokenRenew' -Confirm:$false
+Unregister-ScheduledTask -TaskName 'InstagramCodexConnector-DailyBrief' -Confirm:$false
 
 # 설정 초기화 (토큰 재입력부터 다시 시작하고 싶을 때)
 Remove-Item "$env:LOCALAPPDATA\InstagramCodexConnector" -Recurse -Force

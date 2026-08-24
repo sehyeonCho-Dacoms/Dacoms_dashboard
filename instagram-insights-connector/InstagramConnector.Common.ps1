@@ -297,7 +297,7 @@ function Get-InstagramLongLivedToken {
 function Get-InstagramProfile {
     param([Parameter(Mandatory)][string]$AccessToken)
     return Invoke-InstagramGraphGet -Path 'me' -QueryParams @{
-        fields       = 'id,username,account_type,media_count'
+        fields       = 'id,username,account_type,media_count,followers_count'
         access_token = $AccessToken
     }
 }
@@ -381,6 +381,91 @@ function Get-MediaInsights {
     return $result
 }
 
+function Get-InstagramInsightsSnapshot {
+    <#
+        프로필과 최근 콘텐츠 N개의 인사이트를 한 번에 가져옵니다.
+        collect-instagram-insights.ps1과 daily-instagram-brief.ps1이 공유하는
+        데이터 수집 로직입니다.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$AccessToken,
+        [int]$MediaCount = 5
+    )
+    $igProfile = Get-InstagramProfile -AccessToken $AccessToken
+    $mediaList = @(Get-RecentMedia -AccessToken $AccessToken -Limit $MediaCount)
+
+    $mediaResults = @()
+    foreach ($media in $mediaList) {
+        $insights = Get-MediaInsights -MediaId $media.id -AccessToken $AccessToken
+        $mediaResults += [ordered]@{
+            id               = $media.id
+            caption          = $media.caption
+            mediaType        = $media.media_type
+            mediaProductType = $media.media_product_type
+            permalink        = $media.permalink
+            timestamp        = $media.timestamp
+            views            = $insights.views
+            reach            = $insights.reach
+            saved            = $insights.saved
+            shares           = $insights.shares
+        }
+    }
+
+    return [ordered]@{ Profile = $igProfile; Media = $mediaResults }
+}
+
+$script:BriefStatePath = Join-Path $script:ConfigDir 'brief-state.json'
+
+function Get-InstagramBriefState {
+    <#
+        직전 브리프 생성 시점의 팔로워 수 등 "증감 계산용" 상태를 읽어옵니다.
+        이 파일은 비밀값을 담지 않는 단순 로컬 숫자 캐시입니다.
+    #>
+    if (-not (Test-Path $script:BriefStatePath)) { return $null }
+    try { return Get-Content -Path $script:BriefStatePath -Raw | ConvertFrom-Json }
+    catch { return $null }
+}
+
+function Save-InstagramBriefState {
+    param([Parameter(Mandatory)][hashtable]$State)
+    if (-not (Test-Path $script:ConfigDir)) { New-Item -ItemType Directory -Path $script:ConfigDir -Force | Out-Null }
+    $State | ConvertTo-Json | Set-Content -Path $script:BriefStatePath -Encoding UTF8
+}
+
+function Register-InstagramScheduledTask {
+    <#
+        지정한 스크립트를 매일 특정 시각에 조용히(백그라운드) 실행하는
+        작업 스케줄러 작업을 등록하는 공통 헬퍼입니다.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$TaskName,
+        [Parameter(Mandatory)][string]$ScriptPath,
+        [Parameter(Mandatory)][string]$Description,
+        [Parameter(Mandatory)][datetime]$At
+    )
+
+    $powershellExe = Join-Path $PSHOME 'powershell.exe'
+    if (-not (Test-Path $powershellExe)) { $powershellExe = 'powershell.exe' }
+
+    try {
+        $action = New-ScheduledTaskAction -Execute $powershellExe `
+            -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$ScriptPath`""
+        $trigger = New-ScheduledTaskTrigger -Daily -At $At
+        $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
+        $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd
+
+        Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue
+
+        Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger `
+            -Principal $principal -Settings $settings `
+            -Description $Description | Out-Null
+        return $true
+    } catch {
+        Write-Warning "예약 작업($TaskName)을 등록하지 못했습니다: $($_.Exception.Message)"
+        return $false
+    }
+}
+
 function Register-InstagramTokenRenewalTask {
     <#
         토큰 만료 10일 전부터 매일 자동 갱신을 시도하는 작업 스케줄러 작업을 등록합니다.
@@ -388,26 +473,18 @@ function Register-InstagramTokenRenewalTask {
         매일 실행되어도 안전합니다.
     #>
     param([Parameter(Mandatory)][string]$RenewScriptPath)
+    return Register-InstagramScheduledTask -TaskName 'InstagramCodexConnector-TokenRenew' `
+        -ScriptPath $RenewScriptPath -At ([datetime]'03:00') `
+        -Description 'Instagram 장기 액세스 토큰 만료 10일 전 자동 갱신'
+}
 
-    $taskName = 'InstagramCodexConnector-TokenRenew'
-    $powershellExe = Join-Path $PSHOME 'powershell.exe'
-    if (-not (Test-Path $powershellExe)) { $powershellExe = 'powershell.exe' }
-
-    try {
-        $action = New-ScheduledTaskAction -Execute $powershellExe `
-            -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$RenewScriptPath`""
-        $trigger = New-ScheduledTaskTrigger -Daily -At 3:00AM
-        $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
-        $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd
-
-        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
-
-        Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger `
-            -Principal $principal -Settings $settings `
-            -Description 'Instagram 장기 액세스 토큰 만료 10일 전 자동 갱신' | Out-Null
-        return $true
-    } catch {
-        Write-Warning "자동 갱신 예약 작업을 등록하지 못했습니다: $($_.Exception.Message)"
-        return $false
-    }
+function Register-InstagramDailyBriefTask {
+    <#
+        매일 오전 10시에 팔로워/최근 콘텐츠 성과 브리프를 자동 생성하는
+        작업 스케줄러 작업을 등록합니다.
+    #>
+    param([Parameter(Mandatory)][string]$BriefScriptPath)
+    return Register-InstagramScheduledTask -TaskName 'InstagramCodexConnector-DailyBrief' `
+        -ScriptPath $BriefScriptPath -At ([datetime]'10:00') `
+        -Description 'Instagram 팔로워 및 최근 콘텐츠 성과 브리프 매일 오전 10시 자동 생성'
 }

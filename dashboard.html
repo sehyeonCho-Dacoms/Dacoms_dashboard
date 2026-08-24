@@ -316,7 +316,17 @@
     <span id="igAccountBadge" class="text-xs font-semibold px-3 py-1.5 rounded-full" style="color:#e87ba4; background:color-mix(in srgb,#e87ba4 10%,transparent)">@drafton.co.kr</span>
   </div>
 
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="card rounded-2xl p-5 mb-6 border-l-4" style="border-left-color:#e87ba4">
+    <p class="text-[11px] font-bold tracking-wider mb-1.5" style="color:var(--ink-muted)">📋 오늘의 브리프 · 매일 오전 10시 자동 생성</p>
+    <p id="igBriefSummary" class="text-sm font-semibold leading-relaxed" style="color:var(--ink-2)">아직 생성된 브리프가 없습니다. daily-instagram-brief.ps1이 매일 자동으로 이 카드를 갱신합니다.</p>
+  </div>
+
+  <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+    <div class="card rounded-2xl p-5">
+      <p class="text-[13px] font-semibold mb-2" style="color:var(--ink-2)">팔로워</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="igFollowers">-</span><span class="text-base font-bold opacity-40 ml-1">명</span></p>
+      <p id="igFollowersDelta" class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">-</p>
+    </div>
     <div class="card rounded-2xl p-5">
       <p class="text-[13px] font-semibold mb-2" style="color:var(--ink-2)">총 게시물</p>
       <p class="text-3xl font-extrabold tabular-nums"><span id="igMediaCount">-</span><span class="text-base font-bold opacity-40 ml-1">건</span></p>
@@ -446,14 +456,15 @@ let actions = [
 /* ─────────── 인스타그램 데이터 (기본값 = Mock, 라이브 로드 시 교체) ─────────── */
 let igData = {
   generatedAt: null,
-  account: { username: 'drafton.co.kr', id: '0', accountType: 'BUSINESS', mediaCount: 128 },
+  account: { username: 'drafton.co.kr', id: '0', accountType: 'BUSINESS', mediaCount: 128, followersCount: null },
   media: [
     {id:'1', caption:'스포츠 채용 소식 카드뉴스', mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:'2026-08-20T09:00:00+0000', views:5200, reach:4100, saved:120, shares:38},
     {id:'2', caption:'헤드헌팅 인사이트 릴스',     mediaType:'VIDEO',          permalink:'#', timestamp:'2026-08-17T09:00:00+0000', views:8900, reach:7200, saved:210, shares:64},
     {id:'3', caption:'이번 주 인기 채용공고 TOP5', mediaType:'IMAGE',          permalink:'#', timestamp:'2026-08-14T09:00:00+0000', views:3100, reach:2600, saved:65,  shares:19},
     {id:'4', caption:'스포츠 산업 트렌드 요약',    mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:'2026-08-11T09:00:00+0000', views:4600, reach:3800, saved:98,  shares:27},
     {id:'5', caption:'구단 채용 인터뷰 릴스',      mediaType:'VIDEO',          permalink:'#', timestamp:'2026-08-08T09:00:00+0000', views:11200,reach:9400, saved:305, shares:88},
-  ]
+  ],
+  brief: null
 };
 const igTypeLabel = {IMAGE:'이미지', VIDEO:'릴스/동영상', CAROUSEL_ALBUM:'캐러셀'};
 const igAccountTypeLabel = {BUSINESS:'비즈니스 계정', MEDIA_CREATOR:'크리에이터 계정', PERSONAL:'개인 계정'};
@@ -463,6 +474,16 @@ function renderInstagram(){
   setText('igAccountBadge', '@'+(a.username||'-'));
   setText('igMediaCount', a.mediaCount!=null ? a.mediaCount : '-');
   setText('igAccountType', igAccountTypeLabel[a.accountType] || a.accountType || '-');
+  setText('igFollowers', a.followersCount!=null ? a.followersCount.toLocaleString() : '-');
+
+  const brief = igData.brief;
+  if (brief) {
+    setText('igBriefSummary', brief.summary || '-');
+    const delta = brief.followersDelta;
+    setText('igFollowersDelta', delta==null ? '비교 데이터 없음' : delta>0 ? `▲ 전일 대비 ${delta}명 증가` : delta<0 ? `▼ 전일 대비 ${Math.abs(delta)}명 감소` : '전일과 동일');
+  } else {
+    setText('igFollowersDelta', '-');
+  }
 
   const media = igData.media || [];
   const sum = (k)=>media.reduce((s,m)=>s+(Number(m[k])||0),0);
@@ -757,7 +778,7 @@ function applyLiveData(d){
 // 파일이 없으면(아직 실행 전) 조용히 목업을 유지한다.
 function applyInstagramData(d){
   if(!d || !d.account) return;
-  igData = { generatedAt: d.generatedAt || null, account: d.account, media: Array.isArray(d.media) ? d.media : [] };
+  igData = { generatedAt: d.generatedAt || null, account: d.account, media: Array.isArray(d.media) ? d.media : [], brief: d.brief || null };
   renderInstagram();
   buildCharts();
 }

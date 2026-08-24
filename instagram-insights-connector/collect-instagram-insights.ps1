@@ -34,37 +34,19 @@ $token = $null
 try {
     $token = Get-DecryptedAccessToken -Config $config
 
-    Write-Host '프로필 정보 가져오는 중...' -ForegroundColor Cyan
-    $igProfile = Get-InstagramProfile -AccessToken $token
-
-    Write-Host ("최근 콘텐츠 {0}개 가져오는 중..." -f $MediaCount) -ForegroundColor Cyan
-    $mediaList = @(Get-RecentMedia -AccessToken $token -Limit $MediaCount)
-
-    $mediaResults = @()
-    foreach ($media in $mediaList) {
-        Write-Host ("  - {0} 지표 조회 중" -f $media.id)
-        $insights = Get-MediaInsights -MediaId $media.id -AccessToken $token
-        $mediaResults += [ordered]@{
-            id               = $media.id
-            caption          = $media.caption
-            mediaType        = $media.media_type
-            mediaProductType = $media.media_product_type
-            permalink        = $media.permalink
-            timestamp        = $media.timestamp
-            views            = $insights.views
-            reach            = $insights.reach
-            saved            = $insights.saved
-            shares           = $insights.shares
-        }
-    }
+    Write-Host '프로필 및 최근 콘텐츠 정보 가져오는 중...' -ForegroundColor Cyan
+    $snapshot = Get-InstagramInsightsSnapshot -AccessToken $token -MediaCount $MediaCount
+    $igProfile = $snapshot.Profile
+    $mediaResults = $snapshot.Media
 
     $report = [ordered]@{
         generatedAt = (Get-Date).ToUniversalTime().ToString('o')
         account     = [ordered]@{
-            username    = $igProfile.username
-            id          = $igProfile.id
-            accountType = $igProfile.account_type
-            mediaCount  = $igProfile.media_count
+            username       = $igProfile.username
+            id             = $igProfile.id
+            accountType    = $igProfile.account_type
+            mediaCount     = $igProfile.media_count
+            followersCount = $igProfile.followers_count
         }
         media = $mediaResults
     }
