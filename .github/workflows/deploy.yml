@@ -17,6 +17,7 @@ on:
       - "dashboard.html"
       - "job_pipeline/**"
       - "data/instagram.json"
+      - "vendor/**"
       - ".github/workflows/deploy.yml"
 
 # Pages 배포에 필요한 권한
@@ -70,6 +71,9 @@ jobs:
           # instagram.json은 Windows 로컬 커넥터(collect-instagram-insights.ps1)가 생성해
           # 커밋한 경우에만 존재한다 (토큰/시크릿은 포함되지 않는 수치 데이터).
           if [ -f data/instagram.json ]; then cp data/instagram.json _site/data/instagram.json; fi
+          # 외부 CDN(cdnjs.cloudflare.com) 차단 환경에서도 차트가 항상 뜨도록,
+          # Chart.js를 저장소에 커밋해 둔 로컬 파일로 함께 배포한다.
+          cp -r vendor _site/vendor
 
       - uses: actions/upload-pages-artifact@v3
         with:
