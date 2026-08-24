@@ -1,10 +1,11 @@
 ﻿{
-    "generatedAt":  "2026-08-24T08:36:44.1899262Z",
+    "generatedAt":  "2026-08-24T09:01:59.8514616Z",
     "account":  {
                     "username":  "drafton.co.kr",
                     "id":  "28961157813485354",
                     "accountType":  "BUSINESS",
-                    "mediaCount":  761
+                    "mediaCount":  761,
+                    "followersCount":  9273
                 },
     "media":  [
                   {
@@ -14,8 +15,8 @@
                       "mediaProductType":  "FEED",
                       "permalink":  "https://www.instagram.com/p/DcS5ogRj0zP/",
                       "timestamp":  "2026-08-21T08:23:40+0000",
-                      "views":  7629,
-                      "reach":  2369,
+                      "views":  7681,
+                      "reach":  2376,
                       "saved":  2,
                       "shares":  1
                   },
@@ -26,8 +27,8 @@
                       "mediaProductType":  "FEED",
                       "permalink":  "https://www.instagram.com/p/DcS5H54vfUv/",
                       "timestamp":  "2026-08-21T08:19:30+0000",
-                      "views":  7611,
-                      "reach":  3690,
+                      "views":  7617,
+                      "reach":  3696,
                       "saved":  11,
                       "shares":  16
                   },
@@ -38,8 +39,8 @@
                       "mediaProductType":  "FEED",
                       "permalink":  "https://www.instagram.com/p/DcS4qEBvgHi/",
                       "timestamp":  "2026-08-21T08:17:02+0000",
-                      "views":  8059,
-                      "reach":  3757,
+                      "views":  8069,
+                      "reach":  3776,
                       "saved":  9,
                       "shares":  4
                   },
@@ -50,8 +51,8 @@
                       "mediaProductType":  "FEED",
                       "permalink":  "https://www.instagram.com/p/DcS4b1Xv0Bn/",
                       "timestamp":  "2026-08-21T08:13:47+0000",
-                      "views":  10697,
-                      "reach":  5710,
+                      "views":  10704,
+                      "reach":  5716,
                       "saved":  12,
                       "shares":  11
                   },
@@ -62,10 +63,21 @@
                       "mediaProductType":  "FEED",
                       "permalink":  "https://www.instagram.com/p/DcS4M5fvRX2/",
                       "timestamp":  "2026-08-21T08:11:25+0000",
-                      "views":  6530,
-                      "reach":  3397,
+                      "views":  6532,
+                      "reach":  3407,
                       "saved":  2,
                       "shares":  2
                   }
-              ]
+              ],
+    "brief":  {
+                  "date":  "2026-08-24",
+                  "followers":  9273,
+                  "followersDelta":  null,
+                  "summary":  "팔로워 9273명 (비교 데이터 없음 (첫 브리프)). 최근 5개 게시물 평균 조회수 8121회, 도달 합계 18971회, 저장+공유 합계 70회. 최고 성과: \u0027⠀ [비바스포츠] ZETT 야구 브랜드 영업 담당자 채용 (~08.31)…\u0027 (조회수 10704회)",
+                  "topPost":  {
+                                  "caption":  "⠀ [비바스포츠] ZETT 야구 브랜드 영업 담당자 채용 (~08.31)…",
+                                  "views":  10704,
+                                  "permalink":  "https://www.instagram.com/p/DcS4b1Xv0Bn/"
+                              }
+              }
 }
