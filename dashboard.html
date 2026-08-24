@@ -79,6 +79,7 @@
       <button data-tab="ingest"   class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">공고 인게스트</button>
       <button data-tab="leads"    class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">헤드헌팅 리드</button>
       <button data-tab="trends"   class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">산업 트렌드</button>
+      <button data-tab="instagram" class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">인스타그램</button>
     </nav>
   </div>
 </header>
@@ -305,6 +306,74 @@
   </div>
 </section>
 
+<!-- ══════════════ 인스타그램 성과 ══════════════ -->
+<section id="instagram" class="panel">
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+    <div>
+      <h2 class="text-lg font-extrabold">인스타그램 성과 현황</h2>
+      <p class="text-sm" style="color:var(--ink-muted)">계정 프로필 &amp; 최근 게시물 5개 성과 · Windows 로컬 커넥터로 수집</p>
+    </div>
+    <span id="igAccountBadge" class="text-xs font-semibold px-3 py-1.5 rounded-full" style="color:#e87ba4; background:color-mix(in srgb,#e87ba4 10%,transparent)">@drafton.co.kr</span>
+  </div>
+
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="card rounded-2xl p-5">
+      <p class="text-[13px] font-semibold mb-2" style="color:var(--ink-2)">총 게시물</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="igMediaCount">-</span><span class="text-base font-bold opacity-40 ml-1">건</span></p>
+      <p id="igAccountType" class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">-</p>
+    </div>
+    <div class="card rounded-2xl p-5">
+      <p class="text-[13px] font-semibold mb-2" style="color:var(--ink-2)">최근 5개 조회수 합계</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="igViewsSum">0</span></p>
+      <p class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">views 합계</p>
+    </div>
+    <div class="card rounded-2xl p-5">
+      <p class="text-[13px] font-semibold mb-2" style="color:var(--ink-2)">최근 5개 도달 합계</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="igReachSum">0</span></p>
+      <p class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">reach 합계</p>
+    </div>
+    <div class="card rounded-2xl p-5">
+      <p class="text-[13px] font-semibold mb-2" style="color:var(--ink-2)">저장 + 공유 합계</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="igSavedSharesSum">0</span></p>
+      <p class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">saved + shares</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
+    <div class="card rounded-2xl p-5 lg:col-span-3">
+      <h3 class="text-[15px] font-bold">게시물별 성과</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">최근 5개 게시물 · 조회수/도달/저장/공유</p>
+      <div class="h-64"><canvas id="igPostChart"></canvas></div>
+    </div>
+    <div class="card rounded-2xl p-5 lg:col-span-2">
+      <h3 class="text-[15px] font-bold">콘텐츠 유형 비중</h3>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">이미지 · 릴스 · 캐러셀</p>
+      <div class="h-64 flex items-center justify-center"><canvas id="igTypeChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card rounded-2xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b text-left" style="border-color:var(--grid); color:var(--ink-muted); background:color-mix(in srgb,var(--ink-muted) 6%,transparent)">
+            <th class="font-semibold px-4 py-3 whitespace-nowrap">게시일</th>
+            <th class="font-semibold px-4 py-3 whitespace-nowrap">유형</th>
+            <th class="font-semibold px-4 py-3">캡션</th>
+            <th class="font-semibold px-4 py-3 whitespace-nowrap text-right">조회수</th>
+            <th class="font-semibold px-4 py-3 whitespace-nowrap text-right">도달</th>
+            <th class="font-semibold px-4 py-3 whitespace-nowrap text-right">저장</th>
+            <th class="font-semibold px-4 py-3 whitespace-nowrap text-right">공유</th>
+            <th class="font-semibold px-4 py-3 whitespace-nowrap">링크</th>
+          </tr>
+        </thead>
+        <tbody id="igMediaBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <p id="igUpdatedNote" class="text-xs mt-3" style="color:var(--ink-muted)">데이터는 예시(Mock)입니다 · collect-instagram-insights.ps1 실행 후 data/instagram.json을 커밋하면 실데이터로 교체됩니다.</p>
+</section>
+
 <footer class="text-center text-xs mt-10 pt-6 border-t" style="color:var(--ink-muted); border-color:var(--grid)">
   드래프트온 운영 대시보드 · 데이터는 예시(Mock)이며 실제 크롤링/CRM 연동 전 UI 프로토타입입니다.
 </footer>
@@ -373,6 +442,54 @@ let actions = [
   {lane:'demand', pr:'P1', title:'번핏 신규 리드 첫 접촉', company:'예상 수수료 ₩2,600만',
    why:'프로덕트팀 2배 확장, 초기라 HH 경쟁 낮음 — 선점 가치 큼', cta:'콜드 아웃리치'},
 ];
+
+/* ─────────── 인스타그램 데이터 (기본값 = Mock, 라이브 로드 시 교체) ─────────── */
+let igData = {
+  generatedAt: null,
+  account: { username: 'drafton.co.kr', id: '0', accountType: 'BUSINESS', mediaCount: 128 },
+  media: [
+    {id:'1', caption:'스포츠 채용 소식 카드뉴스', mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:'2026-08-20T09:00:00+0000', views:5200, reach:4100, saved:120, shares:38},
+    {id:'2', caption:'헤드헌팅 인사이트 릴스',     mediaType:'VIDEO',          permalink:'#', timestamp:'2026-08-17T09:00:00+0000', views:8900, reach:7200, saved:210, shares:64},
+    {id:'3', caption:'이번 주 인기 채용공고 TOP5', mediaType:'IMAGE',          permalink:'#', timestamp:'2026-08-14T09:00:00+0000', views:3100, reach:2600, saved:65,  shares:19},
+    {id:'4', caption:'스포츠 산업 트렌드 요약',    mediaType:'CAROUSEL_ALBUM', permalink:'#', timestamp:'2026-08-11T09:00:00+0000', views:4600, reach:3800, saved:98,  shares:27},
+    {id:'5', caption:'구단 채용 인터뷰 릴스',      mediaType:'VIDEO',          permalink:'#', timestamp:'2026-08-08T09:00:00+0000', views:11200,reach:9400, saved:305, shares:88},
+  ]
+};
+const igTypeLabel = {IMAGE:'이미지', VIDEO:'릴스/동영상', CAROUSEL_ALBUM:'캐러셀'};
+const igAccountTypeLabel = {BUSINESS:'비즈니스 계정', MEDIA_CREATOR:'크리에이터 계정', PERSONAL:'개인 계정'};
+
+function renderInstagram(){
+  const a = igData.account || {};
+  setText('igAccountBadge', '@'+(a.username||'-'));
+  setText('igMediaCount', a.mediaCount!=null ? a.mediaCount : '-');
+  setText('igAccountType', igAccountTypeLabel[a.accountType] || a.accountType || '-');
+
+  const media = igData.media || [];
+  const sum = (k)=>media.reduce((s,m)=>s+(Number(m[k])||0),0);
+  setText('igViewsSum', sum('views').toLocaleString());
+  setText('igReachSum', sum('reach').toLocaleString());
+  setText('igSavedSharesSum', (sum('saved')+sum('shares')).toLocaleString());
+
+  document.getElementById('igMediaBody').innerHTML = media.map(m=>{
+    let d = m.timestamp;
+    try{ d = new Date(m.timestamp).toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}); }catch(e){}
+    return `<tr class="row-hover border-b transition-colors" style="border-color:var(--grid)">
+      <td class="px-4 py-3 whitespace-nowrap" style="color:var(--ink-2)">${d}</td>
+      <td class="px-4 py-3 whitespace-nowrap">${pill(igTypeLabel[m.mediaType]||m.mediaType||'-', '#e87ba4')}</td>
+      <td class="px-4 py-3" style="color:var(--ink-2)">${(m.caption||'').slice(0,60)}</td>
+      <td class="px-4 py-3 text-right tabular-nums font-semibold">${m.views ?? '-'}</td>
+      <td class="px-4 py-3 text-right tabular-nums font-semibold">${m.reach ?? '-'}</td>
+      <td class="px-4 py-3 text-right tabular-nums font-semibold">${m.saved ?? '-'}</td>
+      <td class="px-4 py-3 text-right tabular-nums font-semibold">${m.shares ?? '-'}</td>
+      <td class="px-4 py-3 whitespace-nowrap"><a href="${m.permalink}" target="_blank" rel="noopener" class="text-xs font-bold" style="color:#2a78d6">열기 ↗</a></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="8" class="px-4 py-10 text-center text-sm" style="color:var(--ink-muted)">게시물 데이터가 없습니다.</td></tr>`;
+
+  setText('igUpdatedNote', igData.generatedAt
+    ? `데이터 생성: ${igData.generatedAt.replace('T',' ').slice(0,16)} · collect-instagram-insights.ps1 수집 결과`
+    : '데이터는 예시(Mock)입니다 · collect-instagram-insights.ps1 실행 후 data/instagram.json을 커밋하면 실데이터로 교체됩니다.');
+}
+renderInstagram();
 
 /* ─────────── 배지 색 ─────────── */
 const platClass = {'원티드':'#2a78d6','사람인':'#1baf7a','잡코리아':'#4a3aa7','점핏':'#eb6834','워크넷':'#eda100','대한체육회':'#008300'};
@@ -530,6 +647,26 @@ function buildCharts(){
     data:{labels:order,datasets:[{data:order.map(k=>zc[k]),backgroundColor:c.cat[6],borderRadius:4,maxBarThickness:48}]},
     options:{...baseOpts(),plugins:{legend:{display:false},tooltip:baseOpts().plugins.tooltip},
       scales:{y:{beginAtZero:true,...gridScale()},x:{...gridScale(),grid:{display:false}}}}}));
+
+  // 인스타그램 게시물별 성과 (4 series)
+  const igMedia = igData.media||[];
+  const igLabels = igMedia.map((m,i)=>{ try{ return new Date(m.timestamp).toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'}); }catch(e){ return 'P'+(i+1); } });
+  charts.push(new Chart(document.getElementById('igPostChart'),{type:'bar',
+    data:{labels:igLabels,
+      datasets:[
+        {label:'조회수',data:igMedia.map(m=>m.views||0),backgroundColor:c.cat[0],borderRadius:4,maxBarThickness:22},
+        {label:'도달',  data:igMedia.map(m=>m.reach||0),backgroundColor:c.cat[2],borderRadius:4,maxBarThickness:22},
+        {label:'저장',  data:igMedia.map(m=>m.saved||0),backgroundColor:c.cat[4],borderRadius:4,maxBarThickness:22},
+        {label:'공유',  data:igMedia.map(m=>m.shares||0),backgroundColor:c.cat[3],borderRadius:4,maxBarThickness:22},
+      ]},
+    options:{...baseOpts(),scales:{y:{beginAtZero:true,...gridScale()},x:{...gridScale(),grid:{display:false}}}}}));
+
+  // 인스타그램 콘텐츠 유형 비중
+  const igTc={}; igMedia.forEach(m=>{ const k=igTypeLabel[m.mediaType]||m.mediaType||'기타'; igTc[k]=(igTc[k]||0)+1; });
+  const igTl=Object.keys(igTc);
+  charts.push(new Chart(document.getElementById('igTypeChart'),{type:'doughnut',
+    data:{labels:igTl,datasets:[{data:igTl.map(k=>igTc[k]),backgroundColor:igTl.map((_,i)=>c.cat[(i+1)%c.cat.length]),borderWidth:3,borderColor:c.surface,hoverOffset:6}]},
+    options:{...baseOpts(),cutout:'62%',plugins:{...baseOpts().plugins,legend:{position:'bottom',labels:baseOpts().plugins.legend.labels}}}}));
 }
 buildCharts();
 
@@ -605,6 +742,23 @@ function applyLiveData(d){
   fetch('./data/dashboard.json',{cache:'no-store'})
     .then(r=>{ if(!r.ok) throw new Error('no data'); return r.json(); })
     .then(applyLiveData)
+    .catch(()=>{ /* 목업 유지 */ });
+})();
+
+/* ─────────── 라이브 인스타그램 데이터 로드 ─────────── */
+// collect-instagram-insights.ps1 이 로컬(Windows) 실행 시 함께 생성하는 ./data/instagram.json.
+// 토큰/시크릿은 이 파일에 절대 포함되지 않으며, 조회수 등 수치 데이터만 담깁니다.
+// 파일이 없으면(아직 실행 전) 조용히 목업을 유지한다.
+function applyInstagramData(d){
+  if(!d || !d.account) return;
+  igData = { generatedAt: d.generatedAt || null, account: d.account, media: Array.isArray(d.media) ? d.media : [] };
+  renderInstagram();
+  buildCharts();
+}
+(function loadLiveInstagram(){
+  fetch('./data/instagram.json',{cache:'no-store'})
+    .then(r=>{ if(!r.ok) throw new Error('no data'); return r.json(); })
+    .then(applyInstagramData)
     .catch(()=>{ /* 목업 유지 */ });
 })();
 </script>

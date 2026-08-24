@@ -66,6 +66,9 @@ jobs:
           mkdir -p _site/data
           cp dashboard.html _site/index.html
           cp data/dashboard.json _site/data/dashboard.json
+          # instagram.json은 Windows 로컬 커넥터(collect-instagram-insights.ps1)가 생성해
+          # 커밋한 경우에만 존재한다 (토큰/시크릿은 포함되지 않는 수치 데이터).
+          if [ -f data/instagram.json ]; then cp data/instagram.json _site/data/instagram.json; fi
 
       - uses: actions/upload-pages-artifact@v3
         with:
