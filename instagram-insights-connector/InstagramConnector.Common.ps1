@@ -200,8 +200,8 @@ function Show-CredentialInputForm {
     }
 
     $output = [pscustomobject]@{
-        AccessToken = $txtToken.Text
-        AppSecret   = $txtSecret.Text
+        AccessToken = $txtToken.Text.Trim()
+        AppSecret   = $txtSecret.Text.Trim()
     }
 
     # .NET 문자열은 불변이라 완전한 메모리 소거는 불가능하지만,
