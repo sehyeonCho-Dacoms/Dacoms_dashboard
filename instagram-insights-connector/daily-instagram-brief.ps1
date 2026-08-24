@@ -135,14 +135,16 @@ try {
         $surging = @($surging | Sort-Object { $_.delta } -Descending | Select-Object -First 5)
     }
 
-    # 팔로워 전체의 연령대×성별 인구통계 스냅샷 - 대시보드의 "연령대별/성별 선호도"
-    # 섹션에 사용합니다. 계정 전체 지표라 게시물별 교차분석에는 쓰이지 않습니다.
-    # 조회 실패(팔로워 수 부족 등)는 치명적 오류가 아니므로 이전 값을 그대로 유지합니다.
-    $followerDemographics = Get-InstagramFollowerDemographics -AccessToken $token -IgUserId $igProfile.id
-    if ($null -eq $followerDemographics -and $prevDashboardData -and $prevDashboardData.followerDemographics) {
-        $followerDemographics = @($prevDashboardData.followerDemographics)
+    # 최근 30일간 실제로 반응(좋아요/댓글/저장 등)한 참여자의 연령대×성별 인구통계
+    # - 대시보드의 "연령대별/성별 선호도" 섹션에 사용합니다. 계정 전체(최근 30일)
+    # 집계라 게시물별 교차분석에는 쓰이지 않지만, 단순 팔로워 전체보다 "실제로
+    # 반응하는 사람" 기준이라 더 의미 있는 신호입니다.
+    # 조회 실패(참여자 수 부족 등)는 치명적 오류가 아니므로 이전 값을 그대로 유지합니다.
+    $engagedDemographics = Get-InstagramEngagedAudienceDemographics -AccessToken $token -IgUserId $igProfile.id
+    if ($null -eq $engagedDemographics -and $prevDashboardData -and $prevDashboardData.engagedDemographics) {
+        $engagedDemographics = @($prevDashboardData.engagedDemographics)
     }
-    if ($null -eq $followerDemographics) { $followerDemographics = @() }
+    if ($null -eq $engagedDemographics) { $engagedDemographics = @() }
 
     $report = [ordered]@{
         generatedAt          = (Get-Date).ToUniversalTime().ToString('o')
@@ -158,7 +160,7 @@ try {
         brief                = $brief
         followerHistory      = $followerHistory
         surging              = $surging
-        followerDemographics = $followerDemographics
+        engagedDemographics  = $engagedDemographics
     }
 
     if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }
@@ -202,7 +204,7 @@ try {
         Save-InstagramDashboardData -RepoDataDir $repoDataDir `
             -Account $report.account -Media $mediaResults -WeeklyMedia $weeklyMediaResults `
             -Brief $brief -FollowerHistory $followerHistory -Surging $surging `
-            -FollowerDemographics $followerDemographics | Out-Null
+            -EngagedDemographics $engagedDemographics | Out-Null
 
         $candidateRoot = Join-Path $PSScriptRoot '..'
         if (Test-Path (Join-Path $candidateRoot '.git')) {

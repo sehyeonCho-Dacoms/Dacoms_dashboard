@@ -424,13 +424,13 @@
   <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
     <div class="card rounded-2xl p-5 lg:col-span-3">
       <h3 class="text-[15px] font-bold">연령대별 선호도</h3>
-      <p class="text-xs mb-4" style="color:var(--ink-muted)">계정 전체 팔로워 인구통계 스냅샷 (특정 게시물과 연결된 수치가 아닙니다)</p>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">최근 30일 참여자(좋아요·댓글·저장 등) 인구통계 · 특정 게시물과 연결된 수치는 아닙니다</p>
       <div class="h-64"><canvas id="igAgeChart"></canvas></div>
       <p id="igAgeInsight" class="text-xs mt-4 pt-3 border-t leading-relaxed" style="border-color:var(--grid); color:var(--ink-2)"></p>
     </div>
     <div class="card rounded-2xl p-5 lg:col-span-2">
       <h3 class="text-[15px] font-bold">성별별 선호도</h3>
-      <p class="text-xs mb-4" style="color:var(--ink-muted)">계정 전체 팔로워 인구통계 스냅샷 · 성별 격차가 큰 연령대</p>
+      <p class="text-xs mb-4" style="color:var(--ink-muted)">최근 30일 참여자 인구통계 · 성별 격차가 큰 연령대</p>
       <div class="h-40 flex items-center justify-center"><canvas id="igGenderChart"></canvas></div>
       <div id="igGenderGapList" class="space-y-2 mt-4"></div>
       <p id="igGenderInsight" class="text-xs mt-4 pt-3 border-t leading-relaxed" style="border-color:var(--grid); color:var(--ink-2)"></p>
@@ -554,7 +554,7 @@ let igData = {
   surging: [
     {id:'w2', caption:'[FC서울] 스폰서십 담당자 채용 릴스 #사업개발 #커리어', viewsYesterday:6200, viewsToday:8900, delta:2700, deltaPct:43.5, permalink:'#'},
   ],
-  followerDemographics: [
+  engagedDemographics: [
     {ageRange:'18-24', gender:'F', value:320}, {ageRange:'18-24', gender:'M', value:280},
     {ageRange:'25-34', gender:'F', value:610}, {ageRange:'25-34', gender:'M', value:540},
     {ageRange:'35-44', gender:'F', value:190}, {ageRange:'35-44', gender:'M', value:260},
@@ -867,13 +867,14 @@ function renderInstagramTopicRecs(weekly){
     </div>`).join('');
 }
 
-/* ─────────── 인스타그램: 연령/성별 (계정 전체 팔로워 인구통계 스냅샷) ───────────
-   follower_demographics API는 "이 게시물에 어떤 연령/성별이 반응했는지"가 아니라
-   계정 전체 팔로워의 연령×성별 분포만 알려준다 (Instagram API의 한계). 그래서
-   콘텐츠별 교차분석이 아니라 계정 전체 스냅샷이라는 점을 라벨로 명시한다. */
+/* ─────────── 인스타그램: 연령/성별 (최근 30일 참여자 인구통계) ───────────
+   engaged_audience_demographics API는 "이 게시물에 어떤 연령/성별이 반응했는지"가
+   아니라 최근 기간(기본 30일) 전체 참여자의 연령×성별 분포만 알려준다 (Instagram
+   API의 한계). 단순 팔로워 전체보다는 "실제로 반응한 사람" 기준이라 더 의미
+   있지만, 그래도 콘텐츠별 교차분석은 아니라는 점을 라벨로 명시한다. */
 const IG_AGE_ORDER = ['13-17','18-24','25-34','35-44','45-54','55-64','65+'];
 function igAgeGenderPivot(){
-  const rows = igData.followerDemographics || [];
+  const rows = igData.engagedDemographics || [];
   const ages = [...new Set(rows.map(r=>r.ageRange))].sort((a,b)=> IG_AGE_ORDER.indexOf(a)-IG_AGE_ORDER.indexOf(b));
   const byAge = ages.map(age=>{
     const forAge = rows.filter(r=>r.ageRange===age);
@@ -888,7 +889,7 @@ function igAgeGenderPivot(){
 function renderInstagramGenderGap(){
   const gapList = document.getElementById('igGenderGapList');
   if (!gapList) return;
-  const rows = igData.followerDemographics || [];
+  const rows = igData.engagedDemographics || [];
   if (rows.length === 0) {
     gapList.innerHTML = '';
     setText('igGenderInsight', '');
@@ -911,11 +912,11 @@ function renderInstagramGenderGap(){
       <span class="font-bold" style="color:${a.lean==='F'?'#e87ba4':'#2a78d6'}">${a.lean==='F'?'여성':'남성'} 우세 · 격차 ${a.gap.toFixed(0)}%p</span>
     </div>`).join('') || `<p class="text-sm py-2 text-center" style="color:var(--ink-muted)">비교할 데이터가 없습니다.</p>`;
 
-  setText('igGenderInsight', `전체 팔로워 중 여성 ${(totalF/grand*100).toFixed(0)}% · 남성 ${(totalM/grand*100).toFixed(0)}%${totalU>0?` · 미상 ${(totalU/grand*100).toFixed(0)}%`:''}. 격차가 가장 큰 연령대를 참고해 타깃 콘텐츠 비중을 조정해 보세요.`);
+  setText('igGenderInsight', `최근 30일 참여자 중 여성 ${(totalF/grand*100).toFixed(0)}% · 남성 ${(totalM/grand*100).toFixed(0)}%${totalU>0?` · 미상 ${(totalU/grand*100).toFixed(0)}%`:''}. 격차가 가장 큰 연령대를 참고해 타깃 콘텐츠 비중을 조정해 보세요.`);
 
   const topAge = byAge.slice().sort((a,b)=>b.total-a.total)[0];
   if (topAge) {
-    setText('igAgeInsight', `팔로워가 가장 많은 연령대는 ${topAge.age}세(전체의 ${(topAge.total/grand*100).toFixed(0)}%)입니다. 이 연령대가 선호할 만한 직무/콘텐츠 유형을 우선 기획해 보세요.`);
+    setText('igAgeInsight', `참여가 가장 많은 연령대는 ${topAge.age}세(전체의 ${(topAge.total/grand*100).toFixed(0)}%)입니다. 이 연령대가 선호할 만한 직무/콘텐츠 유형을 우선 기획해 보세요.`);
   }
 }
 renderInstagram();
@@ -1167,10 +1168,10 @@ function buildChartsInner(){
         x:{...gridScale(),grid:{display:false}}
       }}}));
 
-  // 인스타그램 연령대별/성별 팔로워 인구통계 (계정 전체 스냅샷)
-  const igDemo = igData.followerDemographics || [];
+  // 인스타그램 연령대별/성별 참여자 인구통계 (최근 30일 집계)
+  const igDemo = igData.engagedDemographics || [];
   const { ages: igAges, byAge: igByAge } = igAgeGenderPivot();
-  renderChartSafely('igAgeChart', igDemo.length===0, '팔로워 인구통계 데이터가 아직 없습니다. daily-instagram-brief.ps1이 자동으로 수집하면 표시됩니다.', ()=> new Chart(document.getElementById('igAgeChart'),{type:'bar',
+  renderChartSafely('igAgeChart', igDemo.length===0, '참여자 인구통계 데이터가 아직 없습니다. daily-instagram-brief.ps1이 자동으로 수집하면 표시됩니다.', ()=> new Chart(document.getElementById('igAgeChart'),{type:'bar',
     data:{labels:igAges,
       datasets:[
         {label:'여성', data:igByAge.map(a=>a.F), backgroundColor:c.cat[4], borderRadius:4, maxBarThickness:36},
@@ -1270,7 +1271,7 @@ function applyInstagramData(d){
   if(!d || !d.account) return;
   igData = { generatedAt: d.generatedAt || null, account: d.account, media: Array.isArray(d.media) ? d.media : [], weeklyMedia: Array.isArray(d.weeklyMedia) ? d.weeklyMedia : [], brief: d.brief || null,
     followerHistory: Array.isArray(d.followerHistory) ? d.followerHistory : [], surging: Array.isArray(d.surging) ? d.surging : [],
-    followerDemographics: Array.isArray(d.followerDemographics) ? d.followerDemographics : [] };
+    engagedDemographics: Array.isArray(d.engagedDemographics) ? d.engagedDemographics : [] };
   renderInstagram();
   buildCharts();
 }

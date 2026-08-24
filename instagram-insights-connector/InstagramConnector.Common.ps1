@@ -381,25 +381,30 @@ function Get-MediaInsights {
     return $result
 }
 
-function Get-InstagramFollowerDemographics {
+function Get-InstagramEngagedAudienceDemographics {
     <#
-        팔로워 전체의 연령대×성별 분포 스냅샷을 가져옵니다. 이 지표는 계정 전체
-        지표이며, 특정 게시물의 조회/참여와는 연결되지 않습니다 (Instagram API가
-        게시물 단위 인구통계를 제공하지 않기 때문). 팔로워 수가 Meta의 최소 요건
-        (일반적으로 100명 이상)에 못 미치거나 계정 유형이 지원되지 않으면 실패할
-        수 있어, 이 경우 치명적 오류로 처리하지 않고 $null을 반환합니다 —
-        대시보드는 $null/빈 배열일 때 "데이터 연동 준비 중" 빈 상태를 표시합니다.
+        최근 N일간 콘텐츠에 실제로 반응(좋아요/댓글/저장 등)한 사람들의 연령×성별
+        분포를 가져옵니다. 단순 팔로워 전체(follower_demographics)보다 "실제로
+        반응하는 사람" 기준이라 더 의미 있는 신호지만, 이 지표 역시 계정 전체
+        (최근 -Timeframe 기간 전체) 집계이며 특정 게시물 하나와 연결되지는
+        않습니다 (Instagram API가 게시물 단위 참여자 인구통계를 제공하지 않기
+        때문). 팔로워/참여자 수가 Meta의 최소 요건에 못 미치거나 계정 유형이
+        지원되지 않으면 실패할 수 있어, 이 경우 치명적 오류로 처리하지 않고
+        $null을 반환합니다 — 대시보드는 $null/빈 배열일 때 "데이터 연동 준비 중"
+        빈 상태를 표시합니다.
     #>
     param(
         [Parameter(Mandatory)][string]$AccessToken,
-        [Parameter(Mandatory)][string]$IgUserId
+        [Parameter(Mandatory)][string]$IgUserId,
+        [string]$Timeframe = 'last_30_days'
     )
     try {
         $resp = Invoke-InstagramGraphGet -Path "$IgUserId/insights" -QueryParams @{
-            metric       = 'follower_demographics'
+            metric       = 'engaged_audience_demographics'
             period       = 'lifetime'
             metric_type  = 'total_value'
             breakdown    = 'age,gender'
+            timeframe    = $Timeframe
             access_token = $AccessToken
         }
         $results = $resp.data[0].total_value.breakdowns[0].results
@@ -414,7 +419,7 @@ function Get-InstagramFollowerDemographics {
         }
         return @($out)
     } catch {
-        Write-Warning "팔로워 인구통계 조회 실패(선택 항목이므로 무시 가능): $($_.Exception.Message)"
+        Write-Warning "참여자 인구통계 조회 실패(선택 항목이므로 무시 가능): $($_.Exception.Message)"
         return $null
     }
 }
@@ -509,7 +514,7 @@ function Save-InstagramDashboardData {
         $Brief = $null,
         $FollowerHistory = $null,
         $Surging = $null,
-        $FollowerDemographics = $null
+        $EngagedDemographics = $null
     )
     $prev = Get-InstagramDashboardData -RepoDataDir $RepoDataDir
 
@@ -521,7 +526,7 @@ function Save-InstagramDashboardData {
         brief                = if ($null -ne $Brief) { $Brief } elseif ($prev -and $prev.PSObject.Properties.Name -contains 'brief') { $prev.brief } else { $null }
         followerHistory      = if ($null -ne $FollowerHistory) { $FollowerHistory } elseif ($prev -and $prev.followerHistory) { @($prev.followerHistory) } else { @() }
         surging              = if ($null -ne $Surging) { $Surging } elseif ($prev -and $prev.surging) { @($prev.surging) } else { @() }
-        followerDemographics = if ($null -ne $FollowerDemographics) { $FollowerDemographics } elseif ($prev -and $prev.followerDemographics) { @($prev.followerDemographics) } else { @() }
+        engagedDemographics  = if ($null -ne $EngagedDemographics) { $EngagedDemographics } elseif ($prev -and $prev.engagedDemographics) { @($prev.engagedDemographics) } else { @() }
     }
 
     $path = Join-Path $RepoDataDir 'instagram.json'
