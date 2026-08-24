@@ -183,7 +183,8 @@ try {
     Write-Host ("요약     : {0}" -f $summary)
     Write-Host ("로컬 파일: {0}" -f $briefMdPath)
     if ($repoRoot) {
-        Write-Host ("대시보드 : {0}" -f (if ($pushed) { '자동 반영 완료 (git push)' } else { '변경 없음 또는 반영 대기' }))
+        $dashboardStatus = if ($pushed) { '자동 반영 완료 (git push)' } else { '변경 없음 또는 반영 대기' }
+        Write-Host ("대시보드 : {0}" -f $dashboardStatus)
     }
 }
 catch {
