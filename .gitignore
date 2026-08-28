@@ -1,3 +1,8 @@
 ga4-key.json
 *-key.json
 gen-lang-client-*.json
+# 자격증명 — 절대 커밋 금지
+.env
+*.env
+!.env.example
+service_account.json
