@@ -23,9 +23,18 @@ jobs:
             "days=999" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
             exit 0
           }
-          $left = [int]([datetime]::Parse($env:EXPIRES_AT).ToUniversalTime() - [datetime]::UtcNow).TotalDays
-          Write-Host "인스타 토큰 만료까지 $left 일"
-          if ($left -le 14) { Write-Host "::warning::토큰 만료 임박 ($left 일)" }
+          try {
+              $left = [int]([datetime]::Parse($env:EXPIRES_AT).ToUniversalTime() - [datetime]::UtcNow).TotalDays
+          } catch {
+              Write-Host "::warning::IG_TOKEN_EXPIRES_AT 파싱 실패 ($($_.Exception.Message)) — 값을 확인하세요."
+              "days=999" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+              exit 0
+          }
+          if ($left -le 14) {
+              Write-Host "::warning::인스타 토큰 만료까지 $left 일 — 갱신이 필요합니다."
+          } else {
+              Write-Host "::notice::인스타 토큰 만료까지 $left 일"
+          }
           "days=$left" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
       - name: 만료 임박 시 이슈 생성
