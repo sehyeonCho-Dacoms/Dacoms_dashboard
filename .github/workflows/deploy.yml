@@ -120,8 +120,15 @@ jobs:
           if git diff --staged --quiet; then
             echo "변경 없음 — 커밋 생략"
           else
-            git commit -m "chore(data): GA4 metrics $(date -u +%Y-%m-%d)"
-            git push
+            git commit -m "chore(data): metrics $(date -u +%Y-%m-%d)"
+            # 실행 중 원격이 앞서갔을 수 있으므로 rebase 후 push (최대 3회 재시도)
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+              echo "push 재시도 $i..."
+              sleep 5
+            done
+            echo "::error::3회 시도 후에도 push 실패"
+            exit 1
           fi
 
       - name: GA4 실패 경고

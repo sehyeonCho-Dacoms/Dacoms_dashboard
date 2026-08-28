@@ -13,8 +13,17 @@
 param(
     [int]$MediaCount = 5,
     [int]$WeeklyMediaCount = 25,
-    [string]$OutputDir = (Join-Path $env:USERPROFILE 'Documents\InstagramInsights')
+    [string]$OutputDir
 )
+
+# OutputDir 기본값: Windows 는 USERPROFILE, CI(리눅스)는 HOME → 임시폴더 순으로 폴백.
+# Windows 로컬 실행 시 기존과 동일한 경로가 된다.
+if (-not $OutputDir) {
+    $base = $env:USERPROFILE
+    if (-not $base) { $base = $env:HOME }
+    if (-not $base) { $base = [System.IO.Path]::GetTempPath() }
+    $OutputDir = Join-Path (Join-Path $base 'Documents') 'InstagramInsights'
+}
 
 . (Join-Path $PSScriptRoot 'InstagramConnector.Common.ps1')
 if ($env:IG_CI) { . (Join-Path $PSScriptRoot 'CI.Bootstrap.ps1') }
