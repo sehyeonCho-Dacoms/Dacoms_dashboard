@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-28T03:58:13.771467+00:00",
-  "source_generated_at": "2026-08-28T03:58:13.676819+00:00",
+  "generated_at": "2026-08-28T05:09:32.911856+00:00",
+  "source_generated_at": "2026-08-28T05:09:32.820503+00:00",
   "yesterday": {
     "date": "20260827",
     "sessions": 180,
@@ -89,14 +89,14 @@
       "share_pct": 5.7
     },
     {
-      "channel": "AI Assistant",
+      "channel": "Email",
       "current": 9,
       "previous": 0,
       "change_pct": null,
       "share_pct": 0.8
     },
     {
-      "channel": "Email",
+      "channel": "AI Assistant",
       "current": 9,
       "previous": 0,
       "change_pct": null,
