@@ -18,11 +18,14 @@ on:
       - "job_pipeline/**"
       - "data/instagram.json"
       - "vendor/**"
+      - "data/ga4_daily.json"       # 추가
+      - "data/ga4_weekly.json"      # 추가
+      - "scripts/**"                # 추가
       - ".github/workflows/deploy.yml"
 
 # Pages 배포에 필요한 권한
 permissions:
-  contents: read
+  contents: write      # read 에서 변경 — GA4 결과를 커밋해야 함
   pages: write
   id-token: write
 
@@ -63,6 +66,36 @@ jobs:
           WORKNET_AUTH_KEY: ${{ secrets.WORKNET_AUTH_KEY }}
         run: PYTHONPATH=job_pipeline python -m pipeline.cli run
 
+      - name: GA4 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: GA4 지표 수집
+        id: ga4
+        continue-on-error: true
+        env:
+          GA4_SA_KEY: ${{ secrets.GA4_SA_KEY }}
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+        run: |
+          python scripts/collect_ga4.py
+          python scripts/build_weekly.py
+
+      - name: GA4 결과 커밋
+        if: steps.ga4.outcome == 'success'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ga4_daily.json data/ga4_weekly.json
+          if git diff --staged --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore(data): GA4 metrics $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: GA4 실패 경고
+        if: steps.ga4.outcome == 'failure'
+        run: echo "::warning::GA4 수집 실패 — Secrets 와 서비스계정 뷰어 권한을 확인하세요."
+
       - name: 정적 사이트 구성 (_site)
         run: |
           mkdir -p _site/data
@@ -74,6 +107,8 @@ jobs:
           # 외부 CDN(cdnjs.cloudflare.com) 차단 환경에서도 차트가 항상 뜨도록,
           # Chart.js를 저장소에 커밋해 둔 로컬 파일로 함께 배포한다.
           cp -r vendor _site/vendor
+          [ -f data/ga4_daily.json ]  && cp data/ga4_daily.json  _site/data/ || true
+          [ -f data/ga4_weekly.json ] && cp data/ga4_weekly.json _site/data/ || true
 
       - uses: actions/upload-pages-artifact@v3
         with:
