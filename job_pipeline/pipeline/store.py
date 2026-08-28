@@ -55,6 +55,6 @@ def _from_dict(d: dict) -> JobPosting:
         "source", "source_id", "company", "title", "url", "role", "level",
         "location", "employment_type", "company_size", "sector", "salary",
         "posted_at", "deadline", "description", "drafton_fit", "fit_reasons",
-        "status",
+        "status", "verified_company",
     }
     return JobPosting(**{k: v for k, v in d.items() if k in known})

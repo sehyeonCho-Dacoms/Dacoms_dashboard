@@ -59,6 +59,10 @@ class JobPosting:
     # 워크플로 (스토어 병합 시 유지)
     status: str = STATUS_NEW
 
+    # 회사명을 신뢰성 있게 확인했는지 (검색 스니펫 기반 소스는 추정 실패 시 False).
+    # False면 build_leads() 회사 집계에서 제외되고, 대시보드 액션 CTA도 낮춰 표시된다.
+    verified_company: bool = True
+
     # 원천 응답 보관 (디버깅용, export 시 제외)
     raw: dict = field(default_factory=dict, repr=False)
 

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generatedAt": "2026-07-24T09:51:33",
+  "generatedAt": "2026-08-07T08:05:16",
   "kpis": {
     "collected": 18,
     "uploadReady": 18,
@@ -25,7 +25,8 @@
         "프로축구"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -42,7 +43,8 @@
         "골프"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -59,7 +61,8 @@
         "골프"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -76,7 +79,8 @@
         "피트니스"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -93,7 +97,8 @@
         "골프"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -110,7 +115,8 @@
         "협회"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -127,7 +133,8 @@
         "피트니스"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -144,7 +151,8 @@
         "골프"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -161,7 +169,8 @@
         "협회 섹터 확정"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -178,7 +187,8 @@
         "스폰서십"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -195,7 +205,8 @@
         "프로축구"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -212,7 +223,8 @@
         "스포츠테크"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -229,7 +241,8 @@
         "스포츠테크"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -246,7 +259,8 @@
         "미디어 섹터 확정"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -263,7 +277,8 @@
         "스포츠웨어"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -280,7 +295,8 @@
         "브랜드 섹터 확정"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -297,7 +313,8 @@
         "스포츠웨어"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     },
     {
       "platform": "샘플",
@@ -314,7 +331,8 @@
         "브랜드 섹터 확정"
       ],
       "status": "신규",
-      "url": ""
+      "url": "",
+      "verified": true
     }
   ],
   "leads": [
@@ -593,23 +611,23 @@
       ],
       "total": [
         0,
-        0,
-        0,
         1,
         2,
         3,
         6,
-        6
+        6,
+        0,
+        0
       ],
       "uploadReady": [
         0,
-        0,
-        0,
         1,
         2,
         3,
         6,
-        6
+        6,
+        0,
+        0
       ]
     }
   }

@@ -50,6 +50,18 @@ class Config:
     ksoc_list_url: Optional[str] = os.getenv("KSOC_LIST_URL")
     ksoc_pages: int = int(os.getenv("KSOC_PAGES", "2"))
 
+    # 구글 프로그래머블 검색(Custom Search JSON API) — 사람인/잡코리아처럼
+    # 공식 API가 없는 사이트를 "구글이 이미 색인해둔 제목/링크/스니펫"으로만
+    # 조회한다. 발급: programmablesearchengine.google.com(cx) +
+    # console.cloud.google.com(API 키, Custom Search API 활성화). 무료 100건/일.
+    google_cse_api_key: Optional[str] = os.getenv("GOOGLE_CSE_API_KEY")
+    google_cse_id: Optional[str] = os.getenv("GOOGLE_CSE_CX")
+    google_cse_sites: list[str] = field(
+        default_factory=lambda: _split(os.getenv("GOOGLE_CSE_SITES", "saramin.co.kr,jobkorea.co.kr"))
+    )
+    google_cse_pages: int = int(os.getenv("GOOGLE_CSE_PAGES", "1"))       # 페이지당 API 호출 1회(10건)
+    google_cse_daily_cap: int = int(os.getenv("GOOGLE_CSE_DAILY_CAP", "90"))  # 무료 100건/일 보호 여유분
+
     # HTTP 매너 (크롤러 rate-limit)
     request_delay_sec: float = float(os.getenv("REQUEST_DELAY_SEC", "1.0"))
     user_agent: str = os.getenv(
@@ -85,6 +97,8 @@ class Config:
             if key == "worknet" and not self.worknet_auth_key:
                 continue
             if key == "wanted" and not self.wanted_enabled:
+                continue
+            if key == "gsearch" and not (self.google_cse_api_key and self.google_cse_id):
                 continue
             out.append(key)
         return out or ["sample"]

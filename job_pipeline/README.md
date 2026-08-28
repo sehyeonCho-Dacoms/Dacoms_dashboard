@@ -37,8 +37,30 @@ python -m http.server 8000
 | `saramin` | 공식 Open API (JSON) | `SARAMIN_ACCESS_KEY` | https://oapi.saramin.co.kr |
 | `worknet` | 공식 API (XML) | `WORKNET_AUTH_KEY` | 공공데이터포털/work.go.kr |
 | `ksoc` | 공개 게시판 크롤러 (HTML) | — (키 불필요) | 대한체육회 채용공고. `KSOC_LIST_URL`로 다른 eGov 게시판도 재사용 |
+| `gsearch` | 구글 Custom Search API (공식) | `GOOGLE_CSE_API_KEY`+`GOOGLE_CSE_CX` | 사람인·잡코리아 등 공식 API 없는 사이트를 "구글 색인 검색"으로 발견. 무료 100건/일 |
 | `wanted` | 비공식 내부 JSON | `WANTED_CRAWLER_ENABLED=true` | ⚠️ ToS/robots 확인 후에만 |
 | `sample` | 로컬 JSON | — | 오프라인 데모/테스트 기본값 |
+
+### `gsearch` — 사람인/잡코리아를 API 없이 "구글 검색"으로 확인하기
+
+사람인 공식 API 승인 전, 또는 API가 아예 없는 잡코리아 같은 사이트를 커버하기
+위한 절충 소스다. **사이트를 직접 크롤링하지 않는다** — 구글이 이미 공개
+색인해둔 제목·링크·짧은 스니펫만 [Custom Search JSON
+API](https://programmablesearchengine.google.com)로 조회한다(공식 API,
+google.com/search HTML 직접 크롤링과는 다르다).
+
+한계와 안전장치:
+- 스니펫만으로는 회사명을 정확히 못 뽑는 경우가 많다. 확신이 없으면
+  `verified_company=False`로 표시되고, 이런 공고는 **헤드헌팅 리드 집계에서
+  자동 제외**되며, 대시보드에 "⚠ 회사명 확인필요" 배지가 뜨고, "오늘의
+  액션"에서도 "지금 업로드"가 아니라 "원문 확인 후 업로드"로 낮춰 표시된다.
+- 공고 본문은 가져오지 않는다 — 실제 채용 상세는 원문 링크에서 사람이 확인.
+- 무료 한도(하루 100건) 보호를 위해 `GOOGLE_CSE_DAILY_CAP`(기본 90)에서 멈춘다.
+
+```bash
+GOOGLE_CSE_API_KEY=xxx GOOGLE_CSE_CX=yyy JOB_SOURCES=gsearch,ksoc \
+  PYTHONPATH=job_pipeline python -m pipeline.cli run
+```
 
 ```bash
 JOB_SOURCES=saramin,worknet SARAMIN_ACCESS_KEY=xxx WORKNET_AUTH_KEY=yyy \
