@@ -1,0 +1,21 @@
+name: Instagram Connector Smoke Test
+on: workflow_dispatch
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: pwsh 버전 확인
+        shell: pwsh
+        run: $PSVersionTable | Format-List
+      - name: Common.ps1 로드 테스트 (토큰 없이)
+        shell: pwsh
+        env:
+          IG_CI: '1'
+          IG_ACCESS_TOKEN: 'dummy-token-for-load-test'
+        run: |
+          . ./instagram-insights-connector/InstagramConnector.Common.ps1
+          . ./instagram-insights-connector/CI.Bootstrap.ps1
+          Write-Host "로드 성공. 정의된 함수 수:"
+          (Get-Command -CommandType Function | Where-Object { $_.Name -like '*Instagram*' }).Count

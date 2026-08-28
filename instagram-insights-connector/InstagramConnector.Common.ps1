@@ -14,7 +14,7 @@ function Assert-WindowsPlatform {
     }
 }
 
-Assert-WindowsPlatform
+if (-not $env:IG_CI) { Assert-WindowsPlatform }
 
 # DPAPI(ProtectedData)는 Windows PowerShell 5.1에서는 System.Security 어셈블리에,
 # PowerShell 7+ (Windows)에서는 System.Security.Cryptography.ProtectedData 패키지에 들어 있습니다.

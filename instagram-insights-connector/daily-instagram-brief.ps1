@@ -26,6 +26,7 @@ param(
 )
 
 . "$PSScriptRoot\InstagramConnector.Common.ps1"
+if ($env:IG_CI) { . (Join-Path $PSScriptRoot 'CI.Bootstrap.ps1') }
 
 $config = Get-InstagramConfig
 if (-not $config) {
