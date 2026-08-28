@@ -81,12 +81,42 @@ jobs:
           python scripts/build_weekly.py
           python scripts/build_brief.py
 
+      - name: 인스타그램 수집 (pwsh)
+        id: instagram
+        continue-on-error: true
+        shell: pwsh
+        env:
+          IG_CI: '1'
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_APP_SECRET: ${{ secrets.IG_APP_SECRET }}
+          IG_TOKEN_EXPIRES_AT: ${{ vars.IG_TOKEN_EXPIRES_AT }}
+        run: |
+          ./instagram-insights-connector/daily-instagram-brief.ps1
+
+      - name: 인스타그램 결과 확인
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path 'data/instagram.json') {
+            $d = Get-Content 'data/instagram.json' -Raw | ConvertFrom-Json
+            Write-Host "generatedAt : $($d.generatedAt)"
+            Write-Host "followers   : $($d.account.followersCount)"
+            Write-Host "media       : $($d.media.Count)건"
+          } else {
+            Write-Host "::warning::data/instagram.json 이 없습니다."
+          }
+
+      - name: 인스타그램 실패 경고
+        if: steps.instagram.outcome == 'failure'
+        run: echo "::warning::인스타그램 수집 실패 — 토큰 만료 또는 권한 문제일 수 있습니다."
+
       - name: GA4 결과 커밋
         if: steps.ga4.outcome == 'success'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ga4_daily.json data/ga4_weekly.json data/ga4_brief.json
+          git add data/ga4_daily.json data/ga4_weekly.json data/ga4_brief.json data/instagram.json data/ig-brief-state.json
           if git diff --staged --quiet; then
             echo "변경 없음 — 커밋 생략"
           else

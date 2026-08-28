@@ -15,7 +15,7 @@
 [CmdletBinding()]
 param()
 
-. "$PSScriptRoot\InstagramConnector.Common.ps1"
+. (Join-Path $PSScriptRoot 'InstagramConnector.Common.ps1')
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing

@@ -25,7 +25,7 @@ param(
     [string]$OutputDir = (Join-Path $env:USERPROFILE 'Documents\InstagramInsights')
 )
 
-. "$PSScriptRoot\InstagramConnector.Common.ps1"
+. (Join-Path $PSScriptRoot 'InstagramConnector.Common.ps1')
 if ($env:IG_CI) { . (Join-Path $PSScriptRoot 'CI.Bootstrap.ps1') }
 
 $config = Get-InstagramConfig

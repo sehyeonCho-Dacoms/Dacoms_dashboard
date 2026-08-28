@@ -548,7 +548,7 @@ function Get-InstagramRepoDataDir {
         이 커넥터가 Dacoms_dashboard 저장소 안에서 실행 중이면(리포 루트의 data 폴더가
         형제 폴더로 존재하면) 그 경로를 반환하고, 아니면 $null을 반환합니다.
     #>
-    $candidate = Join-Path $PSScriptRoot '..\data'
+    $candidate = Join-Path (Split-Path -Parent $PSScriptRoot) 'data'
     if (Test-Path $candidate) { return $candidate }
     return $null
 }

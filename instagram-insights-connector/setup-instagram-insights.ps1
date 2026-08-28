@@ -20,7 +20,7 @@
 [CmdletBinding()]
 param()
 
-. "$PSScriptRoot\InstagramConnector.Common.ps1"
+. (Join-Path $PSScriptRoot 'InstagramConnector.Common.ps1')
 
 Write-Host '=== Instagram Insights Connector 설정 시작 ===' -ForegroundColor Cyan
 

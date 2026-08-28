@@ -14,7 +14,7 @@ param(
     [int]$RenewThresholdDays = 10
 )
 
-. "$PSScriptRoot\InstagramConnector.Common.ps1"
+. (Join-Path $PSScriptRoot 'InstagramConnector.Common.ps1')
 
 $config = Get-InstagramConfig
 if (-not $config) {

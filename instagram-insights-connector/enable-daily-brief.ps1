@@ -10,7 +10,7 @@
 [CmdletBinding()]
 param()
 
-. "$PSScriptRoot\InstagramConnector.Common.ps1"
+. (Join-Path $PSScriptRoot 'InstagramConnector.Common.ps1')
 
 if (-not (Get-InstagramConfig)) {
     Write-Error '설정 파일을 찾을 수 없습니다. 먼저 setup-instagram-insights.ps1을 실행하세요.'
