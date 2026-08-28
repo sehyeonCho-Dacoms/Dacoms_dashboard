@@ -82,6 +82,7 @@
       <button data-tab="ingest"   class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">공고 인게스트</button>
       <button data-tab="leads"    class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">헤드헌팅 리드</button>
       <button data-tab="trends"   class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">산업 트렌드</button>
+      <button data-tab="ga4"      class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">플랫폼 유입</button>
       <button data-tab="instagram" class="tab-btn relative px-3 py-2.5 whitespace-nowrap transition">인스타그램</button>
     </nav>
   </div>
@@ -307,6 +308,98 @@
       <div class="h-72"><canvas id="sizeChart"></canvas></div>
     </div>
   </div>
+</section>
+
+<!-- ══════════════ 플랫폼 유입 (GA4) ══════════════ -->
+<section id="ga4" class="panel">
+
+  <!-- 상태 배너 -->
+  <div id="ga4Status" class="card rounded-2xl px-5 py-3 mb-5 text-sm font-medium flex items-center gap-2" style="color:var(--ink-muted)">
+    <span class="w-1.5 h-1.5 rounded-full pulse" style="background:var(--warning)"></span>
+    GA4 데이터를 불러오는 중…
+  </div>
+
+  <!-- KPI 4장 -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+    <div class="card rounded-2xl p-5">
+      <p class="text-xs font-semibold mb-1" style="color:var(--ink-muted)">세션 · 최근 7일</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="g4Sessions">–</span></p>
+      <p id="g4SessionsDelta" class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">직전 7일 대비</p>
+    </div>
+    <div class="card rounded-2xl p-5">
+      <p class="text-xs font-semibold mb-1" style="color:var(--ink-muted)">신규 사용자 · 최근 7일</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="g4NewUsers">–</span></p>
+      <p id="g4NewUsersDelta" class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">직전 7일 대비</p>
+    </div>
+    <div class="card rounded-2xl p-5">
+      <p class="text-xs font-semibold mb-1" style="color:var(--ink-muted)">참여율 · 7일 평균</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="g4Engage">–</span></p>
+      <p id="g4EngageDelta" class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">직전 7일 대비</p>
+    </div>
+    <div class="card rounded-2xl p-5">
+      <p class="text-xs font-semibold mb-1" style="color:var(--ink-muted)">인스타 유입 · 최근 7일</p>
+      <p class="text-3xl font-extrabold tabular-nums"><span id="g4Ig">–</span></p>
+      <p id="g4IgSub" class="text-xs font-semibold mt-2" style="color:var(--ink-muted)">전체 세션 중 비중</p>
+    </div>
+  </div>
+
+  <!-- 일별 추이 + 채널 구성 -->
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
+    <div class="card rounded-2xl p-5 xl:col-span-2">
+      <div class="flex items-baseline justify-between mb-1">
+        <h3 class="text-sm font-extrabold">일별 세션 · 신규 사용자</h3>
+        <span class="text-[11px] font-semibold" style="color:var(--ink-muted)">최근 28일</span>
+      </div>
+      <p class="text-[11px] mb-4" style="color:var(--ink-muted)">어제 데이터는 GA4에서 확정 전일 수 있습니다.</p>
+      <div class="h-64"><canvas id="ga4TrendChart"></canvas></div>
+    </div>
+
+    <div class="card rounded-2xl p-5">
+      <div class="flex items-baseline justify-between mb-1">
+        <h3 class="text-sm font-extrabold">유입 채널 구성</h3>
+        <span class="text-[11px] font-semibold" style="color:var(--ink-muted)">최근 7일</span>
+      </div>
+      <p class="text-[11px] mb-4" style="color:var(--ink-muted)">막대 옆 숫자 = 세션 수 · 괄호 = 직전 7일 대비</p>
+      <div id="g4Channels" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- 인스타 연결 + 계측 상태 -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-6">
+    <div class="card rounded-2xl p-5">
+      <h3 class="text-sm font-extrabold mb-1">인스타그램 → 플랫폼 연결</h3>
+      <p class="text-[11px] mb-4" style="color:var(--ink-muted)">인스타 콘텐츠가 실제 방문으로 이어지는 정도</p>
+      <div id="g4IgBridge" class="grid grid-cols-3 gap-3 text-center"></div>
+    </div>
+
+    <div class="card rounded-2xl p-5">
+      <div class="flex items-baseline justify-between mb-1">
+        <h3 class="text-sm font-extrabold">계측 상태 점검</h3>
+        <span class="text-[11px] font-semibold" style="color:var(--ink-muted)">8/27 재구축 이벤트</span>
+      </div>
+      <p class="text-[11px] mb-4" style="color:var(--ink-muted)">최근 3일간 수집 여부 — 빈 칸이 생기면 계측이 끊긴 것입니다.</p>
+      <div id="g4Events" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- 상위 유입 페이지 -->
+  <div class="card rounded-2xl p-5">
+    <h3 class="text-sm font-extrabold mb-1">상위 유입 페이지</h3>
+    <p class="text-[11px] mb-4" style="color:var(--ink-muted)">공개 저장소이므로 경로의 ID는 <code>:id</code> 로 정규화되어 있습니다.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left border-b" style="border-color:var(--grid); color:var(--ink-muted)">
+            <th class="py-2 pr-4 font-semibold text-xs">경로</th>
+            <th class="py-2 pr-4 font-semibold text-xs text-right whitespace-nowrap">페이지뷰</th>
+            <th class="py-2 font-semibold text-xs text-right whitespace-nowrap">체류(누적)</th>
+          </tr>
+        </thead>
+        <tbody id="g4Pages"></tbody>
+      </table>
+    </div>
+  </div>
+
 </section>
 
 <!-- ══════════════ 인스타그램 성과 ══════════════ -->
@@ -1248,6 +1341,8 @@ function buildChartsInner(){
   renderChartSafely('igGenderChart', igDemo.length===0, '데이터 없음', ()=> new Chart(document.getElementById('igGenderChart'),{type:'doughnut',
     data:{labels:igGenderLabels,datasets:[{data:igGenderValues,backgroundColor:[c.cat[4],c.cat[0],c.cat[6]],borderWidth:3,borderColor:c.surface,hoverOffset:6}]},
     options:{...baseOpts(),cutout:'62%',plugins:{...baseOpts().plugins,legend:{position:'bottom',labels:baseOpts().plugins.legend.labels}}}}));
+
+  buildGA4Chart();
 }
 buildCharts();
 
@@ -1344,6 +1439,171 @@ function applyInstagramData(d){
     .then(r=>{ if(!r.ok) throw new Error('no data'); return r.json(); })
     .then(applyInstagramData)
     .catch(()=>{ /* 목업 유지 */ });
+})();
+
+/* ═══════════ GA4 플랫폼 유입 탭 ═══════════ */
+// var 사용: 스크립트 앞부분(초기 buildCharts()/activate() 동기 호출)이
+// 이 선언보다 먼저 buildGA4Chart()를 부르므로, let/TDZ면 ReferenceError가 난다.
+var ga4Daily = null, ga4Weekly = null;
+
+// 채널 → 색 인덱스 고정 매핑 (순위가 바뀌어도 색이 따라 바뀌지 않도록)
+const G4_CHANNEL_ORDER = ['Direct','Organic Search','Organic Social','Referral',
+                          'Paid Social','Email','AI Assistant','Unassigned'];
+// 8/27 재구축한 계측 이벤트 (모니터링 대상)
+const G4_WATCH_EVENTS = [
+  ['recruit_view','공고 상세'], ['recruit_list_view','공고 목록'],
+  ['apply_start','지원 시작'], ['apply_resume_selected','이력서 선택'],
+  ['apply_click_final','최종 지원'], ['sign_up_start','가입 시작'],
+  ['resume_new_start','이력서 작성'], ['resume_edit_start','이력서 수정'],
+  ['resume_save_click','이력서 저장']
+];
+
+const g4Num  = n => (Number(n)||0).toLocaleString('ko-KR');
+const g4Date = s => s ? `${+s.slice(4,6)}/${+s.slice(6,8)}` : '';
+function g4Delta(pct){
+  if(pct===null||pct===undefined) return {text:'직전 7일 데이터 없음', color:'var(--ink-muted)'};
+  const up = pct >= 0;
+  return { text:`${up?'▲':'▼'} 직전 7일 대비 ${up?'+':''}${pct}%`,
+           color: up ? 'var(--delta-up)' : 'var(--critical)' };
+}
+function g4SetDelta(id, pct){
+  const el=document.getElementById(id); if(!el) return;
+  const d=g4Delta(pct); el.textContent=d.text; el.style.color=d.color;
+}
+
+function renderGA4(){
+  const status=document.getElementById('ga4Status');
+  if(!ga4Daily || !ga4Weekly){
+    if(status) status.innerHTML =
+      `<span class="w-1.5 h-1.5 rounded-full" style="background:var(--serious)"></span>
+       GA4 데이터를 불러오지 못했습니다. Actions 워크플로 실행 결과를 확인하세요.`;
+    return;
+  }
+
+  const s = ga4Weekly.summary || {};
+  const gen = (ga4Daily.generated_at||'').replace('T',' ').slice(0,16);
+  const daily = ga4Daily.daily || [];
+  const last  = daily[daily.length-1];
+
+  if(status) status.innerHTML =
+    `<span class="w-1.5 h-1.5 rounded-full pulse" style="background:var(--good)"></span>
+     최신 수집 ${gen} (UTC) · 마지막 확정일 ${g4Date(last&&last.date)} ·
+     그날 세션 ${g4Num(last&&last.sessions)}`;
+
+  // ── KPI
+  document.getElementById('g4Sessions').textContent = g4Num(s.sessions && s.sessions.current);
+  g4SetDelta('g4SessionsDelta', s.sessions && s.sessions.change_pct);
+  document.getElementById('g4NewUsers').textContent = g4Num(s.newUsers && s.newUsers.current);
+  g4SetDelta('g4NewUsersDelta', s.newUsers && s.newUsers.change_pct);
+  const er = s.engagementRate && s.engagementRate.current;
+  document.getElementById('g4Engage').textContent = er ? (er*100).toFixed(1)+'%' : '–';
+  g4SetDelta('g4EngageDelta', s.engagementRate && s.engagementRate.change_pct);
+
+  const ig = ga4Weekly.instagram_referral || {};
+  document.getElementById('g4Ig').textContent = g4Num(ig.current);
+  document.getElementById('g4IgSub').textContent = `전체 세션의 ${ig.share_of_sessions_pct ?? 0}%`;
+
+  // ── 채널 구성 (미터 바 + 직접 라벨)
+  const ch = (ga4Weekly.by_channel||[]).slice(0,8);
+  const maxCh = Math.max(1, ...ch.map(c=>c.current));
+  document.getElementById('g4Channels').innerHTML = ch.map(c=>{
+    const idx = G4_CHANNEL_ORDER.indexOf(c.channel);
+    const color = P().cat[(idx>=0?idx:G4_CHANNEL_ORDER.length) % P().cat.length];
+    const d = c.change_pct===null||c.change_pct===undefined ? '신규'
+            : `${c.change_pct>=0?'+':''}${c.change_pct}%`;
+    return `
+    <div>
+      <div class="flex items-baseline justify-between mb-1 gap-2">
+        <span class="text-[12.5px] font-semibold truncate">${c.channel}</span>
+        <span class="text-[12.5px] font-bold tabular-nums whitespace-nowrap">
+          ${g4Num(c.current)}<span class="text-[10px] font-semibold ml-1" style="color:var(--ink-muted)">(${d})</span>
+        </span>
+      </div>
+      <div class="meter w-full h-1.5">
+        <div style="width:${(c.current/maxCh*100).toFixed(1)}%;height:100%;background:${color}"></div>
+      </div>
+    </div>`;
+  }).join('') || `<p class="text-sm py-6 text-center" style="color:var(--ink-muted)">채널 데이터가 없습니다.</p>`;
+
+  // ── 인스타 연결
+  const igDaily = ga4Daily.instagram_referral || [];
+  const ig7 = igDaily.slice(-7).reduce((a,b)=>a+(+b.sessions||0),0);
+  const cell = (label, value, sub, color) => `
+    <div>
+      <p class="text-[10px] font-semibold mb-1" style="color:var(--ink-muted)">${label}</p>
+      <p class="text-xl font-extrabold tabular-nums" ${color?`style="color:${color}"`:''}>${value}</p>
+      <p class="text-[10px] mt-0.5" style="color:var(--ink-muted)">${sub}</p>
+    </div>`;
+  document.getElementById('g4IgBridge').innerHTML =
+    cell('인스타 유입 세션', g4Num(ig7), '최근 7일') +
+    cell('전체 세션 중 비중', `${ig.share_of_sessions_pct ?? 0}%`, '높을수록 좋음',
+         (ig.share_of_sessions_pct||0) < 5 ? 'var(--serious)' : 'var(--good)') +
+    cell('직전 7일 대비', ig.change_pct===null||ig.change_pct===undefined ? '–'
+         : `${ig.change_pct>=0?'+':''}${ig.change_pct}%`, '증감률');
+
+  // ── 계측 상태 점검 (최근 3일)
+  const evByName = {};
+  (ga4Daily.events||[]).forEach(r=>{
+    (evByName[r.eventName] = evByName[r.eventName] || {})[r.date] = +r.eventCount||0;
+  });
+  const days = daily.slice(-3).map(r=>r.date);
+  document.getElementById('g4Events').innerHTML =
+    `<div class="grid grid-cols-[1fr_repeat(3,44px)] gap-x-2 text-[10px] font-semibold pb-1 border-b"
+          style="border-color:var(--grid);color:var(--ink-muted)">
+       <span>이벤트</span>${days.map(d=>`<span class="text-right">${g4Date(d)}</span>`).join('')}
+     </div>` +
+    G4_WATCH_EVENTS.map(([name,label])=>{
+      const row = evByName[name]||{};
+      const cells = days.map(d=>{
+        const v = row[d];
+        return v ? `<span class="text-right tabular-nums font-semibold">${g4Num(v)}</span>`
+                 : `<span class="text-right font-bold" style="color:var(--serious)">·</span>`;
+      }).join('');
+      return `<div class="grid grid-cols-[1fr_repeat(3,44px)] gap-x-2 text-[12px] items-baseline">
+                <span class="truncate">${label}
+                  <span class="text-[10px] ml-1" style="color:var(--ink-muted)">${name}</span>
+                </span>${cells}
+              </div>`;
+    }).join('');
+
+  // ── 상위 페이지
+  document.getElementById('g4Pages').innerHTML =
+    (ga4Daily.top_pages||[]).slice(0,10).map(p=>`
+      <tr class="row-hover border-b" style="border-color:var(--grid)">
+        <td class="py-2 pr-4 font-medium truncate max-w-[420px]">${p.pagePath}</td>
+        <td class="py-2 pr-4 text-right tabular-nums font-semibold">${g4Num(p.screenPageViews)}</td>
+        <td class="py-2 text-right tabular-nums" style="color:var(--ink-2)">
+          ${Math.round((+p.userEngagementDuration||0)/60).toLocaleString('ko-KR')}분</td>
+      </tr>`).join('') ||
+    `<tr><td colspan="3" class="py-8 text-center" style="color:var(--ink-muted)">데이터 없음</td></tr>`;
+}
+
+/* buildCharts() 에서 호출됨 — 캔버스가 없거나 데이터가 없으면 아무것도 하지 않음 */
+function buildGA4Chart(){
+  const el = document.getElementById('ga4TrendChart');
+  if(!el || !ga4Daily) return;
+  const c = P();
+  const d = (ga4Daily.daily||[]).slice(-28);
+  charts.push(new Chart(el,{type:'line',
+    data:{labels:d.map(r=>g4Date(r.date)),
+      datasets:[
+        {label:'세션',data:d.map(r=>+r.sessions||0),
+         borderColor:c.cat[0],backgroundColor:withA(c.cat[0],.10),borderWidth:2,fill:true,
+         tension:.35,pointRadius:0,pointHoverRadius:5,pointBackgroundColor:c.cat[0],
+         pointBorderColor:c.surface,pointBorderWidth:2},
+        {label:'신규 사용자',data:d.map(r=>+r.newUsers||0),
+         borderColor:c.cat[2],backgroundColor:'transparent',borderWidth:2,fill:false,
+         tension:.35,pointRadius:0,pointHoverRadius:5,pointBackgroundColor:c.cat[2],
+         pointBorderColor:c.surface,pointBorderWidth:2}
+      ]},
+    options:{...baseOpts(),interaction:{mode:'index',intersect:false},
+      scales:{y:{beginAtZero:true,...gridScale()},x:{...gridScale(),grid:{display:false}}}}}));
+}
+
+(function loadGA4(){
+  const get = u => fetch(u,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
+  Promise.all([get('./data/ga4_daily.json'), get('./data/ga4_weekly.json')])
+    .then(([a,b])=>{ ga4Daily=a; ga4Weekly=b; renderGA4(); buildCharts(); });
 })();
 </script>
 </body>
