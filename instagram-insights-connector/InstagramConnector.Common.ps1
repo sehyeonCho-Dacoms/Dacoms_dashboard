@@ -28,7 +28,12 @@ try {
     }
 }
 
-$script:ConfigDir     = Join-Path $env:LOCALAPPDATA 'InstagramCodexConnector'
+# LOCALAPPDATA 는 Windows 전용이다. CI(리눅스)에서는 HOME → 임시폴더 순으로 대체한다.
+# Windows 로컬 실행 시에는 기존과 동일한 경로가 그대로 사용된다.
+$script:ConfigBase = $env:LOCALAPPDATA
+if (-not $script:ConfigBase) { $script:ConfigBase = $env:HOME }
+if (-not $script:ConfigBase) { $script:ConfigBase = [System.IO.Path]::GetTempPath() }
+$script:ConfigDir     = Join-Path $script:ConfigBase 'InstagramCodexConnector'
 $script:ConfigPath    = Join-Path $script:ConfigDir 'config.json'
 $script:GraphBase     = 'https://graph.instagram.com'
 $script:RequiredScopes = @('instagram_business_basic', 'instagram_business_manage_insights')

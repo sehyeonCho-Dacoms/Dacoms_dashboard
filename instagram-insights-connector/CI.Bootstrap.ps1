@@ -82,6 +82,14 @@ function Get-DaysUntilExpiry {
     return 9999   # 수집 스크립트가 renew 를 호출하지 않도록
 }
 
+# ── 6. 브리핑 상태를 저장소 안에 보관 (러너는 매번 초기화되므로) ──
+# repo 루트 = 이 스크립트의 상위 폴더
+$repoRoot = Split-Path -Parent $PSScriptRoot
+$dataDir  = Join-Path $repoRoot 'data'
+if (-not (Test-Path $dataDir)) { New-Item -ItemType Directory -Path $dataDir -Force | Out-Null }
+$script:BriefStatePath = Join-Path $dataDir 'ig-brief-state.json'
+Write-Host ("[CI] BriefStatePath → {0}" -f $script:BriefStatePath)
+
 # ── 5. 진단 출력 (시크릿은 절대 출력하지 않음) ──────────────────
 Write-Host '[CI] CI.Bootstrap 로드됨 — 자격증명을 환경변수에서 읽습니다.'
 Write-Host ("[CI] IG_ACCESS_TOKEN 길이: {0}" -f $env:IG_ACCESS_TOKEN.Length)
