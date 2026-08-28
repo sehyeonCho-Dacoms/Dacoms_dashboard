@@ -1,0 +1,82 @@
+name: Instagram Token Expiry Check
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'    # 매주 월요일 09:00 KST
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 만료까지 남은 일수 계산
+        id: check
+        shell: pwsh
+        env:
+          EXPIRES_AT: ${{ vars.IG_TOKEN_EXPIRES_AT }}
+        run: |
+          if (-not $env:EXPIRES_AT) {
+            Write-Host "::warning::Variables 에 IG_TOKEN_EXPIRES_AT 가 없습니다."
+            "days=999" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            exit 0
+          }
+          $left = [int]([datetime]::Parse($env:EXPIRES_AT).ToUniversalTime() - [datetime]::UtcNow).TotalDays
+          Write-Host "인스타 토큰 만료까지 $left 일"
+          if ($left -le 14) { Write-Host "::warning::토큰 만료 임박 ($left 일)" }
+          "days=$left" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: 만료 임박 시 이슈 생성
+        if: fromJSON(steps.check.outputs.days) <= 14
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const days = ${{ steps.check.outputs.days }};
+            const prefix = '인스타그램 토큰 갱신 필요';
+
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open'
+            });
+            if (open.data.some(i => i.title.includes(prefix))) {
+              core.info('이미 열린 알림 이슈가 있어 생성을 건너뜁니다.');
+              return;
+            }
+
+            const body = [
+              `인스타그램 장기 액세스 토큰이 **${days}일 뒤 만료**됩니다.`,
+              '만료되면 매일 자동 수집이 조용히 멈추고, 대시보드의 인스타 지표가 갱신되지 않습니다.',
+              '',
+              '## 갱신 방법 (약 5분, 본인 PC에서)',
+              '',
+              '1. Windows PowerShell 을 연다',
+              '2. 커넥터 폴더에서 토큰 갱신 스크립트를 실행한다',
+              '   ```powershell',
+              '   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force',
+              '   .\\\\renew-instagram-token.ps1',
+              '   ```',
+              '3. 갱신된 토큰을 클립보드로 복사한다',
+              '   ```powershell',
+              '   $j = Get-Content "$env:LOCALAPPDATA\\\\InstagramCodexConnector\\\\config.json" -Raw | ConvertFrom-Json',
+              '   Add-Type -AssemblyName System.Security',
+              '   [System.Text.Encoding]::UTF8.GetString([System.Security.Cryptography.ProtectedData]::Unprotect([Convert]::FromBase64String($j.encryptedAccessToken),$null,[System.Security.Cryptography.DataProtectionScope]::CurrentUser)) | Set-Clipboard',
+              '   "복사됨 · 길이 $((Get-Clipboard).Length)자"; "새 만료일: $($j.expiresAt)"',
+              '   ```',
+              '4. Settings → Secrets and variables → Actions',
+              '   - **Secrets** 탭의 `IG_ACCESS_TOKEN` 을 **Update** (붙여넣기)',
+              '   - **Variables** 탭의 `IG_TOKEN_EXPIRES_AT` 을 새 만료일로 **Update**',
+              '5. 클립보드를 비운다 — `Set-Clipboard -Value " "`',
+              '6. Actions → Build & Deploy Dashboard → Run workflow 로 확인',
+              '7. 「인스타그램 결과 확인」 로그의 `generatedAt` 이 오늘이면 완료 → **이 이슈를 닫는다**',
+              '',
+              '---',
+              '_이 이슈는 `instagram-token-check.yml` 이 매주 월요일 자동 생성합니다._'
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: `⚠️ ${prefix} (${days}일 남음)`,
+              body
+            });
+            core.info('알림 이슈를 생성했습니다.');
