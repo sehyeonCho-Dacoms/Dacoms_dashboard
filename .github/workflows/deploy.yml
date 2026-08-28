@@ -20,6 +20,7 @@ on:
       - "vendor/**"
       - "data/ga4_daily.json"       # 추가
       - "data/ga4_weekly.json"      # 추가
+      - "data/ga4_brief.json"       # 추가
       - "scripts/**"                # 추가
       - ".github/workflows/deploy.yml"
 
@@ -78,13 +79,14 @@ jobs:
         run: |
           python scripts/collect_ga4.py
           python scripts/build_weekly.py
+          python scripts/build_brief.py
 
       - name: GA4 결과 커밋
         if: steps.ga4.outcome == 'success'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ga4_daily.json data/ga4_weekly.json
+          git add data/ga4_daily.json data/ga4_weekly.json data/ga4_brief.json
           if git diff --staged --quiet; then
             echo "변경 없음 — 커밋 생략"
           else
@@ -109,6 +111,7 @@ jobs:
           cp -r vendor _site/vendor
           [ -f data/ga4_daily.json ]  && cp data/ga4_daily.json  _site/data/ || true
           [ -f data/ga4_weekly.json ] && cp data/ga4_weekly.json _site/data/ || true
+          [ -f data/ga4_brief.json ] && cp data/ga4_brief.json _site/data/ || true
 
       - uses: actions/upload-pages-artifact@v3
         with:
