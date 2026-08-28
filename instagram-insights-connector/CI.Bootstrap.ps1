@@ -28,7 +28,10 @@
       IG_TOKEN_EXPIRES_AT  ISO8601 만료시각 (선택)
 #>
 
-Set-StrictMode -Version Latest
+# StrictMode 는 설정하지 않는다.
+# 이 파일은 dot-source 되므로 StrictMode 가 세션 전체에 적용되는데,
+# 기존 커넥터 스크립트(daily-instagram-brief.ps1 등)는 StrictMode 전제로
+# 작성되지 않아 초기화되지 않은 변수·없는 속성 참조에서 예외가 발생한다.
 
 if (-not $env:IG_ACCESS_TOKEN) {
     throw 'CI.Bootstrap: 환경변수 IG_ACCESS_TOKEN 이 없습니다. GitHub Secrets 를 확인하세요.'
