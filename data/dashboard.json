@@ -1,584 +1,746 @@
 {
   "schema": 1,
-  "generatedAt": "2026-07-24T09:51:33",
+  "generatedAt": "2026-08-28T07:17:46",
   "kpis": {
-    "collected": 18,
-    "uploadReady": 18,
-    "uploadReadyPct": 100,
-    "hotLeads": 1,
-    "pipelineValue": 1900,
-    "pipelineValueLabel": "₩1,900만"
+    "collected": 39,
+    "uploadReady": 3,
+    "uploadReadyPct": 8,
+    "hotLeads": 0,
+    "pipelineValue": 0,
+    "pipelineValueLabel": "₩0만"
   },
   "jobs": [
     {
-      "platform": "샘플",
-      "company": "FC서울",
-      "title": "구단 마케팅 & 스폰서십 담당",
-      "role": "마케팅",
-      "level": "경력 3~5년",
-      "size": "중소기업",
-      "sector": "구단",
-      "fit": 98,
-      "reasons": [
-        "스포츠 기업(fc서울)",
-        "구단",
-        "프로축구"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "스마트스코어",
-      "title": "스포츠테크 백엔드 엔지니어(Go)",
-      "role": "개발",
-      "level": "경력 4년 이상",
-      "size": "스타트업",
-      "sector": "스포츠테크",
-      "fit": 92,
-      "reasons": [
-        "스포츠 기업(스마트스코어)",
-        "스포츠",
-        "골프"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "골프존",
-      "title": "프로덕트 매니저(골프 SaaS)",
-      "role": "기획/PM",
-      "level": "경력 5년 이상",
-      "size": "중견기업",
-      "sector": "스포츠테크",
-      "fit": 92,
-      "reasons": [
-        "스포츠 기업(골프존)",
-        "스포츠",
-        "골프"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "번핏",
-      "title": "프론트엔드 개발자(React)",
-      "role": "개발",
-      "level": "경력 2년 이상",
-      "size": "스타트업",
-      "sector": "스포츠테크",
-      "fit": 92,
-      "reasons": [
-        "스포츠 기업(번핏)",
-        "스포츠",
-        "피트니스"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "스마트스코어",
-      "title": "데이터 분석가(스포츠 데이터)",
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 고용노동부 「청년일경험 프로그램(인턴형-일경험 수련생)」 참여자 모집(훈련기획부 경기력분석실 1명) / 경기력분석, 영상분석",
       "role": "데이터",
-      "level": "경력 3년 이상",
-      "size": "스타트업",
-      "sector": "스포츠테크",
-      "fit": 92,
-      "reasons": [
-        "스포츠 기업(스마트스코어)",
-        "스포츠",
-        "골프"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "KBL",
-      "title": "리그 운영 & 기록 담당",
-      "role": "운영",
-      "level": "신입~경력 2년",
-      "size": "중소기업",
-      "sector": "협회",
-      "fit": 92,
-      "reasons": [
-        "스포츠 기업(kbl)",
-        "농구",
-        "협회"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "번핏",
-      "title": "그로스 마케터",
-      "role": "마케팅",
-      "level": "경력 3년 이상",
-      "size": "스타트업",
-      "sector": "스포츠테크",
-      "fit": 92,
-      "reasons": [
-        "스포츠 기업(번핏)",
-        "스포츠",
-        "피트니스"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "스마트스코어",
-      "title": "프로덕트 매니저(PM)",
-      "role": "기획/PM",
-      "level": "경력 5년 이상",
-      "size": "스타트업",
-      "sector": "스포츠테크",
-      "fit": 92,
-      "reasons": [
-        "스포츠 기업(스마트스코어)",
-        "스포츠",
-        "골프"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "대한축구협회",
-      "title": "유소년 사업 운영 매니저",
-      "role": "운영",
-      "level": "경력 2~4년",
+      "level": "",
       "size": "공공/협회",
       "sector": "협회",
       "fit": 90,
       "reasons": [
-        "스포츠 기업(대한축구협회)",
+        "스포츠 기업(대한체육회)",
         "협회",
-        "협회 섹터 확정"
+        "체육"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72686"
     },
     {
-      "platform": "샘플",
-      "company": "갤럭시아SM",
-      "title": "스포츠 마케팅·스폰서십 매니저",
-      "role": "마케팅",
-      "level": "경력 5년 이상",
-      "size": "중견기업",
-      "sector": "에이전시",
-      "fit": 90,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "(대한롤러스포츠연맹) 사무처 직원(회계.총무) 공개채용 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 75,
       "reasons": [
-        "스포츠 기업(갤럭시아sm)",
+        "스포츠 기업(대한체육회)",
         "스포츠",
-        "스폰서십"
+        "협회"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72803"
     },
     {
-      "platform": "샘플",
-      "company": "울산HD FC",
-      "title": "구단 디지털 콘텐츠 매니저",
-      "role": "미디어",
-      "level": "경력 2~4년",
-      "size": "중소기업",
-      "sector": "구단",
-      "fit": 90,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한롤러스포츠연맹]사무처 직원(회계.총무) 공개채용 서류전형 합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 75,
       "reasons": [
-        "스포츠 기업(울산hd)",
-        "구단",
-        "프로축구"
-      ],
-      "status": "신규",
-      "url": ""
-    },
-    {
-      "platform": "샘플",
-      "company": "스포츠투아이",
-      "title": "스포츠 데이터 엔지니어",
-      "role": "데이터",
-      "level": "경력 3~6년",
-      "size": "중소기업",
-      "sector": "스포츠테크",
-      "fit": 84,
-      "reasons": [
-        "스포츠 기업(스포츠투아이)",
+        "스포츠 기업(대한체육회)",
         "스포츠",
-        "스포츠테크"
+        "협회"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72861"
     },
     {
-      "platform": "샘플",
-      "company": "스포츠몬스터",
-      "title": "신사업 개발(BD) 매니저",
-      "role": "개발",
-      "level": "경력 4년 이상",
-      "size": "스타트업",
-      "sector": "스포츠테크",
-      "fit": 84,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 고용노동부 「국민취업지원 연계 프로그램(인턴형-일경험 수련생)」 참여자 모집(스포츠정보화부 1명)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 68,
       "reasons": [
-        "스포츠 기업(스포츠몬스터)",
+        "스포츠 기업(대한체육회)",
         "스포츠",
-        "스포츠테크"
+        "협회"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72685"
     },
     {
-      "platform": "샘플",
-      "company": "스포티비",
-      "title": "스포츠 콘텐츠 PD",
-      "role": "미디어",
-      "level": "경력 3년 이상",
-      "size": "중견기업",
-      "sector": "미디어",
-      "fit": 82,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한파크골프협회] 계약직(사무행정) 공개채용",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 67,
       "reasons": [
-        "스포츠 기업(스포티비)",
-        "스포츠",
-        "미디어 섹터 확정"
+        "스포츠 기업(대한체육회)",
+        "골프",
+        "협회"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72863"
     },
     {
-      "platform": "샘플",
-      "company": "나이키코리아",
-      "title": "디지털 스포츠 마케터",
-      "role": "마케팅",
-      "level": "경력 3~5년",
-      "size": "대기업",
-      "sector": "브랜드",
-      "fit": 76,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "(사)대한핸드볼협회 디비전리그 계약직(사원) 최종 합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 66,
       "reasons": [
-        "스포츠 기업(나이키)",
-        "스포츠",
-        "스포츠웨어"
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "리그"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72771"
     },
     {
-      "platform": "샘플",
-      "company": "데카트론코리아",
-      "title": "리테일 스토어 운영 리드",
-      "role": "운영",
-      "level": "경력 4년 이상",
-      "size": "중견기업",
-      "sector": "브랜드",
-      "fit": 76,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 정규직 신입직원 공개채용 변경사항 사전 안내",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
       "reasons": [
-        "스포츠 기업(데카트론)",
-        "스포츠",
-        "브랜드 섹터 확정"
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72424"
     },
     {
-      "platform": "샘플",
-      "company": "휠라코리아",
-      "title": "이커머스 MD",
-      "role": "MD",
-      "level": "경력 2~4년",
-      "size": "대기업",
-      "sector": "브랜드",
-      "fit": 76,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 신입직원 채용 합격이야기 게시",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
       "reasons": [
-        "스포츠 기업(휠라)",
-        "스포츠",
-        "스포츠웨어"
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=71123"
     },
     {
-      "platform": "샘플",
-      "company": "데상트코리아",
-      "title": "브랜드 마케팅 매니저",
-      "role": "마케팅",
-      "level": "경력 4년 이상",
-      "size": "대기업",
-      "sector": "브랜드",
-      "fit": 76,
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 고용노동부 「청년일경험 프로그램(인턴형-일경험 수련생)」 참여자 모집(국제대회부)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
       "reasons": [
-        "스포츠 기업(데상트)",
-        "스포츠",
-        "브랜드 섹터 확정"
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
       ],
       "status": "신규",
-      "url": ""
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72793"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한컬링연맹] 컬링 국가대표 전담팀 채용공고 2차",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72782"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 하반기 계약직 직원 및 체험형 청년인턴 공개채용 합격자 발표",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72778"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한민국족구협회] 육아휴직 대체인력(계약직) 채용 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72777"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한씨름협회] 사무처 계약직원(출산·육아휴직 대체인력) 공개채용 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72775"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "(사)대한철인3종협회 사무처 직원(경영지원부, 육아휴직 대체인력) 채용 재공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72772"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한카누연맹] 정규직 공개채용 서류전형 합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72766"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[ 대한빙상경기연맹] 2026 빙상 국가대표 지도자  공개채용(3차) 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72749"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 하반기 계약직 직원 및 체험형 청년인턴 공개채용 면접전형 안내",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72722"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한펜싱협회] 국가대표 사브르 지도자(코치) 공개채용 재공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72721"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한하키협회] 국제업무전문인력 최종  합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72717"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한카누연맹] 2026년 제1차 정규직 직원 채용공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72715"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한사이클연맹] 사무행정 계약직 직원 채용  합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72710"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한사이클연맹] 국제업무 계약직 직원 채용  합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72709"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[ 대한빙상경기연맹] 2026 빙상 국가대표 지도자 및 전담팀 공개채용(2차) 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72702"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한사이클연맹] 국제업무 계약직 직원 채용  서류전형 합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72684"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 정규직(일반직·전문기술직·공무직) 신입직원 공개채용(8.12.수정)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72807"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한정구협회] 2026 계약직 채용 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72808"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회 태릉선수촌] 기간제 영양사 채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72806"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 정규직 신입직원 공개채용 합격이야기 게시",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72813"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "(사)대한철인3종협회 육아휴직 대체인력 채용 서류 합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72819"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 정규직(일반직·전문기술직·공무직) 신입직원 공개채용 입사지원서 접수 안내",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72825"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 정규직 신입직원 공개채용 설명회 개최안내",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72829"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "(사)대한철인3종협회 육아휴직 대체인력 채용 최종 합격자 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72838"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2026 국가대표 전담팀 추가채용",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72872"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 제4차 계약직 직원 공개채용(사무행정, 조리사, 간호사)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72885"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "태릉선수촌 기간제 영양사 공개채용  서류전형 합격자 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72883"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2027 충청권 하계세계대학경기대회 조직위원회 제10차 전문직 직원 채용 재공고(사진·기록 분야)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72903"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회 진천국가대표선수촌] 기간제 방사선사 채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72922"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한정구협회]계약직 채용 최종 합격자 발표",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72924"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "태릉선수촌 기간제 영양사 공개채용 최종 합격자 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72923"
     }
   ],
   "leads": [
     {
-      "company": "스마트스코어",
-      "sector": "스포츠테크",
-      "open": 3,
-      "growth": "±0",
-      "senior": 1,
-      "tier": "Hot",
-      "score": 64,
-      "fee": 1900,
-      "stage": "신규",
-      "signal": "3개 직무 동시 채용 — 스케일업 정황"
-    },
-    {
-      "company": "골프존",
-      "sector": "스포츠테크",
-      "open": 1,
-      "growth": "±0",
-      "senior": 1,
-      "tier": "Warm",
-      "score": 61,
-      "fee": 1300,
-      "stage": "신규",
-      "signal": "시니어 비중 높음 → 수수료 단가 상승"
-    },
-    {
-      "company": "갤럭시아SM",
-      "sector": "에이전시",
-      "open": 1,
-      "growth": "±0",
-      "senior": 1,
-      "tier": "Warm",
-      "score": 61,
-      "fee": 950,
-      "stage": "신규",
-      "signal": "시니어 비중 높음 → 수수료 단가 상승 · HH 저경쟁 · 선점 가치 큼"
-    },
-    {
-      "company": "스포츠투아이",
-      "sector": "스포츠테크",
-      "open": 1,
-      "growth": "±0",
-      "senior": 1,
-      "tier": "Warm",
-      "score": 61,
-      "fee": 1300,
-      "stage": "신규",
-      "signal": "시니어 비중 높음 → 수수료 단가 상승"
-    },
-    {
-      "company": "데카트론코리아",
-      "sector": "브랜드",
-      "open": 1,
-      "growth": "±0",
-      "senior": 1,
-      "tier": "Nurture",
-      "score": 44,
-      "fee": 900,
-      "stage": "신규",
-      "signal": "시니어 비중 높음 → 수수료 단가 상승"
-    },
-    {
-      "company": "번핏",
-      "sector": "스포츠테크",
-      "open": 2,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 43,
-      "fee": 600,
-      "stage": "신규",
-      "signal": "관계 구축 단계 · 지속 모니터링"
-    },
-    {
-      "company": "FC서울",
-      "sector": "구단",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 34,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "HH 저경쟁 · 선점 가치 큼"
-    },
-    {
-      "company": "대한축구협회",
+      "company": "대한체육회",
       "sector": "협회",
-      "open": 1,
+      "open": 39,
       "growth": "±0",
       "senior": 0,
-      "tier": "Nurture",
-      "score": 34,
-      "fee": 300,
+      "tier": "Warm",
+      "score": 52,
+      "fee": 11700,
       "stage": "신규",
-      "signal": "HH 저경쟁 · 선점 가치 큼"
-    },
-    {
-      "company": "KBL",
-      "sector": "협회",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 34,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "HH 저경쟁 · 선점 가치 큼"
-    },
-    {
-      "company": "스포츠몬스터",
-      "sector": "스포츠테크",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 34,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "관계 구축 단계 · 지속 모니터링"
-    },
-    {
-      "company": "울산HD FC",
-      "sector": "구단",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 34,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "HH 저경쟁 · 선점 가치 큼"
-    },
-    {
-      "company": "스포티비",
-      "sector": "미디어",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 23,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "관계 구축 단계 · 지속 모니터링"
-    },
-    {
-      "company": "나이키코리아",
-      "sector": "브랜드",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 17,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "관계 구축 단계 · 지속 모니터링"
-    },
-    {
-      "company": "휠라코리아",
-      "sector": "브랜드",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 17,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "관계 구축 단계 · 지속 모니터링"
-    },
-    {
-      "company": "데상트코리아",
-      "sector": "브랜드",
-      "open": 1,
-      "growth": "±0",
-      "senior": 0,
-      "tier": "Nurture",
-      "score": 17,
-      "fee": 300,
-      "stage": "신규",
-      "signal": "관계 구축 단계 · 지속 모니터링"
+      "signal": "39개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
     }
   ],
   "actions": {
     "supply": [
       {
         "pr": "P0",
-        "title": "FC서울 · 구단 마케팅 & 스폰서십 담당 업로드",
-        "company": "샘플 · 적합도 98",
-        "why": "스포츠 기업(fc서울) / 구단 / 프로축구",
+        "title": "대한체육회 · [대한체육회] 고용노동부 「청년일경험 프로그램(인턴형-일경험 수련생)」 참여자 모집(훈련기획부 경기력분석실 1명) / 경기력분석, 영상분석 업로드",
+        "company": "대한체육회 · 적합도 90",
+        "why": "스포츠 기업(대한체육회) / 협회 / 체육",
         "cta": "지금 업로드"
       },
       {
-        "pr": "P0",
-        "title": "스마트스코어 · 스포츠테크 백엔드 엔지니어(Go) 업로드",
-        "company": "샘플 · 적합도 92",
-        "why": "스포츠 기업(스마트스코어) / 스포츠 / 골프",
+        "pr": "P1",
+        "title": "대한체육회 · (대한롤러스포츠연맹) 사무처 직원(회계.총무) 공개채용 공고 업로드",
+        "company": "대한체육회 · 적합도 75",
+        "why": "스포츠 기업(대한체육회) / 스포츠 / 협회",
         "cta": "지금 업로드"
       },
       {
-        "pr": "P0",
-        "title": "골프존 · 프로덕트 매니저(골프 SaaS) 업로드",
-        "company": "샘플 · 적합도 92",
-        "why": "스포츠 기업(골프존) / 스포츠 / 골프",
+        "pr": "P1",
+        "title": "대한체육회 · [대한롤러스포츠연맹]사무처 직원(회계.총무) 공개채용 서류전형 합격자 공고 업로드",
+        "company": "대한체육회 · 적합도 75",
+        "why": "스포츠 기업(대한체육회) / 스포츠 / 협회",
         "cta": "지금 업로드"
       }
     ],
     "demand": [
       {
-        "pr": "P0",
-        "title": "스마트스코어 헤드헌팅 계약 제안",
-        "company": "예상 수수료 ₩1,900만",
-        "why": "3개 직무 동시 채용 — 스케일업 정황",
-        "cta": "제안서 발송"
-      },
-      {
         "pr": "P1",
-        "title": "골프존 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩1,300만",
-        "why": "시니어 비중 높음 → 수수료 단가 상승",
-        "cta": "콜드 아웃리치"
-      },
-      {
-        "pr": "P1",
-        "title": "갤럭시아SM 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩950만",
-        "why": "시니어 비중 높음 → 수수료 단가 상승 · HH 저경쟁 · 선점 가치 큼",
+        "title": "대한체육회 헤드헌팅 접촉",
+        "company": "예상 수수료 ₩11,700만",
+        "why": "39개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
         "cta": "콜드 아웃리치"
       }
     ]
   },
   "trends": {
     "role": {
-      "마케팅": 5,
-      "개발": 3,
-      "운영": 3,
-      "기획/PM": 2,
-      "미디어": 2,
-      "데이터": 2,
-      "MD": 1
+      "기타": 33,
+      "코치/트레이너": 5,
+      "데이터": 1
     },
     "size": {
-      "스타트업": 6,
-      "중견기업": 4,
-      "중소기업": 4,
-      "대기업": 3,
-      "공공/협회": 1
+      "공공/협회": 39
     },
     "platform": {
-      "샘플": 18
+      "대한체육회": 39
     },
     "sector": {
-      "스포츠테크": 8,
-      "브랜드": 4,
-      "구단": 2,
-      "협회": 2,
-      "에이전시": 1,
-      "미디어": 1
+      "협회": 39
     },
     "level": {
-      "신입~주니어": 2,
-      "미들(3~5년)": 11,
-      "시니어(5년+)": 5
+      "신입~주니어": 0,
+      "미들(3~5년)": 39,
+      "시니어(5년+)": 0
     },
     "weekly": {
       "labels": [
@@ -592,24 +754,24 @@
         "이번주"
       ],
       "total": [
-        0,
-        0,
-        0,
+        7,
         1,
-        2,
-        3,
         6,
-        6
+        2,
+        5,
+        4,
+        5,
+        4
       ],
       "uploadReady": [
         0,
         0,
         0,
+        0,
         1,
-        2,
-        3,
-        6,
-        6
+        0,
+        1,
+        0
       ]
     }
   }
