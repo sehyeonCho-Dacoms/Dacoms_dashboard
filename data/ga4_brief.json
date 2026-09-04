@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-09-03T23:04:47.357786+00:00",
-  "source_generated_at": "2026-09-03T23:04:47.265438+00:00",
+  "generated_at": "2026-09-04T13:17:27.098579+00:00",
+  "source_generated_at": "2026-09-04T13:17:26.989478+00:00",
   "yesterday": {
     "date": "20260903",
-    "sessions": 238,
-    "totalUsers": 199,
-    "newUsers": 141,
-    "engagementRate": 0.0462,
-    "averageSessionDuration": 1723.4,
+    "sessions": 254,
+    "totalUsers": 215,
+    "newUsers": 156,
+    "engagementRate": 0.689,
+    "averageSessionDuration": 263.1,
     "sessions_prev_day": 274,
-    "sessions_dod_pct": -13.1
+    "sessions_dod_pct": -7.3
   },
   "week": {
     "sessions": {
-      "current": 1457,
+      "current": 1473,
       "previous": 1079,
-      "change_pct": 35.0
+      "change_pct": 36.5
     },
     "totalUsers": {
-      "current": 1238,
+      "current": 1254,
       "previous": 824,
-      "change_pct": 50.2
+      "change_pct": 52.2
     },
     "newUsers": {
-      "current": 916,
+      "current": 931,
       "previous": 548,
-      "change_pct": 67.2
+      "change_pct": 69.9
     },
     "screenPageViews": {
-      "current": 8453,
+      "current": 8702,
       "previous": 6988,
-      "change_pct": 21.0
+      "change_pct": 24.5
     },
     "engagementRate": {
-      "current": 0.5324,
+      "current": 0.6242,
       "previous": 0.6659,
-      "change_pct": -20.0
+      "change_pct": -6.3
     },
     "averageSessionDuration": {
-      "current": 457.3768,
+      "current": 248.758,
       "previous": 282.5597,
-      "change_pct": 61.9
+      "change_pct": -12.0
     }
   },
   "window": {
@@ -56,58 +56,58 @@
   "baseline_comparison": {
     "note": "8/3 계측 유실 이전 정상 주간 평균 대비 — 이쪽이 진짜 성장폭",
     "baseline_avg_sessions": 738,
-    "current_week_sessions": 1457,
-    "change_pct": 97.6
+    "current_week_sessions": 1473,
+    "change_pct": 99.7
   },
   "channels": [
     {
       "channel": "Direct",
-      "current": 977,
+      "current": 1009,
       "previous": 645,
-      "change_pct": 51.5,
-      "share_pct": 62.5
+      "change_pct": 56.4,
+      "share_pct": 68.5
     },
     {
       "channel": "Organic Search",
-      "current": 280,
+      "current": 292,
       "previous": 267,
-      "change_pct": 4.9,
-      "share_pct": 17.9
-    },
-    {
-      "channel": "Unassigned",
-      "current": 183,
-      "previous": 1,
-      "change_pct": 18200.0,
-      "share_pct": 11.7
+      "change_pct": 9.4,
+      "share_pct": 19.8
     },
     {
       "channel": "Organic Social",
-      "current": 74,
+      "current": 82,
       "previous": 87,
-      "change_pct": -14.9,
-      "share_pct": 4.7
+      "change_pct": -5.7,
+      "share_pct": 5.6
+    },
+    {
+      "channel": "Unassigned",
+      "current": 45,
+      "previous": 1,
+      "change_pct": 4400.0,
+      "share_pct": 3.1
     },
     {
       "channel": "Email",
-      "current": 19,
+      "current": 20,
       "previous": 9,
-      "change_pct": 111.1,
-      "share_pct": 1.2
+      "change_pct": 122.2,
+      "share_pct": 1.4
     },
     {
       "channel": "Referral",
-      "current": 15,
+      "current": 16,
       "previous": 62,
-      "change_pct": -75.8,
-      "share_pct": 1.0
+      "change_pct": -74.2,
+      "share_pct": 1.1
     }
   ],
   "instagram_referral": {
-    "current": 42,
+    "current": 46,
     "previous": 40,
-    "change_pct": 5.0,
-    "share_of_sessions_pct": 2.7
+    "change_pct": 15.0,
+    "share_of_sessions_pct": 3.1
   },
   "weekly_trend": [
     {
@@ -161,10 +161,10 @@
     {
       "week_start": "20260828",
       "week_end": "20260903",
-      "sessions": 1457,
-      "totalUsers": 1238,
-      "newUsers": 916,
-      "screenPageViews": 8453
+      "sessions": 1473,
+      "totalUsers": 1254,
+      "newUsers": 931,
+      "screenPageViews": 8702
     }
   ],
   "measurement": {
@@ -185,7 +185,7 @@
         "counts": [
           157,
           159,
-          132
+          155
         ],
         "alive": true
       },
@@ -200,7 +200,7 @@
         "counts": [
           452,
           466,
-          293
+          354
         ],
         "alive": true
       },
@@ -215,7 +215,7 @@
         "counts": [
           15,
           20,
-          20
+          18
         ],
         "alive": true
       },
@@ -230,7 +230,7 @@
         "counts": [
           4,
           4,
-          5
+          6
         ],
         "alive": true
       },
@@ -245,7 +245,7 @@
         "counts": [
           4,
           4,
-          4
+          6
         ],
         "alive": true
       },
@@ -275,7 +275,7 @@
         "counts": [
           27,
           16,
-          10
+          11
         ],
         "alive": true
       },
@@ -290,7 +290,7 @@
         "counts": [
           83,
           86,
-          90
+          103
         ],
         "alive": true
       },
@@ -305,14 +305,12 @@
         "counts": [
           109,
           91,
-          107
+          122
         ],
         "alive": true
       }
     ],
     "broken": []
   },
-  "alerts": [
-    "참여율 이상치 4.6% — GA4 미확정 데이터일 수 있음"
-  ]
+  "alerts": []
 }
