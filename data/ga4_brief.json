@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-09-04T22:52:29.868150+00:00",
-  "source_generated_at": "2026-09-04T22:52:29.770267+00:00",
+  "generated_at": "2026-09-05T12:29:29.715339+00:00",
+  "source_generated_at": "2026-09-05T12:29:29.618124+00:00",
   "yesterday": {
     "date": "20260904",
-    "sessions": 213,
-    "totalUsers": 170,
-    "newUsers": 117,
-    "engagementRate": 0.0329,
-    "averageSessionDuration": 1139.7,
+    "sessions": 220,
+    "totalUsers": 174,
+    "newUsers": 126,
+    "engagementRate": 0.5636,
+    "averageSessionDuration": 199.3,
     "sessions_prev_day": 254,
-    "sessions_dod_pct": -16.1
+    "sessions_dod_pct": -13.4
   },
   "week": {
     "sessions": {
-      "current": 1535,
+      "current": 1542,
       "previous": 980,
-      "change_pct": 56.6
+      "change_pct": 57.3
     },
     "totalUsers": {
-      "current": 1304,
+      "current": 1308,
       "previous": 768,
-      "change_pct": 69.8
+      "change_pct": 70.3
     },
     "newUsers": {
-      "current": 963,
+      "current": 972,
       "previous": 509,
-      "change_pct": 89.2
+      "change_pct": 91.0
     },
     "screenPageViews": {
-      "current": 8780,
+      "current": 8854,
       "previous": 5779,
-      "change_pct": 51.9
+      "change_pct": 53.2
     },
     "engagementRate": {
-      "current": 0.522,
+      "current": 0.5978,
       "previous": 0.6648,
-      "change_pct": -21.5
+      "change_pct": -10.1
     },
     "averageSessionDuration": {
-      "current": 369.7307,
+      "current": 235.377,
       "previous": 261.0842,
-      "change_pct": 41.6
+      "change_pct": -9.8
     }
   },
   "window": {
@@ -57,31 +57,31 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 1038,
+      "current": 1051,
       "previous": 570,
-      "change_pct": 82.1,
-      "share_pct": 64.0
+      "change_pct": 84.4,
+      "share_pct": 68.1
     },
     {
       "channel": "Organic Search",
-      "current": 297,
+      "current": 313,
       "previous": 249,
-      "change_pct": 19.3,
-      "share_pct": 18.3
-    },
-    {
-      "channel": "Unassigned",
-      "current": 155,
-      "previous": 1,
-      "change_pct": 15400.0,
-      "share_pct": 9.6
+      "change_pct": 25.7,
+      "share_pct": 20.3
     },
     {
       "channel": "Organic Social",
-      "current": 79,
+      "current": 81,
       "previous": 74,
-      "change_pct": 6.8,
-      "share_pct": 4.9
+      "change_pct": 9.5,
+      "share_pct": 5.2
+    },
+    {
+      "channel": "Unassigned",
+      "current": 54,
+      "previous": 1,
+      "change_pct": 5300.0,
+      "share_pct": 3.5
     },
     {
       "channel": "Email",
@@ -99,10 +99,10 @@
     }
   ],
   "instagram_referral": {
-    "current": 41,
+    "current": 42,
     "previous": 40,
-    "change_pct": 2.5,
-    "share_of_sessions_pct": 2.5
+    "change_pct": 5.0,
+    "share_of_sessions_pct": 2.7
   },
   "weekly_trend": [
     {
@@ -156,10 +156,10 @@
     {
       "week_start": "20260829",
       "week_end": "20260904",
-      "sessions": 1535,
-      "totalUsers": 1304,
-      "newUsers": 963,
-      "screenPageViews": 8780
+      "sessions": 1542,
+      "totalUsers": 1308,
+      "newUsers": 972,
+      "screenPageViews": 8854
     }
   ],
   "measurement": {
@@ -180,7 +180,7 @@
         "counts": [
           159,
           155,
-          97
+          102
         ],
         "alive": true
       },
@@ -195,7 +195,7 @@
         "counts": [
           466,
           354,
-          202
+          225
         ],
         "alive": true
       },
@@ -270,7 +270,7 @@
         "counts": [
           16,
           11,
-          5
+          7
         ],
         "alive": true
       },
@@ -285,7 +285,7 @@
         "counts": [
           86,
           103,
-          69
+          70
         ],
         "alive": true
       },
@@ -300,14 +300,12 @@
         "counts": [
           91,
           122,
-          84
+          88
         ],
         "alive": true
       }
     ],
     "broken": []
   },
-  "alerts": [
-    "참여율 이상치 3.3% — GA4 미확정 데이터일 수 있음"
-  ]
+  "alerts": []
 }
