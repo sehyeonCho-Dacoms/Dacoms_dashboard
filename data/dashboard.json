@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "generatedAt": "2026-09-17T23:26:38",
+  "generatedAt": "2026-09-18T13:29:39",
   "kpis": {
-    "collected": 53,
+    "collected": 54,
     "uploadReady": 7,
     "uploadReadyPct": 13,
     "hotLeads": 0,
@@ -910,20 +910,37 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73019"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 제4차 계약직 직원 공개채용 면접전형 대상자 및 면접일정 발표",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73022"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 53,
-      "growth": "±0",
+      "open": 54,
+      "growth": "+1",
       "senior": 0,
       "tier": "Warm",
-      "score": 52,
-      "fee": 15900,
+      "score": 59,
+      "fee": 16200,
       "stage": "신규",
-      "signal": "53개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "54개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
     }
   ],
   "actions": {
@@ -954,30 +971,30 @@
       {
         "pr": "P1",
         "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩15,900만",
-        "why": "53개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
+        "company": "예상 수수료 ₩16,200만",
+        "why": "54개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
         "cta": "콜드 아웃리치"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 44,
+      "기타": 45,
       "코치/트레이너": 8,
       "데이터": 1
     },
     "size": {
-      "공공/협회": 53
+      "공공/협회": 54
     },
     "platform": {
-      "대한체육회": 53
+      "대한체육회": 54
     },
     "sector": {
-      "협회": 53
+      "협회": 54
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 53,
+      "미들(3~5년)": 54,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -992,14 +1009,14 @@
         "이번주"
       ],
       "total": [
-        6,
+        2,
         5,
-        3,
         4,
-        6,
         5,
+        4,
+        7,
         3,
-        6
+        5
       ],
       "uploadReady": [
         0,
@@ -1008,8 +1025,8 @@
         1,
         0,
         2,
-        1,
-        1
+        2,
+        0
       ]
     }
   }
