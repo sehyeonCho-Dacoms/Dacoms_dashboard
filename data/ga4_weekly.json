@@ -1,161 +1,168 @@
 {
-  "generated_at": "2026-09-19T12:58:48.893746+00:00",
-  "source_generated_at": "2026-09-19T12:58:48.818492+00:00",
+  "generated_at": "2026-09-19T22:45:24.938540+00:00",
+  "source_generated_at": "2026-09-19T22:45:24.869907+00:00",
   "window": {
     "current": {
-      "start": "20260912",
-      "end": "20260918"
+      "start": "20260913",
+      "end": "20260919"
     },
     "previous": {
-      "start": "20260905",
-      "end": "20260911"
+      "start": "20260906",
+      "end": "20260912"
     }
   },
   "summary": {
     "sessions": {
-      "current": 919,
-      "previous": 1246,
-      "change_pct": -26.2
+      "current": 848,
+      "previous": 1213,
+      "change_pct": -30.1
     },
     "totalUsers": {
-      "current": 764,
-      "previous": 1004,
-      "change_pct": -23.9
+      "current": 710,
+      "previous": 971,
+      "change_pct": -26.9
     },
     "newUsers": {
-      "current": 486,
-      "previous": 713,
-      "change_pct": -31.8
+      "current": 442,
+      "previous": 676,
+      "change_pct": -34.6
     },
     "screenPageViews": {
-      "current": 5021,
-      "previous": 7664,
-      "change_pct": -34.5
+      "current": 4532,
+      "previous": 7719,
+      "change_pct": -41.3
     },
     "engagementRate": {
-      "current": 0.6456,
-      "previous": 0.6845,
-      "change_pct": -5.7
+      "current": 0.5673,
+      "previous": 0.6884,
+      "change_pct": -17.6
     },
     "averageSessionDuration": {
-      "current": 240.2367,
-      "previous": 272.7089,
-      "change_pct": -11.9
+      "current": 288.1377,
+      "previous": 289.7264,
+      "change_pct": -0.5
     }
   },
   "by_channel": [
     {
       "channel": "Direct",
-      "current": 456,
-      "previous": 662,
-      "change_pct": -31.1,
-      "share_pct": 49.6
+      "current": 438,
+      "previous": 603,
+      "change_pct": -27.4,
+      "share_pct": 50.3
     },
     {
       "channel": "Organic Search",
-      "current": 419,
-      "previous": 462,
-      "change_pct": -9.3,
-      "share_pct": 45.5
+      "current": 368,
+      "previous": 491,
+      "change_pct": -25.1,
+      "share_pct": 42.3
+    },
+    {
+      "channel": "Unassigned",
+      "current": 26,
+      "previous": 12,
+      "change_pct": 116.7,
+      "share_pct": 3.0
     },
     {
       "channel": "Organic Social",
-      "current": 32,
-      "previous": 65,
-      "change_pct": -50.8,
-      "share_pct": 3.5
+      "current": 24,
+      "previous": 69,
+      "change_pct": -65.2,
+      "share_pct": 2.8
+    },
+    {
+      "channel": "AI Assistant",
+      "current": 5,
+      "previous": 6,
+      "change_pct": -16.7,
+      "share_pct": 0.6
     },
     {
       "channel": "Email",
       "current": 5,
       "previous": 22,
       "change_pct": -77.3,
-      "share_pct": 0.5
+      "share_pct": 0.6
     },
     {
-      "channel": "AI Assistant",
-      "current": 5,
-      "previous": 7,
-      "change_pct": -28.6,
-      "share_pct": 0.5
+      "channel": "Cross-network",
+      "current": 2,
+      "previous": 0,
+      "change_pct": null,
+      "share_pct": 0.2
     },
     {
       "channel": "Referral",
       "current": 2,
-      "previous": 12,
-      "change_pct": -83.3,
+      "previous": 11,
+      "change_pct": -81.8,
       "share_pct": 0.2
-    },
-    {
-      "channel": "Unassigned",
-      "current": 1,
-      "previous": 17,
-      "change_pct": -94.1,
-      "share_pct": 0.1
     }
   ],
   "weekly_trend": [
     {
-      "week_start": "20260730",
-      "week_end": "20260805",
-      "sessions": 505,
-      "totalUsers": 405,
-      "newUsers": 116,
-      "screenPageViews": 2936
+      "week_start": "20260731",
+      "week_end": "20260806",
+      "sessions": 472,
+      "totalUsers": 377,
+      "newUsers": 112,
+      "screenPageViews": 2796
     },
     {
-      "week_start": "20260806",
-      "week_end": "20260812",
-      "sessions": 41,
-      "totalUsers": 38,
-      "newUsers": 28,
-      "screenPageViews": 91
+      "week_start": "20260807",
+      "week_end": "20260813",
+      "sessions": 58,
+      "totalUsers": 54,
+      "newUsers": 36,
+      "screenPageViews": 127
     },
     {
-      "week_start": "20260813",
-      "week_end": "20260821",
-      "sessions": 578,
-      "totalUsers": 437,
-      "newUsers": 307,
-      "screenPageViews": 4290
+      "week_start": "20260814",
+      "week_end": "20260822",
+      "sessions": 654,
+      "totalUsers": 497,
+      "newUsers": 350,
+      "screenPageViews": 4940
     },
     {
-      "week_start": "20260822",
-      "week_end": "20260828",
-      "sessions": 980,
-      "totalUsers": 768,
-      "newUsers": 509,
-      "screenPageViews": 5779
+      "week_start": "20260823",
+      "week_end": "20260829",
+      "sessions": 958,
+      "totalUsers": 749,
+      "newUsers": 502,
+      "screenPageViews": 5670
     },
     {
-      "week_start": "20260829",
-      "week_end": "20260904",
-      "sessions": 1542,
-      "totalUsers": 1308,
-      "newUsers": 972,
-      "screenPageViews": 8854
+      "week_start": "20260830",
+      "week_end": "20260905",
+      "sessions": 1618,
+      "totalUsers": 1377,
+      "newUsers": 1031,
+      "screenPageViews": 8920
     },
     {
-      "week_start": "20260905",
-      "week_end": "20260911",
-      "sessions": 1246,
-      "totalUsers": 1004,
-      "newUsers": 713,
-      "screenPageViews": 7664
+      "week_start": "20260906",
+      "week_end": "20260912",
+      "sessions": 1213,
+      "totalUsers": 971,
+      "newUsers": 676,
+      "screenPageViews": 7719
     },
     {
-      "week_start": "20260912",
-      "week_end": "20260918",
-      "sessions": 919,
-      "totalUsers": 764,
-      "newUsers": 486,
-      "screenPageViews": 5021
+      "week_start": "20260913",
+      "week_end": "20260919",
+      "sessions": 848,
+      "totalUsers": 710,
+      "newUsers": 442,
+      "screenPageViews": 4532
     }
   ],
   "instagram_referral": {
     "current": 14,
-    "previous": 27,
-    "change_pct": -48.1,
-    "share_of_sessions_pct": 1.5
+    "previous": 24,
+    "change_pct": -41.7,
+    "share_of_sessions_pct": 1.6
   }
 }
