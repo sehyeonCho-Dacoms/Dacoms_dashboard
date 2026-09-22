@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-21T23:55:54.687852+00:00",
+  "generated_at": "2026-09-22T13:57:13.563059+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -483,12 +483,12 @@
     },
     {
       "date": "20260921",
-      "sessions": 101,
-      "totalUsers": 84,
-      "newUsers": 45,
-      "screenPageViews": 541,
-      "engagementRate": 0.0297,
-      "averageSessionDuration": 649.2814
+      "sessions": 105,
+      "totalUsers": 88,
+      "newUsers": 50,
+      "screenPageViews": 591,
+      "engagementRate": 0.7333,
+      "averageSessionDuration": 231.2223
     }
   ],
   "by_channel": [
@@ -1808,33 +1808,21 @@
     },
     {
       "date": "20260921",
-      "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 70,
-      "totalUsers": 65
-    },
-    {
-      "date": "20260921",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 56,
-      "totalUsers": 46
+      "sessions": 62,
+      "totalUsers": 52
     },
     {
       "date": "20260921",
       "sessionDefaultChannelGroup": "Organic Search",
-      "sessions": 30,
-      "totalUsers": 25
-    },
-    {
-      "date": "20260921",
-      "sessionDefaultChannelGroup": "Cross-network",
-      "sessions": 5,
-      "totalUsers": 5
+      "sessions": 38,
+      "totalUsers": 32
     },
     {
       "date": "20260921",
       "sessionDefaultChannelGroup": "Organic Social",
-      "sessions": 3,
-      "totalUsers": 2
+      "sessions": 4,
+      "totalUsers": 3
     },
     {
       "date": "20260921",
@@ -4498,39 +4486,27 @@
     },
     {
       "date": "20260921",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 70
-    },
-    {
-      "date": "20260921",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 56
+      "sessions": 62
     },
     {
       "date": "20260921",
       "sessionSource": "google",
       "sessionMedium": "organic",
-      "sessions": 16
+      "sessions": 21
     },
     {
       "date": "20260921",
       "sessionSource": "m.search.naver.com",
       "sessionMedium": "referral",
-      "sessions": 9
-    },
-    {
-      "date": "20260921",
-      "sessionSource": "(data not available)",
-      "sessionMedium": "(data not available)",
-      "sessions": 5
+      "sessions": 11
     },
     {
       "date": "20260921",
       "sessionSource": "naver",
       "sessionMedium": "organic",
-      "sessions": 4
+      "sessions": 5
     },
     {
       "date": "20260921",
@@ -4548,6 +4524,12 @@
       "date": "20260921",
       "sessionSource": "blog.naver.com",
       "sessionMedium": "referral",
+      "sessions": 1
+    },
+    {
+      "date": "20260921",
+      "sessionSource": "ig",
+      "sessionMedium": "social",
       "sessions": 1
     },
     {
@@ -5211,7 +5193,7 @@
     {
       "date": "20260921",
       "deviceCategory": "mobile",
-      "sessions": 19
+      "sessions": 23
     },
     {
       "date": "20260921",
@@ -8923,47 +8905,47 @@
     {
       "date": "20260921",
       "eventName": "page_view",
-      "eventCount": 541
+      "eventCount": 591
     },
     {
       "date": "20260921",
       "eventName": "user_engagement",
-      "eventCount": 374
+      "eventCount": 401
     },
     {
       "date": "20260921",
       "eventName": "scroll",
-      "eventCount": 219
+      "eventCount": 247
     },
     {
       "date": "20260921",
       "eventName": "recruit_list_view",
-      "eventCount": 156
+      "eventCount": 178
     },
     {
       "date": "20260921",
       "eventName": "session_start",
-      "eventCount": 95
+      "eventCount": 104
     },
     {
       "date": "20260921",
       "eventName": "form_start",
-      "eventCount": 56
+      "eventCount": 63
     },
     {
       "date": "20260921",
       "eventName": "form_submit",
-      "eventCount": 54
+      "eventCount": 60
     },
     {
       "date": "20260921",
       "eventName": "first_visit",
-      "eventCount": 45
+      "eventCount": 51
     },
     {
       "date": "20260921",
       "eventName": "recruit_view",
-      "eventCount": 30
+      "eventCount": 32
     },
     {
       "date": "20260921",
@@ -8987,17 +8969,17 @@
     },
     {
       "date": "20260921",
+      "eventName": "click",
+      "eventCount": 3
+    },
+    {
+      "date": "20260921",
       "eventName": "join",
       "eventCount": 2
     },
     {
       "date": "20260921",
       "eventName": "apply_start",
-      "eventCount": 1
-    },
-    {
-      "date": "20260921",
-      "eventName": "click",
       "eventCount": 1
     },
     {
@@ -9009,28 +8991,28 @@
   "top_pages": [
     {
       "pagePath": "/recruit/recruitList.do",
-      "screenPageViews": 10920,
-      "userEngagementDuration": 108120
+      "screenPageViews": 10936,
+      "userEngagementDuration": 108191
     },
     {
       "pagePath": "/main/main.do",
-      "screenPageViews": 8468,
-      "userEngagementDuration": 71434
+      "screenPageViews": 8479,
+      "userEngagementDuration": 71471
     },
     {
       "pagePath": "/recruit/recruitView.do",
-      "screenPageViews": 5124,
-      "userEngagementDuration": 97325
+      "screenPageViews": 5131,
+      "userEngagementDuration": 97558
     },
     {
       "pagePath": "/member/loginGen.do",
-      "screenPageViews": 4114,
-      "userEngagementDuration": 15328
+      "screenPageViews": 4125,
+      "userEngagementDuration": 15353
     },
     {
       "pagePath": "/resume/resumeList.do",
-      "screenPageViews": 1003,
-      "userEngagementDuration": 3871
+      "screenPageViews": 1004,
+      "userEngagementDuration": 3877
     },
     {
       "pagePath": "/resume/resumeEdit.do",
@@ -9044,13 +9026,13 @@
     },
     {
       "pagePath": "/event/eventView.do",
-      "screenPageViews": 775,
+      "screenPageViews": 774,
       "userEngagementDuration": 13102
     },
     {
       "pagePath": "/company/companyList.do",
-      "screenPageViews": 652,
-      "userEngagementDuration": 5750
+      "screenPageViews": 653,
+      "userEngagementDuration": 5765
     },
     {
       "pagePath": "/community/communityList.do",
@@ -9059,12 +9041,12 @@
     },
     {
       "pagePath": "/event/eventList.do",
-      "screenPageViews": 577,
+      "screenPageViews": 578,
       "userEngagementDuration": 6482
     },
     {
       "pagePath": "/resume/resumeUpdateProcess.do",
-      "screenPageViews": 428,
+      "screenPageViews": 429,
       "userEngagementDuration": 162
     },
     {
@@ -9089,13 +9071,13 @@
     },
     {
       "pagePath": "/member/loginFail.do",
-      "screenPageViews": 276,
+      "screenPageViews": 278,
       "userEngagementDuration": 105
     },
     {
       "pagePath": "/company/companyViewRecruit.do",
       "screenPageViews": 266,
-      "userEngagementDuration": 952
+      "userEngagementDuration": 960
     },
     {
       "pagePath": "/community/communityView.do",
@@ -9105,7 +9087,7 @@
     {
       "pagePath": "/member/loginCor.do",
       "screenPageViews": 208,
-      "userEngagementDuration": 750
+      "userEngagementDuration": 751
     },
     {
       "pagePath": "/recruit/applyResumeProcess.do",
@@ -9134,7 +9116,7 @@
     },
     {
       "pagePath": "/business/ticketList.do",
-      "screenPageViews": 98,
+      "screenPageViews": 95,
       "userEngagementDuration": 548
     },
     {
@@ -9189,7 +9171,7 @@
     },
     {
       "pagePath": "/member/joinGenProcess.do",
-      "screenPageViews": 38,
+      "screenPageViews": 39,
       "userEngagementDuration": 10
     },
     {
@@ -9199,7 +9181,7 @@
     },
     {
       "pagePath": "/business/ticketPurchase.do",
-      "screenPageViews": 34,
+      "screenPageViews": 36,
       "userEngagementDuration": 640
     },
     {
@@ -9366,6 +9348,10 @@
     {
       "date": "20260919",
       "sessions": 3
+    },
+    {
+      "date": "20260921",
+      "sessions": 1
     }
   ]
 }
