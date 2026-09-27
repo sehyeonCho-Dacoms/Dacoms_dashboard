@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-09-27T14:37:16.3671156Z",
+  "generatedAt": "2026-09-27T23:43:00.6696254Z",
   "account": {
     "username": "drafton.co.kr",
     "id": "28961157813485354",
     "accountType": "BUSINESS",
     "mediaCount": 824,
-    "followersCount": 11034
+    "followersCount": 11040
   },
   "media": [
     {
@@ -15,9 +15,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdygnOpj9tV/",
       "timestamp": "2026-09-27T11:32:08+00:00",
-      "views": 11689,
-      "reach": 4003,
-      "saved": 24,
+      "views": 14126,
+      "reach": 4775,
+      "saved": 26,
       "shares": 9
     },
     {
@@ -27,8 +27,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Ddn6eZovKdH/",
       "timestamp": "2026-09-23T11:00:07+00:00",
-      "views": 7918,
-      "reach": 3370,
+      "views": 8031,
+      "reach": 3412,
       "saved": 0,
       "shares": 2
     },
@@ -39,10 +39,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Ddn2sriD9NV/",
       "timestamp": "2026-09-23T08:13:28+00:00",
-      "views": 25653,
-      "reach": 9927,
-      "saved": 225,
-      "shares": 131
+      "views": 25878,
+      "reach": 10062,
+      "saved": 230,
+      "shares": 132
     },
     {
       "id": "17908409862309077",
@@ -51,10 +51,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdnOlvov-6M/",
       "timestamp": "2026-09-23T02:23:15+00:00",
-      "views": 34332,
-      "reach": 18976,
+      "views": 34764,
+      "reach": 19150,
       "saved": 65,
-      "shares": 153
+      "shares": 155
     },
     {
       "id": "17917749969240598",
@@ -63,10 +63,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdnOdJrPXV0/",
       "timestamp": "2026-09-23T02:22:09+00:00",
-      "views": 58612,
-      "reach": 31186,
+      "views": 58934,
+      "reach": 31293,
       "saved": 46,
-      "shares": 423
+      "shares": 427
     }
   ],
   "weeklyMedia": [
@@ -77,9 +77,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdygnOpj9tV/",
       "timestamp": "2026-09-27T11:32:08+00:00",
-      "views": 11689,
-      "reach": 4003,
-      "saved": 24,
+      "views": 14126,
+      "reach": 4775,
+      "saved": 26,
       "shares": 9
     },
     {
@@ -89,8 +89,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Ddn6eZovKdH/",
       "timestamp": "2026-09-23T11:00:07+00:00",
-      "views": 7918,
-      "reach": 3370,
+      "views": 8031,
+      "reach": 3412,
       "saved": 0,
       "shares": 2
     },
@@ -101,10 +101,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Ddn2sriD9NV/",
       "timestamp": "2026-09-23T08:13:28+00:00",
-      "views": 25653,
-      "reach": 9927,
-      "saved": 225,
-      "shares": 131
+      "views": 25878,
+      "reach": 10062,
+      "saved": 230,
+      "shares": 132
     },
     {
       "id": "17908409862309077",
@@ -113,10 +113,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdnOlvov-6M/",
       "timestamp": "2026-09-23T02:23:15+00:00",
-      "views": 34332,
-      "reach": 18976,
+      "views": 34764,
+      "reach": 19150,
       "saved": 65,
-      "shares": 153
+      "shares": 155
     },
     {
       "id": "17917749969240598",
@@ -125,10 +125,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdnOdJrPXV0/",
       "timestamp": "2026-09-23T02:22:09+00:00",
-      "views": 58612,
-      "reach": 31186,
+      "views": 58934,
+      "reach": 31293,
       "saved": 46,
-      "shares": 423
+      "shares": 427
     },
     {
       "id": "18128737627766603",
@@ -137,10 +137,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdlX-XoD1qw/",
       "timestamp": "2026-09-22T09:06:31+00:00",
-      "views": 22526,
-      "reach": 8089,
-      "saved": 189,
-      "shares": 148
+      "views": 22714,
+      "reach": 8172,
+      "saved": 191,
+      "shares": 151
     },
     {
       "id": "18174092635432809",
@@ -149,9 +149,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdixTbkjy7G/",
       "timestamp": "2026-09-21T08:50:02+00:00",
-      "views": 27435,
-      "reach": 12620,
-      "saved": 182,
+      "views": 27622,
+      "reach": 12674,
+      "saved": 184,
       "shares": 124
     },
     {
@@ -161,8 +161,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdbFL7rD1pk/",
       "timestamp": "2026-09-18T09:09:56+00:00",
-      "views": 30061,
-      "reach": 13339,
+      "views": 30110,
+      "reach": 13369,
       "saved": 141,
       "shares": 100
     },
@@ -173,8 +173,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdYh70UPDL9/",
       "timestamp": "2026-09-17T12:50:05+00:00",
-      "views": 7464,
-      "reach": 3499,
+      "views": 7527,
+      "reach": 3527,
       "saved": 3,
       "shares": 0
     },
@@ -185,7 +185,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdY4g6GD8v1/",
       "timestamp": "2026-09-17T12:40:02+00:00",
-      "views": 13152,
+      "views": 13190,
       "reach": 4408,
       "saved": 3,
       "shares": 3
@@ -197,8 +197,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdYhS9KPu70/",
       "timestamp": "2026-09-17T12:30:05+00:00",
-      "views": 6401,
-      "reach": 2959,
+      "views": 6459,
+      "reach": 2976,
       "saved": 1,
       "shares": 0
     },
@@ -209,8 +209,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdYkvitD6KE/",
       "timestamp": "2026-09-17T09:47:58+00:00",
-      "views": 32333,
-      "reach": 14705,
+      "views": 32397,
+      "reach": 14755,
       "saved": 129,
       "shares": 49
     },
@@ -221,10 +221,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdV6j_Oj2aF/",
       "timestamp": "2026-09-16T09:00:02+00:00",
-      "views": 60320,
-      "reach": 30540,
-      "saved": 505,
-      "shares": 206
+      "views": 60448,
+      "reach": 30641,
+      "saved": 508,
+      "shares": 208
     },
     {
       "id": "18093754130419950",
@@ -233,8 +233,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdTussJPIIG/",
       "timestamp": "2026-09-15T12:40:01+00:00",
-      "views": 18513,
-      "reach": 8209,
+      "views": 18572,
+      "reach": 8223,
       "saved": 54,
       "shares": 20
     },
@@ -245,8 +245,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdTtuEIj58q/",
       "timestamp": "2026-09-15T12:30:03+00:00",
-      "views": 12270,
-      "reach": 3840,
+      "views": 12320,
+      "reach": 3867,
       "saved": 3,
       "shares": 5
     },
@@ -257,8 +257,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdTUUrDj1On/",
       "timestamp": "2026-09-15T08:48:17+00:00",
-      "views": 32848,
-      "reach": 15316,
+      "views": 32898,
+      "reach": 15359,
       "saved": 381,
       "shares": 220
     },
@@ -269,10 +269,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdQypCoj4nt/",
       "timestamp": "2026-09-14T09:15:29+00:00",
-      "views": 74049,
-      "reach": 37567,
-      "saved": 797,
-      "shares": 641
+      "views": 74248,
+      "reach": 37726,
+      "saved": 802,
+      "shares": 645
     },
     {
       "id": "17879340813536290",
@@ -281,8 +281,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdJF8wfj3e1/",
       "timestamp": "2026-09-11T09:30:01+00:00",
-      "views": 27222,
-      "reach": 11625,
+      "views": 27231,
+      "reach": 11633,
       "saved": 85,
       "shares": 41
     },
@@ -293,8 +293,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdIUHcyPwRg/",
       "timestamp": "2026-09-11T02:15:13+00:00",
-      "views": 9901,
-      "reach": 4443,
+      "views": 9908,
+      "reach": 4460,
       "saved": 23,
       "shares": 3
     },
@@ -305,7 +305,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdG4CFpD8j8/",
       "timestamp": "2026-09-10T12:50:02+00:00",
-      "views": 12698,
+      "views": 12700,
       "reach": 4165,
       "saved": 19,
       "shares": 11
@@ -341,9 +341,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdGfVUeD_NS/",
       "timestamp": "2026-09-10T09:14:22+00:00",
-      "views": 124020,
-      "reach": 61641,
-      "saved": 745,
+      "views": 124296,
+      "reach": 61853,
+      "saved": 748,
       "shares": 600
     },
     {
@@ -353,7 +353,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdD8O0clIWp/",
       "timestamp": "2026-09-09T09:29:09+00:00",
-      "views": 57380,
+      "views": 57419,
       "reach": 29323,
       "saved": 1030,
       "shares": 584
@@ -365,20 +365,20 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdBaOkUD6R-/",
       "timestamp": "2026-09-08T09:53:33+00:00",
-      "views": 17177,
-      "reach": 6028,
+      "views": 17179,
+      "reach": 6034,
       "saved": 79,
       "shares": 53
     }
   ],
   "brief": {
     "date": "2026-09-27",
-    "followers": 11034,
-    "followersDelta": 21,
-    "summary": "팔로워 11034명 (▲ 전일 대비 21 명 증가). 최근 5개 게시물 평균 조회수 27641회, 도달 합계 67462회, 저장+공유 합계 1078회. 최고 성과: '⠀ [한화이글스] 한화이글스 프로야구단 단기통역(일어) 선발공고(~26.…' (조회수 58612회)",
+    "followers": 11040,
+    "followersDelta": 6,
+    "summary": "팔로워 11040명 (▲ 전일 대비 6 명 증가). 최근 5개 게시물 평균 조회수 28347회, 도달 합계 68692회, 저장+공유 합계 1092회. 최고 성과: '⠀ [한화이글스] 한화이글스 프로야구단 단기통역(일어) 선발공고(~26.…' (조회수 58934회)",
     "topPost": {
       "caption": "⠀ [한화이글스] 한화이글스 프로야구단 단기통역(일어) 선발공고(~26.…",
-      "views": 58612,
+      "views": 58934,
       "permalink": "https://www.instagram.com/p/DdnOdJrPXV0/"
     }
   },
@@ -517,38 +517,18 @@
     },
     {
       "date": "2026-09-27",
-      "followers": 11034
+      "followers": 11040
     }
   ],
-  "surging": [
-    {
-      "id": "18057163010632246",
-      "caption": "⠀ 체대 나오면 구단 취업에 유리할까요? 🤔 유리합니다. 딱 한 군데에서만요. 그리고 거…",
-      "viewsYesterday": 122736,
-      "viewsToday": 124020,
-      "delta": 1284,
-      "deltaPct": 1.0,
-      "permalink": "https://www.instagram.com/p/DdGfVUeD_NS/"
-    },
-    {
-      "id": "17908409862309077",
-      "caption": "⠀ [포항스틸러스] 2026년 ㈜포항스틸러스 사무국 신입인턴직 채용공고(~26.10.20)…",
-      "viewsYesterday": 33092,
-      "viewsToday": 34332,
-      "delta": 1240,
-      "deltaPct": 3.7,
-      "permalink": "https://www.instagram.com/p/DdnOlvov-6M/"
-    },
-    {
-      "id": "17917749969240598",
-      "caption": "⠀ [한화이글스] 한화이글스 프로야구단 단기통역(일어) 선발공고(~26.09.26) 모집분…",
-      "viewsYesterday": 57457,
-      "viewsToday": 58612,
-      "delta": 1155,
-      "deltaPct": 2.0,
-      "permalink": "https://www.instagram.com/p/DdnOdJrPXV0/"
-    }
-  ],
+  "surging": {
+    "id": "18116187428279974",
+    "caption": "⠀ [넥슨코리아] [인사] 인사관리/운영 담당자 (계약직)(채용시 마감) 모집분야: 인사관…",
+    "viewsYesterday": 11689,
+    "viewsToday": 14126,
+    "delta": 2437,
+    "deltaPct": 20.8,
+    "permalink": "https://www.instagram.com/p/DdygnOpj9tV/"
+  },
   "engagedDemographics": {},
   "analysisHistory": [
     {
@@ -841,12 +821,12 @@
     },
     {
       "date": "2026-09-27",
-      "followers": 11034,
-      "viewsAvg": 27641.0,
-      "reachSum": 67462.0,
-      "engagementSum": 1078.0,
+      "followers": 11040,
+      "viewsAvg": 28347.0,
+      "reachSum": 68692.0,
+      "engagementSum": 1092.0,
       "topCategory": "마케팅",
-      "surgingCount": 3
+      "surgingCount": 1
     }
   ]
 }
