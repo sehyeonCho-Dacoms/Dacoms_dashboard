@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-09-29T15:30:23.984034+00:00",
-  "source_generated_at": "2026-09-29T15:30:23.823813+00:00",
+  "generated_at": "2026-09-30T00:09:06.151679+00:00",
+  "source_generated_at": "2026-09-30T00:09:06.056916+00:00",
   "yesterday": {
     "date": "20260929",
     "sessions": 105,
     "totalUsers": 93,
-    "newUsers": 55,
+    "newUsers": 58,
     "engagementRate": 0.0381,
-    "averageSessionDuration": 844.0,
+    "averageSessionDuration": 893.1,
     "sessions_prev_day": 113,
     "sessions_dod_pct": -7.1
   },
@@ -23,14 +23,14 @@
       "change_pct": -19.0
     },
     "newUsers": {
-      "current": 303,
+      "current": 306,
       "previous": 358,
-      "change_pct": -15.4
+      "change_pct": -14.5
     },
     "screenPageViews": {
-      "current": 2971,
+      "current": 2998,
       "previous": 3754,
-      "change_pct": -20.9
+      "change_pct": -20.1
     },
     "engagementRate": {
       "current": 0.5777,
@@ -38,9 +38,9 @@
       "change_pct": -10.5
     },
     "averageSessionDuration": {
-      "current": 266.963,
+      "current": 273.9774,
       "previous": 231.2298,
-      "change_pct": 15.5
+      "change_pct": 18.5
     }
   },
   "window": {
@@ -57,24 +57,24 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 295,
+      "current": 298,
       "previous": 386,
-      "change_pct": -23.6,
-      "share_pct": 51.3
+      "change_pct": -22.8,
+      "share_pct": 51.6
     },
     {
       "channel": "Organic Search",
       "current": 169,
       "previous": 244,
       "change_pct": -30.7,
-      "share_pct": 29.4
+      "share_pct": 29.2
     },
     {
       "channel": "Unassigned",
       "current": 62,
       "previous": 0,
       "change_pct": null,
-      "share_pct": 10.8
+      "share_pct": 10.7
     },
     {
       "channel": "Organic Social",
@@ -88,7 +88,7 @@
       "current": 13,
       "previous": 0,
       "change_pct": null,
-      "share_pct": 2.3
+      "share_pct": 2.2
     },
     {
       "channel": "AI Assistant",
@@ -158,8 +158,8 @@
       "week_end": "20260929",
       "sessions": 520,
       "totalUsers": 457,
-      "newUsers": 303,
-      "screenPageViews": 2971
+      "newUsers": 306,
+      "screenPageViews": 2998
     }
   ],
   "measurement": {
@@ -180,7 +180,7 @@
         "counts": [
           41,
           88,
-          69
+          70
         ],
         "alive": true
       },
@@ -195,7 +195,7 @@
         "counts": [
           120,
           324,
-          169
+          183
         ],
         "alive": true
       },
