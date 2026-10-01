@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-09-30T15:44:55.735030+00:00",
-  "source_generated_at": "2026-09-30T15:44:55.624964+00:00",
+  "generated_at": "2026-10-01T00:25:40.142027+00:00",
+  "source_generated_at": "2026-10-01T00:25:40.042564+00:00",
   "yesterday": {
     "date": "20260930",
-    "sessions": 101,
-    "totalUsers": 81,
-    "newUsers": 41,
-    "engagementRate": 0.0099,
-    "averageSessionDuration": 1319.8,
+    "sessions": 106,
+    "totalUsers": 86,
+    "newUsers": 49,
+    "engagementRate": 0.0283,
+    "averageSessionDuration": 1600.0,
     "sessions_prev_day": 106,
-    "sessions_dod_pct": -4.7
+    "sessions_dod_pct": 0.0
   },
   "week": {
     "sessions": {
-      "current": 509,
+      "current": 514,
       "previous": 651,
-      "change_pct": -21.8
+      "change_pct": -21.0
     },
     "totalUsers": {
-      "current": 443,
+      "current": 448,
       "previous": 563,
-      "change_pct": -21.3
+      "change_pct": -20.4
     },
     "newUsers": {
-      "current": 280,
+      "current": 288,
       "previous": 371,
-      "change_pct": -24.5
+      "change_pct": -22.4
     },
     "screenPageViews": {
-      "current": 3063,
+      "current": 3125,
       "previous": 3417,
-      "change_pct": -10.4
+      "change_pct": -8.5
     },
     "engagementRate": {
-      "current": 0.5793,
+      "current": 0.5819,
       "previous": 0.639,
-      "change_pct": -9.3
+      "change_pct": -8.9
     },
     "averageSessionDuration": {
-      "current": 344.3058,
+      "current": 384.3439,
       "previous": 200.2263,
-      "change_pct": 72.0
+      "change_pct": 92.0
     }
   },
   "window": {
@@ -57,38 +57,38 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 298,
+      "current": 304,
       "previous": 373,
-      "change_pct": -20.1,
-      "share_pct": 52.7
+      "change_pct": -18.5,
+      "share_pct": 52.6
     },
     {
       "channel": "Organic Search",
-      "current": 164,
+      "current": 169,
       "previous": 236,
-      "change_pct": -30.5,
-      "share_pct": 29.0
+      "change_pct": -28.4,
+      "share_pct": 29.2
     },
     {
       "channel": "Unassigned",
-      "current": 67,
+      "current": 68,
       "previous": 0,
       "change_pct": null,
-      "share_pct": 11.9
+      "share_pct": 11.8
     },
     {
       "channel": "Cross-network",
-      "current": 14,
+      "current": 15,
       "previous": 0,
       "change_pct": null,
-      "share_pct": 2.5
+      "share_pct": 2.6
     },
     {
       "channel": "Organic Social",
       "current": 13,
       "previous": 35,
       "change_pct": -62.9,
-      "share_pct": 2.3
+      "share_pct": 2.2
     },
     {
       "channel": "AI Assistant",
@@ -156,10 +156,10 @@
     {
       "week_start": "20260924",
       "week_end": "20260930",
-      "sessions": 509,
-      "totalUsers": 443,
-      "newUsers": 280,
-      "screenPageViews": 3063
+      "sessions": 514,
+      "totalUsers": 448,
+      "newUsers": 288,
+      "screenPageViews": 3125
     }
   ],
   "measurement": {
@@ -180,7 +180,7 @@
         "counts": [
           88,
           72,
-          59
+          69
         ],
         "alive": true
       },
@@ -195,7 +195,7 @@
         "counts": [
           324,
           187,
-          142
+          151
         ],
         "alive": true
       },
@@ -314,6 +314,6 @@
   },
   "alerts": [
     "계측 끊김 의심 — 지원 시작, 이력서 선택, 최종 지원, 가입 시작 (20260930 0건)",
-    "참여율 이상치 1.0% — GA4 미확정 데이터일 수 있음"
+    "참여율 이상치 2.8% — GA4 미확정 데이터일 수 있음"
   ]
 }
