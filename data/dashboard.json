@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-01T16:08:38",
+  "generatedAt": "2026-10-02T00:35:41",
   "kpis": {
     "collected": 62,
     "uploadReady": 7,
     "uploadReadyPct": 11,
-    "hotLeads": 1,
-    "pipelineValue": 18600,
-    "pipelineValueLabel": "₩1.9억"
+    "hotLeads": 0,
+    "pipelineValue": 0,
+    "pipelineValueLabel": "₩0만"
   },
   "jobs": [
     {
@@ -1070,13 +1070,13 @@
       "company": "대한체육회",
       "sector": "협회",
       "open": 62,
-      "growth": "+3",
+      "growth": "±0",
       "senior": 0,
-      "tier": "Hot",
-      "score": 65,
+      "tier": "Warm",
+      "score": 52,
       "fee": 18600,
       "stage": "신규",
-      "signal": "3건↑ 채용 확대 중(스케일업 신호) · 62개 직무 동시 채용 — 스케일업 정황"
+      "signal": "62개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
     }
   ],
   "actions": {
@@ -1105,11 +1105,11 @@
     ],
     "demand": [
       {
-        "pr": "P0",
-        "title": "대한체육회 헤드헌팅 계약 제안",
+        "pr": "P1",
+        "title": "대한체육회 헤드헌팅 접촉",
         "company": "예상 수수료 ₩18,600만",
-        "why": "3건↑ 채용 확대 중(스케일업 신호) · 62개 직무 동시 채용 — 스케일업 정황",
-        "cta": "제안서 발송"
+        "why": "62개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
+        "cta": "콜드 아웃리치"
       }
     ]
   },
@@ -1145,13 +1145,13 @@
         "이번주"
       ],
       "total": [
-        3,
         4,
-        6,
+        5,
+        4,
+        7,
+        3,
         5,
         3,
-        6,
-        4,
         5
       ],
       "uploadReady": [
@@ -1159,8 +1159,8 @@
         1,
         0,
         2,
-        1,
-        1,
+        2,
+        0,
         0,
         0
       ]
