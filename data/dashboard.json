@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-06T01:41:41",
+  "generatedAt": "2026-10-06T15:45:49",
   "kpis": {
-    "collected": 63,
-    "uploadReady": 7,
-    "uploadReadyPct": 11,
-    "hotLeads": 0,
-    "pipelineValue": 0,
-    "pipelineValueLabel": "₩0만"
+    "collected": 68,
+    "uploadReady": 11,
+    "uploadReadyPct": 16,
+    "hotLeads": 1,
+    "pipelineValue": 20400,
+    "pipelineValueLabel": "₩2.0억"
   },
   "jobs": [
     {
@@ -132,6 +132,74 @@
     {
       "platform": "대한체육회",
       "company": "대한체육회",
+      "title": "[대한테니스협회] 2027년도 국가대표 선수 선발 공지",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 73,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "테니스",
+        "협회"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73124"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한테니스협회] 2027년도 국가대표 트레이너 모집 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 72,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "테니스",
+        "협회"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73125"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한스쿼시연맹] 2027-2028 국가대표 전담팀(체력트레이너) 공개채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 71,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73121"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한스쿼시연맹] 2027-2028 국가대표 지도자(코치) 공개채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 71,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73120"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
       "title": "[대한체육회] 고용노동부 「국민취업지원 연계 프로그램(인턴형-일경험 수련생)」 참여자 모집(스포츠정보화부 1명)",
       "role": "기타",
       "level": "",
@@ -213,6 +281,23 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73081"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한테니스협회] 2027년도 국가대표 감독 모집 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 66,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "테니스",
+        "협회"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73123"
     },
     {
       "platform": "대한체육회",
@@ -1086,14 +1171,14 @@
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 63,
-      "growth": "±0",
+      "open": 68,
+      "growth": "+5",
       "senior": 0,
-      "tier": "Warm",
-      "score": 52,
-      "fee": 18900,
+      "tier": "Hot",
+      "score": 65,
+      "fee": 20400,
       "stage": "신규",
-      "signal": "63개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "5건↑ 채용 확대 중(스케일업 신호) · 68개 직무 동시 채용 — 스케일업 정황"
     }
   ],
   "actions": {
@@ -1122,32 +1207,32 @@
     ],
     "demand": [
       {
-        "pr": "P1",
-        "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩18,900만",
-        "why": "63개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
-        "cta": "콜드 아웃리치"
+        "pr": "P0",
+        "title": "대한체육회 헤드헌팅 계약 제안",
+        "company": "예상 수수료 ₩20,400만",
+        "why": "5건↑ 채용 확대 중(스케일업 신호) · 68개 직무 동시 채용 — 스케일업 정황",
+        "cta": "제안서 발송"
       }
     ]
   },
   "trends": {
     "role": {
       "기타": 52,
-      "코치/트레이너": 10,
+      "코치/트레이너": 15,
       "데이터": 1
     },
     "size": {
-      "공공/협회": 63
+      "공공/협회": 68
     },
     "platform": {
-      "대한체육회": 63
+      "대한체육회": 68
     },
     "sector": {
-      "협회": 63
+      "협회": 68
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 63,
+      "미들(3~5년)": 68,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -1169,7 +1254,7 @@
         5,
         6,
         2,
-        4
+        9
       ],
       "uploadReady": [
         1,
@@ -1179,7 +1264,7 @@
         2,
         0,
         0,
-        0
+        4
       ]
     }
   }
