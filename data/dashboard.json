@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-07T00:28:48",
+  "generatedAt": "2026-10-07T16:11:01",
   "kpis": {
-    "collected": 68,
+    "collected": 69,
     "uploadReady": 11,
     "uploadReadyPct": 16,
     "hotLeads": 0,
@@ -1165,20 +1165,37 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73072"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한체육회] 2026년 정규직 신입직원 공개채용 최종합격자 발표",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73127"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 68,
-      "growth": "±0",
+      "open": 69,
+      "growth": "+1",
       "senior": 0,
       "tier": "Warm",
-      "score": 52,
-      "fee": 20400,
+      "score": 59,
+      "fee": 20700,
       "stage": "신규",
-      "signal": "68개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "69개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
     }
   ],
   "actions": {
@@ -1209,30 +1226,30 @@
       {
         "pr": "P1",
         "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩20,400만",
-        "why": "68개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
+        "company": "예상 수수료 ₩20,700만",
+        "why": "69개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
         "cta": "콜드 아웃리치"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 52,
+      "기타": 53,
       "코치/트레이너": 15,
       "데이터": 1
     },
     "size": {
-      "공공/협회": 68
+      "공공/협회": 69
     },
     "platform": {
-      "대한체육회": 68
+      "대한체육회": 69
     },
     "sector": {
-      "협회": 68
+      "협회": 69
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 68,
+      "미들(3~5년)": 69,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -1254,7 +1271,7 @@
         5,
         5,
         2,
-        9
+        10
       ],
       "uploadReady": [
         1,
