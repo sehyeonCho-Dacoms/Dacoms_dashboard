@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-12T18:45:40.781550+00:00",
+  "generated_at": "2026-10-13T02:28:51.712436+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -501,12 +501,12 @@
     },
     {
       "date": "20261012",
-      "sessions": 112,
-      "totalUsers": 88,
-      "newUsers": 54,
-      "screenPageViews": 893,
-      "engagementRate": 0.6696,
-      "averageSessionDuration": 199.9215
+      "sessions": 117,
+      "totalUsers": 93,
+      "newUsers": 56,
+      "screenPageViews": 915,
+      "engagementRate": 0.7009,
+      "averageSessionDuration": 330.9188
     }
   ],
   "by_channel": [
@@ -2031,20 +2031,14 @@
     {
       "date": "20261012",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 71,
-      "totalUsers": 60
+      "sessions": 75,
+      "totalUsers": 64
     },
     {
       "date": "20261012",
       "sessionDefaultChannelGroup": "Organic Search",
-      "sessions": 33,
-      "totalUsers": 23
-    },
-    {
-      "date": "20261012",
-      "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 21,
-      "totalUsers": 20
+      "sessions": 35,
+      "totalUsers": 25
     },
     {
       "date": "20261012",
@@ -5106,19 +5100,13 @@
       "date": "20261012",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 71
-    },
-    {
-      "date": "20261012",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 21
+      "sessions": 75
     },
     {
       "date": "20261012",
       "sessionSource": "google",
       "sessionMedium": "organic",
-      "sessions": 20
+      "sessions": 21
     },
     {
       "date": "20261012",
@@ -5130,7 +5118,7 @@
       "date": "20261012",
       "sessionSource": "m.search.naver.com",
       "sessionMedium": "referral",
-      "sessions": 5
+      "sessions": 6
     },
     {
       "date": "20261012",
@@ -5938,12 +5926,12 @@
     {
       "date": "20261012",
       "deviceCategory": "desktop",
-      "sessions": 76
+      "sessions": 80
     },
     {
       "date": "20261012",
       "deviceCategory": "mobile",
-      "sessions": 37
+      "sessions": 38
     }
   ],
   "events": [
@@ -10225,32 +10213,32 @@
     {
       "date": "20261012",
       "eventName": "page_view",
-      "eventCount": 893
+      "eventCount": 915
     },
     {
       "date": "20261012",
       "eventName": "user_engagement",
-      "eventCount": 774
+      "eventCount": 792
     },
     {
       "date": "20261012",
       "eventName": "scroll",
-      "eventCount": 556
+      "eventCount": 570
     },
     {
       "date": "20261012",
       "eventName": "recruit_list_view",
-      "eventCount": 312
+      "eventCount": 323
     },
     {
       "date": "20261012",
       "eventName": "recruit_view",
-      "eventCount": 118
+      "eventCount": 120
     },
     {
       "date": "20261012",
       "eventName": "session_start",
-      "eventCount": 111
+      "eventCount": 116
     },
     {
       "date": "20261012",
@@ -10265,7 +10253,7 @@
     {
       "date": "20261012",
       "eventName": "first_visit",
-      "eventCount": 54
+      "eventCount": 56
     },
     {
       "date": "20261012",
@@ -10306,23 +10294,23 @@
   "top_pages": [
     {
       "pagePath": "/recruit/recruitList.do",
-      "screenPageViews": 12861,
-      "userEngagementDuration": 136962
+      "screenPageViews": 12872,
+      "userEngagementDuration": 137253
     },
     {
       "pagePath": "/main/main.do",
-      "screenPageViews": 9781,
-      "userEngagementDuration": 88234
+      "screenPageViews": 9787,
+      "userEngagementDuration": 88259
     },
     {
       "pagePath": "/recruit/recruitView.do",
-      "screenPageViews": 5111,
-      "userEngagementDuration": 114500
+      "screenPageViews": 5113,
+      "userEngagementDuration": 114512
     },
     {
       "pagePath": "/member/loginGen.do",
-      "screenPageViews": 4730,
-      "userEngagementDuration": 17329
+      "screenPageViews": 4733,
+      "userEngagementDuration": 17332
     },
     {
       "pagePath": "/resume/resumeList.do",
