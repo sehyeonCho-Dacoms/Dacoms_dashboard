@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T00:12:16.510357+00:00",
+  "generated_at": "2026-10-14T14:24:34.975049+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -505,8 +505,8 @@
       "totalUsers": 115,
       "newUsers": 77,
       "screenPageViews": 614,
-      "engagementRate": 0.6107,
-      "averageSessionDuration": 186.6484
+      "engagementRate": 0.6412,
+      "averageSessionDuration": 232.1562
     }
   ],
   "by_channel": [
@@ -2037,8 +2037,8 @@
     {
       "date": "20261013",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 64,
-      "totalUsers": 57
+      "sessions": 65,
+      "totalUsers": 58
     },
     {
       "date": "20261013",
@@ -2054,13 +2054,13 @@
     },
     {
       "date": "20261013",
-      "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 16,
-      "totalUsers": 16
+      "sessionDefaultChannelGroup": "Referral",
+      "sessions": 1,
+      "totalUsers": 1
     },
     {
       "date": "20261013",
-      "sessionDefaultChannelGroup": "Referral",
+      "sessionDefaultChannelGroup": "Unassigned",
       "sessions": 1,
       "totalUsers": 1
     }
@@ -5124,19 +5124,13 @@
       "date": "20261013",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 64
+      "sessions": 65
     },
     {
       "date": "20261013",
       "sessionSource": "google",
       "sessionMedium": "organic",
       "sessions": 25
-    },
-    {
-      "date": "20261013",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 16
     },
     {
       "date": "20261013",
@@ -5167,6 +5161,12 @@
       "sessionSource": "ig",
       "sessionMedium": "social",
       "sessions": 4
+    },
+    {
+      "date": "20261013",
+      "sessionSource": "(not set)",
+      "sessionMedium": "(not set)",
+      "sessions": 1
     },
     {
       "date": "20261013",
@@ -10288,7 +10288,7 @@
     {
       "date": "20261013",
       "eventName": "user_engagement",
-      "eventCount": 500
+      "eventCount": 501
     },
     {
       "date": "20261013",
@@ -10365,7 +10365,7 @@
     {
       "pagePath": "/recruit/recruitList.do",
       "screenPageViews": 12993,
-      "userEngagementDuration": 138562
+      "userEngagementDuration": 138574
     },
     {
       "pagePath": "/main/main.do",

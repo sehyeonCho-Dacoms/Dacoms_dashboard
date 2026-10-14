@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-14T00:12:16.626225+00:00",
-  "source_generated_at": "2026-10-14T00:12:16.510357+00:00",
+  "generated_at": "2026-10-14T14:24:35.047599+00:00",
+  "source_generated_at": "2026-10-14T14:24:34.975049+00:00",
   "yesterday": {
     "date": "20261013",
     "sessions": 131,
     "totalUsers": 115,
     "newUsers": 77,
-    "engagementRate": 0.6107,
-    "averageSessionDuration": 186.6,
+    "engagementRate": 0.6412,
+    "averageSessionDuration": 232.2,
     "sessions_prev_day": 117,
     "sessions_dod_pct": 12.0
   },
@@ -33,14 +33,14 @@
       "change_pct": 33.7
     },
     "engagementRate": {
-      "current": 0.6537,
+      "current": 0.6581,
       "previous": 0.6169,
-      "change_pct": 6.0
+      "change_pct": 6.7
     },
     "averageSessionDuration": {
-      "current": 251.5436,
+      "current": 258.0448,
       "previous": 218.066,
-      "change_pct": 15.4
+      "change_pct": 18.3
     }
   },
   "window": {
@@ -57,52 +57,52 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 416,
+      "current": 417,
       "previous": 358,
-      "change_pct": 16.2,
-      "share_pct": 59.7
+      "change_pct": 16.5,
+      "share_pct": 61.1
     },
     {
       "channel": "Organic Search",
       "current": 203,
       "previous": 184,
       "change_pct": 10.3,
-      "share_pct": 29.1
+      "share_pct": 29.7
     },
     {
       "channel": "Organic Social",
       "current": 40,
       "previous": 13,
       "change_pct": 207.7,
-      "share_pct": 5.7
-    },
-    {
-      "channel": "Unassigned",
-      "current": 16,
-      "previous": 4,
-      "change_pct": 300.0,
-      "share_pct": 2.3
+      "share_pct": 5.9
     },
     {
       "channel": "Referral",
       "current": 10,
       "previous": 2,
       "change_pct": 400.0,
-      "share_pct": 1.4
+      "share_pct": 1.5
     },
     {
       "channel": "AI Assistant",
       "current": 8,
       "previous": 3,
       "change_pct": 166.7,
-      "share_pct": 1.1
+      "share_pct": 1.2
+    },
+    {
+      "channel": "Paid Social",
+      "current": 4,
+      "previous": 2,
+      "change_pct": 100.0,
+      "share_pct": 0.6
     }
   ],
   "instagram_referral": {
     "current": 28,
     "previous": 6,
     "change_pct": 366.7,
-    "share_of_sessions_pct": 4.0
+    "share_of_sessions_pct": 4.1
   },
   "weekly_trend": [
     {
