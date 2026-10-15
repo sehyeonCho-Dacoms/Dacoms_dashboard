@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-14T23:46:37.124047+00:00",
-  "source_generated_at": "2026-10-14T23:46:37.054948+00:00",
+  "generated_at": "2026-10-15T14:02:06.255108+00:00",
+  "source_generated_at": "2026-10-15T14:02:06.157599+00:00",
   "window": {
     "current": {
       "start": "20261008",
@@ -33,44 +33,37 @@
       "change_pct": 19.3
     },
     "engagementRate": {
-      "current": 0.6605,
+      "current": 0.6658,
       "previous": 0.6246,
-      "change_pct": 5.7
+      "change_pct": 6.6
     },
     "averageSessionDuration": {
-      "current": 243.8518,
+      "current": 250.5923,
       "previous": 235.2896,
-      "change_pct": 3.6
+      "change_pct": 6.5
     }
   },
   "by_channel": [
     {
       "channel": "Direct",
-      "current": 382,
+      "current": 385,
       "previous": 392,
-      "change_pct": -2.6,
-      "share_pct": 58.0
+      "change_pct": -1.8,
+      "share_pct": 59.0
     },
     {
       "channel": "Organic Search",
       "current": 209,
       "previous": 174,
       "change_pct": 20.1,
-      "share_pct": 31.7
+      "share_pct": 32.1
     },
     {
       "channel": "Organic Social",
       "current": 37,
       "previous": 17,
       "change_pct": 117.6,
-      "share_pct": 5.6
-    },
-    {
-      "channel": "Unassigned",
-      "current": 11,
-      "previous": 4,
-      "change_pct": 175.0,
-      "share_pct": 1.7
+      "share_pct": 5.7
     },
     {
       "channel": "Referral",
@@ -92,6 +85,13 @@
       "previous": 2,
       "change_pct": 100.0,
       "share_pct": 0.6
+    },
+    {
+      "channel": "Unassigned",
+      "current": 1,
+      "previous": 4,
+      "change_pct": -75.0,
+      "share_pct": 0.2
     }
   ],
   "weekly_trend": [
@@ -164,6 +164,6 @@
     "current": 24,
     "previous": 12,
     "change_pct": 100.0,
-    "share_of_sessions_pct": 3.6
+    "share_of_sessions_pct": 3.7
   }
 }
