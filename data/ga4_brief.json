@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-10-15T23:35:13.693491+00:00",
-  "source_generated_at": "2026-10-15T23:35:13.551545+00:00",
+  "generated_at": "2026-10-16T13:49:13.208324+00:00",
+  "source_generated_at": "2026-10-16T13:49:13.112285+00:00",
   "yesterday": {
     "date": "20261015",
-    "sessions": 72,
+    "sessions": 73,
     "totalUsers": 66,
     "newUsers": 44,
-    "engagementRate": 0.6111,
-    "averageSessionDuration": 201.8,
+    "engagementRate": 0.6438,
+    "averageSessionDuration": 213.9,
     "sessions_prev_day": 108,
-    "sessions_dod_pct": -33.3
+    "sessions_dod_pct": -32.4
   },
   "week": {
     "sessions": {
-      "current": 610,
+      "current": 611,
       "previous": 605,
-      "change_pct": 0.8
+      "change_pct": 1.0
     },
     "totalUsers": {
       "current": 523,
@@ -33,14 +33,14 @@
       "change_pct": -3.1
     },
     "engagementRate": {
-      "current": 0.6591,
+      "current": 0.6638,
       "previous": 0.6342,
-      "change_pct": 3.9
+      "change_pct": 4.7
     },
     "averageSessionDuration": {
-      "current": 228.4137,
+      "current": 230.1384,
       "previous": 250.9485,
-      "change_pct": -9.0
+      "change_pct": -8.3
     }
   },
   "window": {
@@ -57,17 +57,17 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 352,
+      "current": 354,
       "previous": 400,
-      "change_pct": -12.0,
-      "share_pct": 57.5
+      "change_pct": -11.5,
+      "share_pct": 57.9
     },
     {
       "channel": "Organic Search",
-      "current": 205,
+      "current": 206,
       "previous": 167,
-      "change_pct": 22.8,
-      "share_pct": 33.5
+      "change_pct": 23.4,
+      "share_pct": 33.7
     },
     {
       "channel": "Organic Social",
@@ -84,18 +84,18 @@
       "share_pct": 1.1
     },
     {
-      "channel": "Unassigned",
-      "current": 5,
-      "previous": 4,
-      "change_pct": 25.0,
-      "share_pct": 0.8
-    },
-    {
       "channel": "AI Assistant",
       "current": 4,
       "previous": 7,
       "change_pct": -42.9,
       "share_pct": 0.7
+    },
+    {
+      "channel": "Paid Social",
+      "current": 3,
+      "previous": 2,
+      "change_pct": 50.0,
+      "share_pct": 0.5
     }
   ],
   "instagram_referral": {
@@ -164,7 +164,7 @@
     {
       "week_start": "20261009",
       "week_end": "20261015",
-      "sessions": 610,
+      "sessions": 611,
       "totalUsers": 523,
       "newUsers": 339,
       "screenPageViews": 4009
@@ -320,6 +320,6 @@
   },
   "alerts": [
     "계측 끊김 의심 — 이력서 선택, 최종 지원 (20261015 0건)",
-    "세션 급변 — 전일 대비 -33.3%"
+    "세션 급변 — 전일 대비 -32.4%"
   ]
 }

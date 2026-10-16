@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T23:35:13.551545+00:00",
+  "generated_at": "2026-10-16T13:49:13.112285+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -501,12 +501,12 @@
     },
     {
       "date": "20261015",
-      "sessions": 72,
+      "sessions": 73,
       "totalUsers": 66,
       "newUsers": 44,
       "screenPageViews": 440,
-      "engagementRate": 0.6111,
-      "averageSessionDuration": 201.7935
+      "engagementRate": 0.6438,
+      "averageSessionDuration": 213.8663
     }
   ],
   "by_channel": [
@@ -2049,26 +2049,20 @@
     {
       "date": "20261015",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 43,
-      "totalUsers": 40
+      "sessions": 45,
+      "totalUsers": 41
     },
     {
       "date": "20261015",
       "sessionDefaultChannelGroup": "Organic Search",
-      "sessions": 23,
-      "totalUsers": 21
+      "sessions": 24,
+      "totalUsers": 22
     },
     {
       "date": "20261015",
       "sessionDefaultChannelGroup": "Organic Social",
       "sessions": 4,
       "totalUsers": 3
-    },
-    {
-      "date": "20261015",
-      "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 4,
-      "totalUsers": 4
     }
   ],
   "by_source": [
@@ -5148,19 +5142,13 @@
       "date": "20261015",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 43
+      "sessions": 45
     },
     {
       "date": "20261015",
       "sessionSource": "google",
       "sessionMedium": "organic",
-      "sessions": 15
-    },
-    {
-      "date": "20261015",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 4
+      "sessions": 16
     },
     {
       "date": "20261015",
