@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T23:19:32.580890+00:00",
+  "generated_at": "2026-10-17T12:46:51.941251+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -501,12 +501,12 @@
     },
     {
       "date": "20261016",
-      "sessions": 64,
-      "totalUsers": 56,
-      "newUsers": 26,
-      "screenPageViews": 321,
-      "engagementRate": 0.7344,
-      "averageSessionDuration": 223.1767
+      "sessions": 68,
+      "totalUsers": 60,
+      "newUsers": 29,
+      "screenPageViews": 380,
+      "engagementRate": 0.7353,
+      "averageSessionDuration": 249.5909
     }
   ],
   "by_channel": [
@@ -2043,8 +2043,8 @@
     {
       "date": "20261016",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 34,
-      "totalUsers": 31
+      "sessions": 38,
+      "totalUsers": 35
     },
     {
       "date": "20261016",
@@ -2067,12 +2067,6 @@
     {
       "date": "20261016",
       "sessionDefaultChannelGroup": "Organic Social",
-      "sessions": 1,
-      "totalUsers": 1
-    },
-    {
-      "date": "20261016",
-      "sessionDefaultChannelGroup": "Unassigned",
       "sessions": 1,
       "totalUsers": 1
     }
@@ -5118,7 +5112,7 @@
       "date": "20261016",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 34
+      "sessions": 38
     },
     {
       "date": "20261016",
@@ -5143,12 +5137,6 @@
       "sessionSource": "chatgpt.com",
       "sessionMedium": "ai-assistant",
       "sessions": 2
-    },
-    {
-      "date": "20261016",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 1
     },
     {
       "date": "20261016",
@@ -5938,12 +5926,17 @@
     {
       "date": "20261016",
       "deviceCategory": "desktop",
-      "sessions": 44
+      "sessions": 45
     },
     {
       "date": "20261016",
       "deviceCategory": "mobile",
-      "sessions": 20
+      "sessions": 23
+    },
+    {
+      "date": "20261016",
+      "deviceCategory": "tablet",
+      "sessions": 1
     }
   ],
   "events": [
@@ -10345,47 +10338,47 @@
     {
       "date": "20261016",
       "eventName": "page_view",
-      "eventCount": 321
+      "eventCount": 380
     },
     {
       "date": "20261016",
       "eventName": "user_engagement",
-      "eventCount": 303
+      "eventCount": 366
     },
     {
       "date": "20261016",
       "eventName": "scroll",
-      "eventCount": 136
+      "eventCount": 151
     },
     {
       "date": "20261016",
       "eventName": "recruit_list_view",
-      "eventCount": 123
+      "eventCount": 147
     },
     {
       "date": "20261016",
       "eventName": "session_start",
-      "eventCount": 65
+      "eventCount": 69
     },
     {
       "date": "20261016",
       "eventName": "recruit_view",
-      "eventCount": 45
+      "eventCount": 65
     },
     {
       "date": "20261016",
       "eventName": "first_visit",
-      "eventCount": 26
+      "eventCount": 29
     },
     {
       "date": "20261016",
       "eventName": "form_start",
-      "eventCount": 26
+      "eventCount": 28
     },
     {
       "date": "20261016",
       "eventName": "form_submit",
-      "eventCount": 25
+      "eventCount": 27
     },
     {
       "date": "20261016",
@@ -10416,23 +10409,23 @@
   "top_pages": [
     {
       "pagePath": "/recruit/recruitList.do",
-      "screenPageViews": 12264,
-      "userEngagementDuration": 132131
+      "screenPageViews": 12286,
+      "userEngagementDuration": 132293
     },
     {
       "pagePath": "/main/main.do",
-      "screenPageViews": 9409,
-      "userEngagementDuration": 84379
+      "screenPageViews": 9422,
+      "userEngagementDuration": 84574
     },
     {
       "pagePath": "/recruit/recruitView.do",
-      "screenPageViews": 4828,
-      "userEngagementDuration": 111093
+      "screenPageViews": 4848,
+      "userEngagementDuration": 111370
     },
     {
       "pagePath": "/member/loginGen.do",
-      "screenPageViews": 4588,
-      "userEngagementDuration": 16387
+      "screenPageViews": 4592,
+      "userEngagementDuration": 16394
     },
     {
       "pagePath": "/resume/resumeList.do",
