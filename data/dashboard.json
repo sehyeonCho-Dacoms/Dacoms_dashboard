@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-17T12:46:40",
+  "generatedAt": "2026-10-17T22:56:55",
   "kpis": {
-    "collected": 82,
+    "collected": 83,
     "uploadReady": 12,
-    "uploadReadyPct": 15,
+    "uploadReadyPct": 14,
     "hotLeads": 0,
     "pipelineValue": 0,
     "pipelineValueLabel": "₩0만"
@@ -1403,20 +1403,37 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73190"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "대한레슬링협회 직원 채용 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73194"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 82,
-      "growth": "±0",
+      "open": 83,
+      "growth": "+1",
       "senior": 0,
       "tier": "Warm",
-      "score": 52,
-      "fee": 24600,
+      "score": 59,
+      "fee": 24900,
       "stage": "신규",
-      "signal": "82개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "83개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
     }
   ],
   "actions": {
@@ -1447,30 +1464,30 @@
       {
         "pr": "P1",
         "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩24,600만",
-        "why": "82개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
+        "company": "예상 수수료 ₩24,900만",
+        "why": "83개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
         "cta": "콜드 아웃리치"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 64,
+      "기타": 65,
       "코치/트레이너": 17,
       "데이터": 1
     },
     "size": {
-      "공공/협회": 82
+      "공공/협회": 83
     },
     "platform": {
-      "대한체육회": 82
+      "대한체육회": 83
     },
     "sector": {
-      "협회": 82
+      "협회": 83
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 82,
+      "미들(3~5년)": 83,
       "시니어(5년+)": 0
     },
     "weekly": {
