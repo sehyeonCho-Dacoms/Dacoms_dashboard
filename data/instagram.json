@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-17T22:57:16.0267924Z",
+  "generatedAt": "2026-10-18T13:04:55.8126242Z",
   "account": {
     "username": "drafton.co.kr",
     "id": "28961157813485354",
     "accountType": "BUSINESS",
     "mediaCount": 842,
-    "followersCount": 11674
+    "followersCount": 11681
   },
   "media": [
     {
@@ -15,10 +15,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DejIh8BDwXM/",
       "timestamp": "2026-10-16T08:44:29+00:00",
-      "views": 116486,
-      "reach": 62492,
-      "saved": 236,
-      "shares": 269
+      "views": 118860,
+      "reach": 63453,
+      "saved": 247,
+      "shares": 277
     },
     {
       "id": "18043602833824382",
@@ -27,10 +27,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DegyMPCj_yd/",
       "timestamp": "2026-10-15T10:50:48+00:00",
-      "views": 101520,
-      "reach": 49074,
-      "saved": 214,
-      "shares": 1873
+      "views": 102225,
+      "reach": 49617,
+      "saved": 217,
+      "shares": 1885
     },
     {
       "id": "18130568419703366",
@@ -39,8 +39,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeB1GDv0Uo/",
       "timestamp": "2026-10-14T12:30:04+00:00",
-      "views": 8622,
-      "reach": 4082,
+      "views": 8777,
+      "reach": 4188,
       "saved": 8,
       "shares": 8
     },
@@ -51,8 +51,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeXo8hj-C1/",
       "timestamp": "2026-10-14T12:20:01+00:00",
-      "views": 17902,
-      "reach": 6405,
+      "views": 18208,
+      "reach": 6500,
       "saved": 11,
       "shares": 17
     },
@@ -63,10 +63,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeAfHPD-kO/",
       "timestamp": "2026-10-14T08:57:59+00:00",
-      "views": 26312,
-      "reach": 11991,
-      "saved": 204,
-      "shares": 103
+      "views": 27112,
+      "reach": 12378,
+      "saved": 210,
+      "shares": 110
     }
   ],
   "weeklyMedia": [
@@ -77,10 +77,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DejIh8BDwXM/",
       "timestamp": "2026-10-16T08:44:29+00:00",
-      "views": 116486,
-      "reach": 62492,
-      "saved": 236,
-      "shares": 269
+      "views": 118860,
+      "reach": 63453,
+      "saved": 247,
+      "shares": 277
     },
     {
       "id": "18043602833824382",
@@ -89,10 +89,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DegyMPCj_yd/",
       "timestamp": "2026-10-15T10:50:48+00:00",
-      "views": 101520,
-      "reach": 49074,
-      "saved": 214,
-      "shares": 1873
+      "views": 102225,
+      "reach": 49617,
+      "saved": 217,
+      "shares": 1885
     },
     {
       "id": "18130568419703366",
@@ -101,8 +101,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeB1GDv0Uo/",
       "timestamp": "2026-10-14T12:30:04+00:00",
-      "views": 8622,
-      "reach": 4082,
+      "views": 8777,
+      "reach": 4188,
       "saved": 8,
       "shares": 8
     },
@@ -113,8 +113,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeXo8hj-C1/",
       "timestamp": "2026-10-14T12:20:01+00:00",
-      "views": 17902,
-      "reach": 6405,
+      "views": 18208,
+      "reach": 6500,
       "saved": 11,
       "shares": 17
     },
@@ -125,10 +125,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeAfHPD-kO/",
       "timestamp": "2026-10-14T08:57:59+00:00",
-      "views": 26312,
-      "reach": 11991,
-      "saved": 204,
-      "shares": 103
+      "views": 27112,
+      "reach": 12378,
+      "saved": 210,
+      "shares": 110
     },
     {
       "id": "17880111237545985",
@@ -137,10 +137,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DebnGscDxIo/",
       "timestamp": "2026-10-13T10:37:43+00:00",
-      "views": 30752,
-      "reach": 13977,
-      "saved": 259,
-      "shares": 126
+      "views": 31318,
+      "reach": 14345,
+      "saved": 265,
+      "shares": 131
     },
     {
       "id": "18114268073583577",
@@ -149,10 +149,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeY-9NPD9-M/",
       "timestamp": "2026-10-12T10:08:25+00:00",
-      "views": 22318,
-      "reach": 8017,
-      "saved": 369,
-      "shares": 126
+      "views": 22614,
+      "reach": 8174,
+      "saved": 380,
+      "shares": 136
     },
     {
       "id": "17892394158615519",
@@ -161,9 +161,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeOi5Kbj9k1/",
       "timestamp": "2026-10-08T08:50:47+00:00",
-      "views": 23590,
-      "reach": 8014,
-      "saved": 197,
+      "views": 23763,
+      "reach": 8128,
+      "saved": 200,
       "shares": 84
     },
     {
@@ -173,10 +173,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeMDWjBvShR/",
       "timestamp": "2026-10-07T12:20:04+00:00",
-      "views": 19677,
-      "reach": 8421,
-      "saved": 34,
-      "shares": 51
+      "views": 19771,
+      "reach": 8472,
+      "saved": 36,
+      "shares": 52
     },
     {
       "id": "18096535424541692",
@@ -185,10 +185,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeL9Qh6D4DS/",
       "timestamp": "2026-10-07T08:43:27+00:00",
-      "views": 27873,
-      "reach": 10900,
-      "saved": 162,
-      "shares": 81
+      "views": 28089,
+      "reach": 11038,
+      "saved": 165,
+      "shares": 83
     },
     {
       "id": "18110491688133820",
@@ -197,8 +197,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeJcCBIvNmt/",
       "timestamp": "2026-10-06T12:50:06+00:00",
-      "views": 10447,
-      "reach": 4924,
+      "views": 10508,
+      "reach": 5140,
       "saved": 13,
       "shares": 5
     },
@@ -209,8 +209,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeJyZf1jwB3/",
       "timestamp": "2026-10-06T12:30:02+00:00",
-      "views": 24554,
-      "reach": 9213,
+      "views": 24713,
+      "reach": 9315,
       "saved": 113,
       "shares": 72
     },
@@ -221,10 +221,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeJXbnGj1KH/",
       "timestamp": "2026-10-06T08:34:26+00:00",
-      "views": 50130,
-      "reach": 24654,
-      "saved": 506,
-      "shares": 356
+      "views": 50400,
+      "reach": 24910,
+      "saved": 510,
+      "shares": 358
     },
     {
       "id": "18130917082754737",
@@ -233,8 +233,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Dd_IMdzj9su/",
       "timestamp": "2026-10-02T09:08:53+00:00",
-      "views": 19066,
-      "reach": 6829,
+      "views": 19070,
+      "reach": 6835,
       "saved": 75,
       "shares": 27
     },
@@ -245,10 +245,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Dd8hWD1j-A3/",
       "timestamp": "2026-10-01T08:50:01+00:00",
-      "views": 40920,
-      "reach": 17316,
-      "saved": 449,
-      "shares": 230
+      "views": 41114,
+      "reach": 17413,
+      "saved": 453,
+      "shares": 233
     },
     {
       "id": "18184840090424221",
@@ -257,8 +257,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Dd8C_HIsZis/",
       "timestamp": "2026-10-01T04:25:59+00:00",
-      "views": 9912,
-      "reach": 5156,
+      "views": 9916,
+      "reach": 5158,
       "saved": 3,
       "shares": 0
     },
@@ -269,7 +269,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Dd8C6KtvcHE/",
       "timestamp": "2026-10-01T04:25:27+00:00",
-      "views": 18809,
+      "views": 18814,
       "reach": 8674,
       "saved": 68,
       "shares": 34
@@ -281,10 +281,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Dd5_Jduj1Vp/",
       "timestamp": "2026-09-30T09:13:38+00:00",
-      "views": 44904,
-      "reach": 20603,
-      "saved": 753,
-      "shares": 377
+      "views": 45234,
+      "reach": 20726,
+      "saved": 768,
+      "shares": 380
     },
     {
       "id": "18042255146827261",
@@ -293,9 +293,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Dd3WNRCFCMa/",
       "timestamp": "2026-09-29T08:37:24+00:00",
-      "views": 45147,
-      "reach": 19425,
-      "saved": 489,
+      "views": 45255,
+      "reach": 19437,
+      "saved": 491,
       "shares": 250
     },
     {
@@ -305,8 +305,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdygnOpj9tV/",
       "timestamp": "2026-09-27T11:32:08+00:00",
-      "views": 19388,
-      "reach": 6837,
+      "views": 19393,
+      "reach": 6841,
       "saved": 31,
       "shares": 17
     },
@@ -317,9 +317,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Ddn2sriD9NV/",
       "timestamp": "2026-09-23T08:13:28+00:00",
-      "views": 30863,
-      "reach": 12666,
-      "saved": 298,
+      "views": 30876,
+      "reach": 12667,
+      "saved": 299,
       "shares": 181
     },
     {
@@ -329,8 +329,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdnOlvov-6M/",
       "timestamp": "2026-09-23T02:23:15+00:00",
-      "views": 45208,
-      "reach": 25748,
+      "views": 45220,
+      "reach": 25796,
       "saved": 85,
       "shares": 180
     },
@@ -341,7 +341,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdnOdJrPXV0/",
       "timestamp": "2026-09-23T02:22:09+00:00",
-      "views": 83039,
+      "views": 83050,
       "reach": 46252,
       "saved": 60,
       "shares": 551
@@ -353,10 +353,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdlX-XoD1qw/",
       "timestamp": "2026-09-22T09:06:31+00:00",
-      "views": 26738,
-      "reach": 10222,
-      "saved": 252,
-      "shares": 187
+      "views": 26755,
+      "reach": 10237,
+      "saved": 253,
+      "shares": 189
     },
     {
       "id": "18174092635432809",
@@ -365,20 +365,20 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DdixTbkjy7G/",
       "timestamp": "2026-09-21T08:50:02+00:00",
-      "views": 31295,
-      "reach": 15097,
-      "saved": 226,
-      "shares": 144
+      "views": 31318,
+      "reach": 15113,
+      "saved": 227,
+      "shares": 145
     }
   ],
   "brief": {
-    "date": "2026-10-17",
-    "followers": 11674,
-    "followersDelta": 0,
-    "summary": "팔로워 11674명 (전일과 동일). 최근 5개 게시물 평균 조회수 54168회, 도달 합계 134044회, 저장+공유 합계 2943회. 최고 성과: '⠀ 😱”우승 굿즈 1만 개를 만들었는데… 우리 팀이 준우승했습니다“ 상…' (조회수 116486회)",
+    "date": "2026-10-18",
+    "followers": 11681,
+    "followersDelta": 7,
+    "summary": "팔로워 11681명 (▲ 전일 대비 7 명 증가). 최근 5개 게시물 평균 조회수 55036회, 도달 합계 136136회, 저장+공유 합계 2990회. 최고 성과: '⠀ 😱”우승 굿즈 1만 개를 만들었는데… 우리 팀이 준우승했습니다“ 상…' (조회수 118860회)",
     "topPost": {
       "caption": "⠀ 😱”우승 굿즈 1만 개를 만들었는데… 우리 팀이 준우승했습니다“ 상…",
-      "views": 116486,
+      "views": 118860,
       "permalink": "https://www.instagram.com/p/DejIh8BDwXM/"
     }
   },
@@ -598,15 +598,19 @@
     {
       "date": "2026-10-17",
       "followers": 11674
+    },
+    {
+      "date": "2026-10-18",
+      "followers": 11681
     }
   ],
   "surging": {
     "id": "17969245430963368",
     "caption": "⠀ 😱”우승 굿즈 1만 개를 만들었는데… 우리 팀이 준우승했습니다“ 상상만 해도 아찔하죠…",
-    "viewsYesterday": 114501,
-    "viewsToday": 116486,
-    "delta": 1985,
-    "deltaPct": 1.7,
+    "viewsYesterday": 116486,
+    "viewsToday": 118860,
+    "delta": 2374,
+    "deltaPct": 2.0,
     "permalink": "https://www.instagram.com/p/DejIh8BDwXM/"
   },
   "engagedDemographics": {},
@@ -1085,6 +1089,15 @@
       "viewsAvg": 54168.0,
       "reachSum": 134044.0,
       "engagementSum": 2943.0,
+      "topCategory": "마케팅",
+      "surgingCount": 1
+    },
+    {
+      "date": "2026-10-18",
+      "followers": 11681,
+      "viewsAvg": 55036.0,
+      "reachSum": 136136.0,
+      "engagementSum": 2990.0,
       "topCategory": "마케팅",
       "surgingCount": 1
     }
