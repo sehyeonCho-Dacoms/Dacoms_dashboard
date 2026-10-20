@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-10-20T00:08:56.754484+00:00",
-  "source_generated_at": "2026-10-20T00:08:56.645317+00:00",
+  "generated_at": "2026-10-20T14:11:31.557188+00:00",
+  "source_generated_at": "2026-10-20T14:11:31.455863+00:00",
   "yesterday": {
     "date": "20261019",
-    "sessions": 53,
-    "totalUsers": 47,
-    "newUsers": 27,
-    "engagementRate": 0.7358,
-    "averageSessionDuration": 291.8,
+    "sessions": 82,
+    "totalUsers": 73,
+    "newUsers": 47,
+    "engagementRate": 0.7561,
+    "averageSessionDuration": 350.5,
     "sessions_prev_day": 50,
-    "sessions_dod_pct": 6.0
+    "sessions_dod_pct": 64.0
   },
   "week": {
     "sessions": {
-      "current": 534,
+      "current": 563,
       "previous": 672,
-      "change_pct": -20.5
+      "change_pct": -16.2
     },
     "totalUsers": {
-      "current": 462,
+      "current": 488,
       "previous": 547,
-      "change_pct": -15.5
+      "change_pct": -10.8
     },
     "newUsers": {
-      "current": 292,
+      "current": 312,
       "previous": 357,
-      "change_pct": -18.2
+      "change_pct": -12.6
     },
     "screenPageViews": {
-      "current": 3040,
+      "current": 3235,
       "previous": 4924,
-      "change_pct": -38.3
+      "change_pct": -34.3
     },
     "engagementRate": {
-      "current": 0.6605,
+      "current": 0.6634,
       "previous": 0.6688,
-      "change_pct": -1.2
+      "change_pct": -0.8
     },
     "averageSessionDuration": {
-      "current": 220.8803,
+      "current": 229.2674,
       "previous": 263.2434,
-      "change_pct": -16.1
+      "change_pct": -12.9
     }
   },
   "window": {
@@ -57,23 +57,23 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 310,
+      "current": 327,
       "previous": 419,
-      "change_pct": -26.0,
+      "change_pct": -22.0,
       "share_pct": 58.1
     },
     {
       "channel": "Organic Search",
-      "current": 176,
+      "current": 187,
       "previous": 205,
-      "change_pct": -14.1,
-      "share_pct": 33.0
+      "change_pct": -8.8,
+      "share_pct": 33.2
     },
     {
       "channel": "Organic Social",
-      "current": 38,
+      "current": 40,
       "previous": 24,
-      "change_pct": 58.3,
+      "change_pct": 66.7,
       "share_pct": 7.1
     },
     {
@@ -84,17 +84,17 @@
       "share_pct": 0.9
     },
     {
-      "channel": "Unassigned",
-      "current": 3,
-      "previous": 3,
-      "change_pct": 0.0,
-      "share_pct": 0.6
+      "channel": "Referral",
+      "current": 2,
+      "previous": 9,
+      "change_pct": -77.8,
+      "share_pct": 0.4
     },
     {
-      "channel": "Email",
+      "channel": "Unassigned",
       "current": 1,
-      "previous": 0,
-      "change_pct": null,
+      "previous": 3,
+      "change_pct": -66.7,
       "share_pct": 0.2
     }
   ],
@@ -102,7 +102,7 @@
     "current": 17,
     "previous": 16,
     "change_pct": 6.2,
-    "share_of_sessions_pct": 3.2
+    "share_of_sessions_pct": 3.0
   },
   "weekly_trend": [
     {
@@ -164,10 +164,10 @@
     {
       "week_start": "20261013",
       "week_end": "20261019",
-      "sessions": 534,
-      "totalUsers": 462,
-      "newUsers": 292,
-      "screenPageViews": 3040
+      "sessions": 563,
+      "totalUsers": 488,
+      "newUsers": 312,
+      "screenPageViews": 3235
     }
   ],
   "measurement": {
@@ -188,7 +188,7 @@
         "counts": [
           43,
           25,
-          38
+          61
         ],
         "alive": true
       },
@@ -203,7 +203,7 @@
         "counts": [
           153,
           106,
-          109
+          191
         ],
         "alive": true
       },
@@ -263,7 +263,7 @@
         "counts": [
           0,
           1,
-          1
+          5
         ],
         "alive": true
       },
@@ -278,7 +278,7 @@
         "counts": [
           0,
           2,
-          2
+          3
         ],
         "alive": true
       },
@@ -293,7 +293,7 @@
         "counts": [
           0,
           2,
-          4
+          7
         ],
         "alive": true
       },
@@ -308,12 +308,14 @@
         "counts": [
           0,
           2,
-          3
+          7
         ],
         "alive": true
       }
     ],
     "broken": []
   },
-  "alerts": []
+  "alerts": [
+    "세션 급변 — 전일 대비 +64.0%"
+  ]
 }
