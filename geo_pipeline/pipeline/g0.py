@@ -1,7 +1,9 @@
 """G0 이슈 트래커 (DR-MKT-01) — 매일 10시 · AI · 하루 최대 100건.
 
   뉴스 소스(네이버 뉴스 API·RSS) → 수집 창(최근 G0_WINDOW_HOURS) → 중복 제거
-  → 최신순 최대 G0_MAX건 → 1차 거름망(screen.py) → 기사 목록(JSON·CSV·MD)
+  → 1차 거름망(screen.py) → 통과 기사 먼저·최신순 최대 G0_MAX건 → 기사 목록(JSON·CSV·MD)
+
+상한을 거름망 뒤에 둔다. 앞에 두면 최신 일반 기사가 100건을 채워 쓸 만한 기사가 잘린다.
 
 출력은 G2 흥미도 점수의 입력이다. 기사 본문은 받지 않고 제목·원문 링크·API 요약만 남긴다.
 """
@@ -29,17 +31,16 @@ def run_g0(config: Config, now: datetime | None = None) -> list[Article]:
     since = now - timedelta(hours=config.g0_window_hours)
     recent = [a for a in raw if a.published is None or a.published >= since]
     articles = dedupe(recent)
-    articles.sort(key=lambda a: a.published or now, reverse=True)
-    articles = articles[: config.g0_max]
-
     for a in articles:
         a.press = urllib.parse.urlsplit(a.url).netloc.removeprefix("www.")
         a.id = article_id(a, now)
         screen(a, now)
     passed = sum(1 for a in articles if a.screen == SCREEN_PASS)
-    print(f"📰 수집 {len(raw)} → 최근 {config.g0_window_hours}시간 {len(recent)} → 중복 제거·상한 {len(articles)}"
-          f" → 거름망 통과 {passed}")
-    return articles
+    print(f"📰 수집 {len(raw)} → 최근 {config.g0_window_hours}시간 {len(recent)} → 중복 제거 {len(articles)}"
+          f" (거름망 통과 {passed}) → 최대 {config.g0_max}건")
+
+    articles.sort(key=lambda a: (a.screen == SCREEN_PASS, a.published or now), reverse=True)
+    return articles[: config.g0_max]
 
 
 def dedupe(articles: list[Article]) -> list[Article]:
