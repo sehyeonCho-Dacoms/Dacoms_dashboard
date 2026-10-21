@@ -38,12 +38,28 @@ def test_screen_passes_workforce_news_and_flags_controversy():
 
 def test_screen_reasons():
     assert screen(_a("대학병원 항암 신약 임상시험 결과"), NOW).screen_reasons[0].startswith("①")
-    assert screen(_a("기업 이사회 의사결정 구조 개편"), NOW).screen_reasons == ["① 주제 밖(인력·채용 단어 없음)"]
-    assert screen(_a("환절기 감기 증상과 예방법", "전문의 조언"), NOW).screen_reasons[0].startswith("②")
+    assert screen(_a("기업 이사회 의사결정 구조 개편"), NOW).screen_reasons == ["① 주제 밖(제목에 의료 단어 없음)"]
+    assert screen(_a("병원 홍보 행사 개최"), NOW).screen_reasons == ["① 주제 밖(인력·채용 단어 없음)"]
+    assert screen(_a("전문의가 알려주는 감기 증상과 예방법"), NOW).screen_reasons == ["② 의료 조언형(증상·예방법)"]
     assert screen(_a("병원 운영 혐의로 의사 기소"), NOW).screen_reasons[0].startswith("③")
     assert screen(_a("전공의 복귀 찌라시 확산"), NOW).screen_reasons[0].startswith("④")
     old = screen(_a("전공의 복귀 현황", hours=24 * 8), NOW)
     assert old.screen == SCREEN_DROP and "⑤ 7일 지남" in old.screen_reasons
+
+
+def test_first_run_false_positives_are_dropped():
+    # 10/21 첫 실행에서 통과됐던 유형: 요약의 '의사를 밝혔다', 제목의 '정원'·'의정'
+    a = screen(_a("대통령 \"처벌 원치 않아\"…수사 종결 수순", "처벌을 원하지 않는다는 의사를 밝혔다"), NOW)
+    assert a.screen == SCREEN_DROP and a.screen_reasons[0].startswith("① 주제 밖(제목에 의료 단어 없음)")
+    b = screen(_a("시의회, 하천 정원 조성 예산 의정 활동 보고"), NOW)
+    assert b.screen == SCREEN_DROP
+    c = screen(_a("일본·중국 노선 여객 급증…항공 여객 역대 최다"), NOW)
+    assert c.screen == SCREEN_DROP
+
+
+def test_cap_keeps_passed_articles_first(tmp_path):
+    articles = run_g0(_config(tmp_path, g0_max=4), NOW)
+    assert len(articles) == 4 and all(a.screen == SCREEN_PASS for a in articles)
 
 
 def test_offtopic_title_kept_when_title_is_about_workforce():
@@ -103,10 +119,12 @@ def test_parse_date_handles_missing_and_iso():
 def test_run_g0_sample_window_dedupe_and_cap(tmp_path):
     articles = run_g0(_config(tmp_path), NOW)
     titles = [a.title for a in articles]
-    assert len(articles) == 9                                   # 40시간 전 1건 제외, 재전송 1건 제외
+    assert len(articles) == 11                                  # 40시간 전 1건 제외, 재전송 1건 제외
     assert not any("의대 정원 조정" in t for t in titles)
     assert sum("봉직의 연봉" in t for t in titles) == 1
-    assert [a.published for a in articles] == sorted((a.published for a in articles), reverse=True)
+    passed = [a for a in articles if a.screen == SCREEN_PASS]
+    assert articles[: len(passed)] == passed                    # 통과 기사가 앞에
+    assert [a.published for a in passed] == sorted((a.published for a in passed), reverse=True)
     assert all(a.id == f"N-{a.published:%Y%m%d}-{a.id[-4:]}" and a.press for a in articles)
 
     capped = run_g0(_config(tmp_path, g0_max=3), NOW)
@@ -121,7 +139,7 @@ def test_g0_outputs_and_calibration(tmp_path):
     paths = write_g0_outputs(articles, tmp_path, "2026-10-21")
     with paths["csv"].open(encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
-    assert len(rows) == 9 and rows[0]["기사 ID"].startswith("N-")
+    assert len(rows) == 11 and rows[0]["기사 ID"].startswith("N-")
     summary = paths["summary"].read_text(encoding="utf-8")
     assert "## 채점 보정용 5건" in summary and "① 주제 밖" in summary
 

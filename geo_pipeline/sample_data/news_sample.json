@@ -1,13 +1,93 @@
 [
-  {"hours_ago": 2, "query": "전공의", "url": "https://news.example.com/a/1001", "title": "[가상] 전공의 복귀율 집계, 수련병원별 편차 커", "description": "가상 기사. 수련병원별 전공의 복귀 현황과 인력 공백 대책."},
-  {"hours_ago": 3, "query": "의사", "url": "https://press.example.org/news/2002", "title": "[가상] 지방 중소병원 봉직의 연봉 상승세…구인난 여전", "description": "가상 기사. 지역 병원의 의사 채용 조건과 연봉 변화."},
-  {"hours_ago": 3, "query": "의료 인력", "url": "https://other.example.net/view/2002", "title": "[가상] 지방 중소병원 봉직의 연봉 상승세…구인난 여전", "description": "같은 기사 다른 매체 재전송 (중복 제거 대상)."},
-  {"hours_ago": 5, "query": "필수의료", "url": "https://news.example.com/a/1003", "title": "[가상] 필수의료 수가 인상안에 의사단체 반발", "description": "가상 기사. 수가 인상 폭을 두고 의협과 정부 갈등."},
-  {"hours_ago": 6, "query": "간호사", "url": "https://press.example.org/news/2004", "title": "[가상] 간호사 이직률 높은 병동, 근무 형태 바꾸니 줄었다", "description": "가상 기사. 3교대 개선과 이직률."},
-  {"hours_ago": 8, "query": "병원 채용", "url": "https://news.example.com/a/1005", "title": "[가상] 병원 원무·행정직 채용 공고, 근무 조건 공개 늘어", "description": "가상 기사. 원무 인력 채용 시장."},
-  {"hours_ago": 9, "query": "의사", "url": "https://news.example.com/a/1006", "title": "[가상] 대학병원, 항암 신약 임상시험 결과 발표", "description": "가상 기사. 신약 효과에 관한 연구 결과."},
-  {"hours_ago": 10, "query": "의사", "url": "https://press.example.org/news/2007", "title": "[가상] 환절기 감기 증상과 예방법", "description": "가상 기사. 전문의가 알려주는 건강 관리."},
-  {"hours_ago": 11, "query": "의사", "url": "https://news.example.com/a/1008", "title": "[가상] 의료기관 사무장 병원 운영 혐의로 의사 기소", "description": "가상 기사. 특정 개인의 수사 소식."},
-  {"hours_ago": 12, "query": "의사", "url": "https://other.example.net/view/3009", "title": "[가상] 기업 이사회 의사결정 구조 개편", "description": "가상 기사. 의료와 무관한 경영 기사."},
-  {"hours_ago": 40, "query": "의대 정원", "url": "https://news.example.com/a/1010", "title": "[가상] 의대 정원 조정 논의 재개", "description": "가상 기사. 수집 창(26시간) 밖이라 빠져야 함."}
+  {
+    "hours_ago": 2,
+    "query": "전공의",
+    "url": "https://news.example.com/a/1001",
+    "title": "[가상] 전공의 복귀율 집계, 수련병원별 편차 커",
+    "description": "가상 기사. 수련병원별 전공의 복귀 현황과 인력 공백 대책."
+  },
+  {
+    "hours_ago": 3,
+    "query": "의사",
+    "url": "https://press.example.org/news/2002",
+    "title": "[가상] 지방 중소병원 봉직의 연봉 상승세…구인난 여전",
+    "description": "가상 기사. 지역 병원의 의사 채용 조건과 연봉 변화."
+  },
+  {
+    "hours_ago": 3,
+    "query": "의료 인력",
+    "url": "https://other.example.net/view/2002",
+    "title": "[가상] 지방 중소병원 봉직의 연봉 상승세…구인난 여전",
+    "description": "같은 기사 다른 매체 재전송 (중복 제거 대상)."
+  },
+  {
+    "hours_ago": 5,
+    "query": "필수의료",
+    "url": "https://news.example.com/a/1003",
+    "title": "[가상] 필수의료 수가 인상안에 의사단체 반발",
+    "description": "가상 기사. 수가 인상 폭을 두고 의협과 정부 갈등."
+  },
+  {
+    "hours_ago": 6,
+    "query": "간호사",
+    "url": "https://press.example.org/news/2004",
+    "title": "[가상] 간호사 이직률 높은 병동, 근무 형태 바꾸니 줄었다",
+    "description": "가상 기사. 3교대 개선과 이직률."
+  },
+  {
+    "hours_ago": 8,
+    "query": "병원 채용",
+    "url": "https://news.example.com/a/1005",
+    "title": "[가상] 병원 원무·행정직 채용 공고, 근무 조건 공개 늘어",
+    "description": "가상 기사. 원무 인력 채용 시장."
+  },
+  {
+    "hours_ago": 9,
+    "query": "의사",
+    "url": "https://news.example.com/a/1006",
+    "title": "[가상] 대학병원, 항암 신약 임상시험 결과 발표",
+    "description": "가상 기사. 신약 효과에 관한 연구 결과."
+  },
+  {
+    "hours_ago": 10,
+    "query": "의사",
+    "url": "https://press.example.org/news/2007",
+    "title": "[가상] 환절기 감기 증상과 예방법",
+    "description": "가상 기사. 전문의가 알려주는 건강 관리."
+  },
+  {
+    "hours_ago": 11,
+    "query": "의사",
+    "url": "https://news.example.com/a/1008",
+    "title": "[가상] 의료기관 사무장 병원 운영 혐의로 의사 기소",
+    "description": "가상 기사. 특정 개인의 수사 소식."
+  },
+  {
+    "hours_ago": 12,
+    "query": "의사",
+    "url": "https://other.example.net/view/3009",
+    "title": "[가상] 기업 이사회 의사결정 구조 개편",
+    "description": "가상 기사. 의료와 무관한 경영 기사."
+  },
+  {
+    "hours_ago": 4,
+    "query": "의료 인력",
+    "url": "https://other.example.net/view/3011",
+    "title": "[가상] 대통령 \"처벌 원치 않아\"…수사 종결 수순",
+    "description": "가상 기사. 피해자가 처벌을 원하지 않는다는 의사를 밝혔다. (첫 실행에서 요약의 '의사'로 통과된 유형)"
+  },
+  {
+    "hours_ago": 4,
+    "query": "의료 인력",
+    "url": "https://other.example.net/view/3012",
+    "title": "[가상] 시의회, 하천 정원 조성 예산 의정 활동 보고",
+    "description": "가상 기사. '정원'·'의정'이 의료와 무관하게 쓰인 유형."
+  },
+  {
+    "hours_ago": 40,
+    "query": "의대 정원",
+    "url": "https://news.example.com/a/1010",
+    "title": "[가상] 의대 정원 조정 논의 재개",
+    "description": "가상 기사. 수집 창(26시간) 밖이라 빠져야 함."
+  }
 ]
