@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+from datetime import datetime
 from typing import Optional
 
 # 구조 지표 측정 상태
@@ -79,3 +80,33 @@ class StructureRecord:
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+# --------------------------------------------------------------------------- #
+# G0 이슈 트래커
+# --------------------------------------------------------------------------- #
+SCREEN_PASS = "통과"
+SCREEN_DROP = "탈락"
+
+
+@dataclass
+class Article:
+    """의료 기사 한 건. 본문은 받지 않는다(제목·링크·API 요약만, RULE-11 ③)."""
+
+    title: str
+    url: str                                  # 언론사 원문 링크
+    published: Optional[datetime] = None    # KST
+    description: str = ""                     # 검색 API/RSS가 주는 요약 (채점용, 게시 금지)
+    source: str = ""                          # naver_news | rss | sample
+    query: str = ""                           # 걸린 검색어 (RSS면 피드 주소)
+    naver_url: str = ""                       # 네이버 뉴스 링크 (있으면)
+    id: str = ""                              # N-YYYYMMDD-xxxx
+    press: str = ""                           # 원문 도메인
+    screen: str = SCREEN_PASS                 # 거름망 결과
+    screen_reasons: list[str] = field(default_factory=list)
+    flags: list[str] = field(default_factory=list)   # 논쟁 등 (사람 확인)
+
+    def to_dict(self) -> dict:
+        d = asdict(self)
+        d["published"] = self.published.isoformat(timespec="minutes") if self.published else ""
+        return d

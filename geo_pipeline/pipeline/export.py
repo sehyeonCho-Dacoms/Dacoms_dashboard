@@ -177,3 +177,92 @@ def _fmt(v) -> str:
 
 def _pct(v) -> str:
     return "—" if v is None else f"{round(v * 100)}%"
+
+
+# --------------------------------------------------------------------------- #
+# G0 이슈 트래커
+# --------------------------------------------------------------------------- #
+G0_COLUMNS: list[tuple[str, str]] = [
+    ("id", "기사 ID"),
+    ("published", "발행 시각"),
+    ("press", "매체(도메인)"),
+    ("title", "제목"),
+    ("url", "원문 링크"),
+    ("naver_url", "네이버 뉴스 링크"),
+    ("screen", "거름망"),
+    ("screen_reasons", "탈락 근거"),
+    ("flags", "표시"),
+    ("query", "검색어"),
+    ("description", "요약(채점용·게시 금지)"),
+]
+
+
+def write_g0_outputs(articles, out_dir: Path, day: str) -> dict[str, Path]:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    paths = {
+        "json": out_dir / f"g0_{day}.json",
+        "csv": out_dir / f"g0_{day}.csv",
+        "summary": out_dir / f"g0_{day}_summary.md",
+    }
+    rows = [a.to_dict() for a in articles]
+    paths["json"].write_text(
+        json.dumps({"day": day, "count": len(rows), "articles": rows}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    with paths["csv"].open("w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f)
+        w.writerow([label for _, label in G0_COLUMNS])
+        for r in rows:
+            w.writerow([_cell(r[key]) for key, _ in G0_COLUMNS])
+    paths["summary"].write_text(build_g0_summary(articles, day), encoding="utf-8")
+    return paths
+
+
+def pick_calibration(articles, n: int = 5) -> list:
+    """채점 보정용 기사 n건: 거름망 통과분에서 검색어가 겹치지 않게 최신순으로."""
+    passed = [a for a in articles if a.screen == "통과"]
+    out, used = [], set()
+    for a in passed:
+        if a.query not in used:
+            out.append(a)
+            used.add(a.query)
+        if len(out) == n:
+            return out
+    out += [a for a in passed if a not in out][: n - len(out)]
+    return out
+
+
+def build_g0_summary(articles, day: str) -> str:
+    passed = [a for a in articles if a.screen == "통과"]
+    dropped = [a for a in articles if a.screen != "통과"]
+    by_reason = Counter(r.split("(")[0] for a in dropped for r in a.screen_reasons)
+    lines = [
+        f"# G0 이슈 트래커 — {day}",
+        "",
+        f"- 기사 {len(articles)}건 · 거름망 통과 {len(passed)}건 · 탈락 {len(dropped)}건"
+        + (f" ({', '.join(f'{k} {v}' for k, v in sorted(by_reason.items()))})" if by_reason else ""),
+        "- 거름망은 제목·요약 단어로 거른 1차 표시입니다. 최종 판단은 G2 흥미도 점수와 사람이 합니다.",
+        "- '논쟁' 표시 기사의 입장은 AI가 정하지 않습니다 (DR-MKT-02 사람 확인).",
+        "",
+        "## 채점 보정용 5건 (G2 · AX 스터디)",
+        "",
+        "출력 형식: `기사ID | 거름망 | A B C D E F | 총점 | 타깃 | 매칭 질문(GQ-n) | 채널 | 표시 | 한 줄 이유`",
+        "",
+    ]
+    for a in pick_calibration(articles):
+        lines.append(f"- `{a.id}` [{_md(a.title)}]({a.url}) · {a.press}{' · 논쟁' if a.flags else ''}")
+    lines += ["", "## 거름망 통과", "", "| ID | 시각 | 매체 | 제목 | 표시 |", "| --- | --- | --- | --- | --- |"]
+    for a in passed:
+        lines.append(f"| `{a.id}` | {_hm(a)} | {a.press} | [{_md(a.title)}]({a.url}) | {'·'.join(a.flags)} |")
+    lines += ["", "## 탈락 (잘못 걸러졌는지 확인용)", "", "| ID | 제목 | 근거 |", "| --- | --- | --- |"]
+    for a in dropped:
+        lines.append(f"| `{a.id}` | [{_md(a.title)}]({a.url}) | {'; '.join(a.screen_reasons)} |")
+    return "\n".join(lines) + "\n"
+
+
+def _hm(a) -> str:
+    return a.published.strftime("%m-%d %H:%M") if a.published else ""
+
+
+def _md(text: str) -> str:
+    return text.replace("|", "\\|").replace("[", "(").replace("]", ")")

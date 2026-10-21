@@ -57,15 +57,20 @@ class NaverBlogSource(BaseSource):
         return self.config.naver_blog_endpoint or ENDPOINTS[self.config.naver_api_mode]
 
     def headers(self) -> dict:
-        id_header, secret_header = AUTH_HEADERS[self.config.naver_api_mode]
-        return {
-            id_header: self.config.naver_client_id or "",
-            secret_header: self.config.naver_client_secret or "",
-            "User-Agent": self.config.user_agent,
-        }
+        return naver_headers(self.config)
 
     def page_url(self, ref: PostRef) -> str:
         return to_mobile_url(ref.url)
+
+
+def naver_headers(config) -> dict:
+    """창구(hub/legacy)에 맞는 인증 헤더. 블로그·뉴스 검색이 같이 쓴다."""
+    id_header, secret_header = AUTH_HEADERS[config.naver_api_mode]
+    return {
+        id_header: config.naver_client_id or "",
+        secret_header: config.naver_client_secret or "",
+        "User-Agent": config.user_agent,
+    }
 
 
 def parse_items(
