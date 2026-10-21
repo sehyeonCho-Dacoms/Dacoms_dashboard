@@ -108,6 +108,30 @@ def test_naver_api_items_filter_and_clean():
     assert refs[0].group == "의사"
 
 
+def test_naver_results_split_tistory_channel_with_own_ranks():
+    q = build_queries()[0]
+    items = [
+        {"title": "n1", "link": "https://blog.naver.com/a/1", "postdate": "20261001"},
+        {"title": "t1", "link": "https://abc.tistory.com/7", "postdate": "20261002"},
+        {"title": "n2", "link": "https://blog.naver.com/b/2", "postdate": ""},
+        {"title": "x", "link": "https://brunch.co.kr/@x/1", "postdate": ""},
+    ]
+    refs = parse_items(items, q, with_tistory=True)
+    assert [(r.channel, r.rank) for r in refs] == [("naver", 1), ("tistory", 1), ("naver", 2)]
+    assert [r.channel for r in parse_items(items, q)] == ["naver", "naver"]
+
+
+def test_collect_keeps_top_n_per_channel(tmp_path, monkeypatch):
+    src = NaverBlogSource(_config(tmp_path, top_n=1, naver_client_id="i", naver_client_secret="s",
+                                  request_delay_sec=0))
+    items = [{"title": t, "link": u, "postdate": ""} for t, u in [
+        ("n1", "https://blog.naver.com/a/1"), ("n2", "https://blog.naver.com/a/2"),
+        ("t1", "https://abc.tistory.com/1"), ("t2", "https://abc.tistory.com/2")]]
+    monkeypatch.setattr(_http, "get_json", lambda *a, **k: {"items": items})
+    refs = src.collect(build_queries()[:1])
+    assert [(r.channel, r.title) for r in refs] == [("naver", "n1"), ("tistory", "t1")]
+
+
 def test_naver_hub_and_legacy_auth(tmp_path):
     base = dict(naver_client_id="id", naver_client_secret="secret")
     hub = NaverBlogSource(_config(tmp_path, naver_api_mode="hub", **base))

@@ -48,5 +48,9 @@ class BaseSource:
             except Exception as exc:
                 print(f"  ⚠️  {self.name} '{q.query}' 검색 실패: {exc}")
                 continue
-            out.extend(refs[: self.config.top_n])
+            per_channel: dict[str, int] = {}
+            for ref in refs:  # 채널별 상위 N개 (네이버 검색이 티스토리 글도 함께 줄 때)
+                per_channel[ref.channel] = per_channel.get(ref.channel, 0) + 1
+                if per_channel[ref.channel] <= self.config.top_n:
+                    out.append(ref)
         return out
