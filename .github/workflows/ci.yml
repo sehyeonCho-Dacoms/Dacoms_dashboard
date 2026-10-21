@@ -6,10 +6,12 @@ on:
   push:
     paths:
       - "job_pipeline/**"
+      - "geo_pipeline/**"
       - ".github/workflows/ci.yml"
   pull_request:
     paths:
       - "job_pipeline/**"
+      - "geo_pipeline/**"
   workflow_dispatch:
 
 jobs:
@@ -30,3 +32,21 @@ jobs:
 
       - name: 테스트
         run: cd job_pipeline && python -m pytest -q
+
+  geo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r geo_pipeline/requirements.txt
+
+      - name: G-R 노드 스모크 (오프라인 sample)
+        run: PYTHONPATH=geo_pipeline python -m pipeline.cli gr
+
+      - name: 테스트
+        run: cd geo_pipeline && python -m pytest -q

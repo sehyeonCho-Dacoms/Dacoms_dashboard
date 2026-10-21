@@ -1,0 +1,59 @@
+name: G-R 모범 글 구조 분석 (월간)
+
+# 블로그 GEO 체인 G-R (DR-GEO-12). 월 1회 상위 글 목록·구조 지표를 모아
+# 아티팩트(CSV·JSON·요약 MD)로 올린다. 산출물은 커밋하지 않는다.
+#
+# 필요한 Secrets:
+#   NAVER_CLIENT_ID, NAVER_CLIENT_SECRET   NAVER API HUB 인증 정보 (필수 — 없으면 실패)
+#   GOOGLE_CSE_KEY, GOOGLE_CSE_CX          티스토리(구글 CSE, 선택 — 구글이 신규 가입을 닫아 기존 키가 있을 때만)
+# 티스토리는 geo_pipeline/tistory_urls.csv 에 사람이 넣은 링크를 쓴다 (파일이 없으면 건너뜀).
+# 글 페이지 구조 측정은 Variables 의 GR_FETCH_PAGES=true 일 때만 (RULE-11: 약관 확인 후).
+#
+# ⚠️ schedule 은 기본 브랜치(main)에서만 발동한다.
+
+on:
+  schedule:
+    - cron: "0 1 1 * *"        # 매월 1일 10:00 KST (UTC 01:00)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r geo_pipeline/requirements.txt
+
+      - name: G-R 실행
+        env:
+          GR_SOURCES: naver,tistory_cse,tistory_manual
+          GR_TISTORY_URLS_CSV: geo_pipeline/tistory_urls.csv
+          GR_FETCH_PAGES: ${{ vars.GR_FETCH_PAGES || 'false' }}
+          NAVER_API_MODE: ${{ vars.NAVER_API_MODE || 'hub' }}
+          NAVER_BLOG_ENDPOINT: ${{ vars.NAVER_BLOG_ENDPOINT }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          GOOGLE_CSE_KEY: ${{ secrets.GOOGLE_CSE_KEY }}
+          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
+        run: |
+          if [ -z "$NAVER_CLIENT_ID" ] || [ -z "$NAVER_CLIENT_SECRET" ]; then
+            echo "::error::NAVER_CLIENT_ID/SECRET 시크릿이 없습니다. sample 데이터로 월간 결과를 만들지 않도록 중단합니다."
+            exit 1
+          fi
+          PYTHONPATH=geo_pipeline python -m pipeline.cli sources
+          PYTHONPATH=geo_pipeline python -m pipeline.cli gr
+          cat geo_pipeline/out/gr_*_summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gr-${{ github.run_id }}
+          path: geo_pipeline/out/
+          retention-days: 90
