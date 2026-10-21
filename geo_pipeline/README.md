@@ -43,8 +43,10 @@ GR_SOURCES=naver,tistory_manual GR_TISTORY_URLS_CSV=geo_pipeline/tistory_urls.cs
 
 자격증명이 없는 소스는 **자동으로 건너뛴다**. 전부 없으면 `sample`로 돈다.
 
-> 구글 검색 결과 화면을 긁는 방식은 약관상 금지라 넣지 않았다. CSE 키가 없으면
-> `tistory_manual`로 사람이 링크를 넣는다(CSV 예시: `sample_data/tistory_urls.example.csv`).
+> 구글 검색 결과 화면을 긁는 방식은 약관상 금지라 넣지 않았다. Google Custom Search JSON API는
+> 신규 가입이 닫혔고 2027-01-01 종료 예정이라, 티스토리는 기본적으로 `tistory_manual`을 쓴다:
+> 월 1회 구글에서 검색어별 상위 티스토리 글 링크를 `geo_pipeline/tistory_urls.csv`에 넣는다
+> (예시: `sample_data/tistory_urls.example.csv`). 월간 워크플로가 이 파일을 자동으로 읽는다.
 
 ## 수집 기준 (RULE-11 외부 사이트 데이터 수집 기준)
 

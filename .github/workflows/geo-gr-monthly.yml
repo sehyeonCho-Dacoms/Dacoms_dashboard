@@ -5,7 +5,8 @@ name: G-R 모범 글 구조 분석 (월간)
 #
 # 필요한 Secrets:
 #   NAVER_CLIENT_ID, NAVER_CLIENT_SECRET   NAVER API HUB 인증 정보 (필수 — 없으면 실패)
-#   GOOGLE_CSE_KEY, GOOGLE_CSE_CX          티스토리(구글 CSE, 선택 — 없으면 티스토리는 건너뜀)
+#   GOOGLE_CSE_KEY, GOOGLE_CSE_CX          티스토리(구글 CSE, 선택 — 구글이 신규 가입을 닫아 기존 키가 있을 때만)
+# 티스토리는 geo_pipeline/tistory_urls.csv 에 사람이 넣은 링크를 쓴다 (파일이 없으면 건너뜀).
 # 글 페이지 구조 측정은 Variables 의 GR_FETCH_PAGES=true 일 때만 (RULE-11: 약관 확인 후).
 #
 # ⚠️ schedule 은 기본 브랜치(main)에서만 발동한다.
@@ -33,7 +34,8 @@ jobs:
 
       - name: G-R 실행
         env:
-          GR_SOURCES: naver,tistory_cse
+          GR_SOURCES: naver,tistory_cse,tistory_manual
+          GR_TISTORY_URLS_CSV: geo_pipeline/tistory_urls.csv
           GR_FETCH_PAGES: ${{ vars.GR_FETCH_PAGES || 'false' }}
           NAVER_API_MODE: ${{ vars.NAVER_API_MODE || 'hub' }}
           NAVER_BLOG_ENDPOINT: ${{ vars.NAVER_BLOG_ENDPOINT }}
