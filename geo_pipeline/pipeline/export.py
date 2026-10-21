@@ -25,6 +25,7 @@ CSV_COLUMNS: list[tuple[str, str]] = [
     ("title", "제목"),
     ("url", "링크"),
     ("published", "발행일"),
+    ("source", "수집 경로"),
     ("status", "측정 상태"),
     ("title_len", "제목 글자 수"),
     ("title_patterns", "제목 패턴"),

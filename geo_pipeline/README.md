@@ -43,8 +43,12 @@ GR_SOURCES=naver,tistory_manual GR_TISTORY_URLS_CSV=geo_pipeline/tistory_urls.cs
 
 자격증명이 없는 소스는 **자동으로 건너뛴다**. 전부 없으면 `sample`로 돈다.
 
+> **티스토리 기본 경로:** 네이버 블로그 검색 API 결과에 섞여 나오는 티스토리 글을 티스토리 채널로
+> 기록한다(`GR_TISTORY_FROM_NAVER=true`, 기본). '구글 상위'가 아니라 '네이버에 걸린 티스토리 글'이라는
+> 점을 감안해서 본다. CSV의 '수집 경로' 열로 구분된다.
+>
 > 구글 검색 결과 화면을 긁는 방식은 약관상 금지라 넣지 않았다. Google Custom Search JSON API는
-> 신규 가입이 닫혔고 2027-01-01 종료 예정이라, 티스토리는 기본적으로 `tistory_manual`을 쓴다:
+> 신규 가입이 닫혔고 2027-01-01 종료 예정이다. 구글 상위 글을 보태고 싶으면 `tistory_manual`을 쓴다:
 > 월 1회 구글에서 검색어별 상위 티스토리 글 링크를 `geo_pipeline/tistory_urls.csv`에 넣는다
 > (예시: `sample_data/tistory_urls.example.csv`). 월간 워크플로가 이 파일을 자동으로 읽는다.
 
