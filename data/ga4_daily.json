@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T23:40:55.670353+00:00",
+  "generated_at": "2026-10-21T14:23:58.104488+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -505,8 +505,8 @@
       "totalUsers": 65,
       "newUsers": 39,
       "screenPageViews": 431,
-      "engagementRate": 0.6543,
-      "averageSessionDuration": 171.6599
+      "engagementRate": 0.6667,
+      "averageSessionDuration": 268.1057
     }
   ],
   "by_channel": [
@@ -2027,12 +2027,6 @@
       "sessionDefaultChannelGroup": "Organic Search",
       "sessions": 29,
       "totalUsers": 21
-    },
-    {
-      "date": "20261020",
-      "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 7,
-      "totalUsers": 6
     },
     {
       "date": "20261020",
@@ -4993,12 +4987,6 @@
       "sessionSource": "m.search.naver.com",
       "sessionMedium": "referral",
       "sessions": 8
-    },
-    {
-      "date": "20261020",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 7
     },
     {
       "date": "20261020",

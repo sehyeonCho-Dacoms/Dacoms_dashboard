@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-20T23:40:55.784239+00:00",
-  "source_generated_at": "2026-10-20T23:40:55.670353+00:00",
+  "generated_at": "2026-10-21T14:23:58.212329+00:00",
+  "source_generated_at": "2026-10-21T14:23:58.104488+00:00",
   "yesterday": {
     "date": "20261020",
     "sessions": 81,
     "totalUsers": 65,
     "newUsers": 39,
-    "engagementRate": 0.6543,
-    "averageSessionDuration": 171.7,
+    "engagementRate": 0.6667,
+    "averageSessionDuration": 268.1,
     "sessions_prev_day": 82,
     "sessions_dod_pct": -1.2
   },
@@ -33,14 +33,14 @@
       "change_pct": -35.0
     },
     "engagementRate": {
-      "current": 0.6653,
+      "current": 0.6671,
       "previous": 0.6581,
-      "change_pct": 1.1
+      "change_pct": 1.4
     },
     "averageSessionDuration": {
-      "current": 220.6251,
+      "current": 234.403,
       "previous": 258.0448,
-      "change_pct": -14.5
+      "change_pct": -9.2
     }
   },
   "window": {
@@ -60,41 +60,41 @@
       "current": 309,
       "previous": 417,
       "change_pct": -25.9,
-      "share_pct": 59.4
+      "share_pct": 60.2
     },
     {
       "channel": "Organic Search",
       "current": 172,
       "previous": 203,
       "change_pct": -15.3,
-      "share_pct": 33.1
+      "share_pct": 33.5
     },
     {
       "channel": "Organic Social",
       "current": 22,
       "previous": 40,
       "change_pct": -45.0,
-      "share_pct": 4.2
+      "share_pct": 4.3
     },
     {
       "channel": "AI Assistant",
       "current": 8,
       "previous": 8,
       "change_pct": 0.0,
-      "share_pct": 1.5
-    },
-    {
-      "channel": "Unassigned",
-      "current": 7,
-      "previous": 1,
-      "change_pct": 600.0,
-      "share_pct": 1.3
+      "share_pct": 1.6
     },
     {
       "channel": "Email",
       "current": 1,
       "previous": 0,
       "change_pct": null,
+      "share_pct": 0.2
+    },
+    {
+      "channel": "Referral",
+      "current": 1,
+      "previous": 10,
+      "change_pct": -90.0,
       "share_pct": 0.2
     }
   ],
