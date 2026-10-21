@@ -45,8 +45,10 @@ jobs:
       - name: 의존성 설치
         run: pip install -r geo_pipeline/requirements.txt
 
-      - name: G-R 노드 스모크 (오프라인 sample)
-        run: PYTHONPATH=geo_pipeline python -m pipeline.cli gr
+      - name: G-R·G0 노드 스모크 (오프라인 sample)
+        run: |
+          PYTHONPATH=geo_pipeline python -m pipeline.cli gr
+          PYTHONPATH=geo_pipeline python -m pipeline.cli g0
 
       - name: 테스트
         run: cd geo_pipeline && python -m pytest -q

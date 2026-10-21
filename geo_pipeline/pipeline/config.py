@@ -54,6 +54,16 @@ class Config:
     # 사람이 구글 상위 티스토리 글 링크를 붙여 넣는 CSV (group,keyword,rank,url)
     tistory_urls_csv: Optional[str] = os.getenv("GR_TISTORY_URLS_CSV")
 
+    # ── G0 이슈 트래커 ──────────────────────────
+    # 소스: naver_news(네이버 뉴스 검색 API) · rss(G0_RSS_FEEDS) · sample
+    g0_sources: list[str] = field(default_factory=lambda: _split(os.getenv("G0_SOURCES", "sample")))
+    g0_max: int = int(os.getenv("G0_MAX", "100"))                    # 하루 최대 N건 (체인 v1)
+    g0_window_hours: int = int(os.getenv("G0_WINDOW_HOURS", "26"))   # 하루 1회 + 여유 2시간
+    # 수집 검색어. 비우면 news.py 기본값. 키워드로 미리 거르지 않고 넓게 모은다(10/16 합의)
+    g0_queries: list[str] = field(default_factory=lambda: _split(os.getenv("G0_QUERIES")))
+    g0_rss_feeds: list[str] = field(default_factory=lambda: _split(os.getenv("G0_RSS_FEEDS")))
+    naver_news_endpoint: Optional[str] = os.getenv("NAVER_NEWS_ENDPOINT")  # 주소가 다를 때만
+
     # HTTP 매너
     request_delay_sec: float = float(os.getenv("REQUEST_DELAY_SEC", "2.0"))
     user_agent: str = os.getenv(
@@ -76,6 +86,16 @@ class Config:
             if key == "tistory_cse" and not (self.google_cse_key and self.google_cse_cx):
                 continue
             if key == "tistory_manual" and not self.tistory_urls_csv:
+                continue
+            out.append(key)
+        return out or ["sample"]
+
+    def enabled_g0_source_keys(self) -> list[str]:
+        out = []
+        for key in self.g0_sources:
+            if key == "naver_news" and not (self.naver_client_id and self.naver_client_secret):
+                continue
+            if key == "rss" and not self.g0_rss_feeds:
                 continue
             out.append(key)
         return out or ["sample"]
