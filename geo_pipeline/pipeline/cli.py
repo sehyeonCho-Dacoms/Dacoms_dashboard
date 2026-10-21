@@ -62,8 +62,9 @@ def cmd_g0(config: Config, args) -> None:
     if args.hours:
         config.g0_window_hours = args.hours
     now = datetime.now(KST)
-    articles = run_g0(config, now)
-    paths = write_g0_outputs(articles, config.out_dir, now.strftime("%Y-%m-%d"))
+    stats: dict = {}
+    articles = run_g0(config, now, stats)
+    paths = write_g0_outputs(articles, config.out_dir, now.strftime("%Y-%m-%d"), stats)
     for kind, path in paths.items():
         print(f"   {kind:8s}→ {path}")
 

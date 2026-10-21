@@ -20,7 +20,8 @@ from .screen import screen, title_key
 from .sources.news import KST, get_news_sources
 
 
-def run_g0(config: Config, now: datetime | None = None) -> list[Article]:
+def run_g0(config: Config, now: datetime | None = None, stats: dict | None = None) -> list[Article]:
+    """stats 를 넘기면 단계별 건수(수집·창·중복 제거·통과)를 채운다 (요약 MD 첫 줄용)."""
     now = now or datetime.now(KST)
     raw: list[Article] = []
     for source in get_news_sources(config, now):
@@ -36,6 +37,9 @@ def run_g0(config: Config, now: datetime | None = None) -> list[Article]:
         a.id = article_id(a, now)
         screen(a, now)
     passed = sum(1 for a in articles if a.screen == SCREEN_PASS)
+    if stats is not None:
+        stats.update(raw=len(raw), recent=len(recent), deduped=len(articles), passed=passed,
+                     hours=config.g0_window_hours)
     print(f"📰 수집 {len(raw)} → 최근 {config.g0_window_hours}시간 {len(recent)} → 중복 제거 {len(articles)}"
           f" (거름망 통과 {passed}) → 최대 {config.g0_max}건")
 

@@ -197,7 +197,7 @@ G0_COLUMNS: list[tuple[str, str]] = [
 ]
 
 
-def write_g0_outputs(articles, out_dir: Path, day: str) -> dict[str, Path]:
+def write_g0_outputs(articles, out_dir: Path, day: str, stats: dict | None = None) -> dict[str, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = {
         "json": out_dir / f"g0_{day}.json",
@@ -214,7 +214,7 @@ def write_g0_outputs(articles, out_dir: Path, day: str) -> dict[str, Path]:
         w.writerow([label for _, label in G0_COLUMNS])
         for r in rows:
             w.writerow([_cell(r[key]) for key, _ in G0_COLUMNS])
-    paths["summary"].write_text(build_g0_summary(articles, day), encoding="utf-8")
+    paths["summary"].write_text(build_g0_summary(articles, day, stats), encoding="utf-8")
     return paths
 
 
@@ -232,14 +232,19 @@ def pick_calibration(articles, n: int = 5) -> list:
     return out
 
 
-def build_g0_summary(articles, day: str) -> str:
+def build_g0_summary(articles, day: str, stats: dict | None = None) -> str:
     passed = [a for a in articles if a.screen == "통과"]
     dropped = [a for a in articles if a.screen != "통과"]
     by_reason = Counter(r.split("(")[0] for a in dropped for r in a.screen_reasons)
-    lines = [
-        f"# G0 이슈 트래커 — {day}",
-        "",
-        f"- 기사 {len(articles)}건 · 거름망 통과 {len(passed)}건 · 탈락 {len(dropped)}건"
+    lines = [f"# G0 이슈 트래커 — {day}", ""]
+    if stats:
+        # 상한이 거름망 뒤에 있어 기록분만 세면 탈락이 0건처럼 보인다 → 단계별 건수를 먼저 적는다
+        lines.append(
+            f"- 검토 {stats['deduped']}건(최근 {stats['hours']}시간, 중복 제거 후) 중 거름망 통과 {stats['passed']}건"
+            f" → 통과 기사 먼저 {len(articles)}건 기록"
+        )
+    lines += [
+        f"- 기록 {len(articles)}건 · 거름망 통과 {len(passed)}건 · 탈락 {len(dropped)}건"
         + (f" ({', '.join(f'{k} {v}' for k, v in sorted(by_reason.items()))})" if by_reason else ""),
         "- 거름망은 제목·요약 단어로 거른 1차 표시입니다. 최종 판단은 G2 흥미도 점수와 사람이 합니다.",
         "- '논쟁' 표시 기사의 입장은 AI가 정하지 않습니다 (DR-MKT-02 사람 확인).",
