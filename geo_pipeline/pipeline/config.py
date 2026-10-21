@@ -44,6 +44,9 @@ class Config:
     # ── 소스별 자격증명 ─────────────────────────
     naver_client_id: Optional[str] = os.getenv("NAVER_CLIENT_ID")
     naver_client_secret: Optional[str] = os.getenv("NAVER_CLIENT_SECRET")
+    # hub = 네이버 클라우드 NAVER API HUB (기본) / legacy = 네이버 개발자센터
+    naver_api_mode: str = os.getenv("NAVER_API_MODE", "hub").lower()
+    naver_blog_endpoint: Optional[str] = os.getenv("NAVER_BLOG_ENDPOINT")  # 주소가 다를 때만
     google_cse_key: Optional[str] = os.getenv("GOOGLE_CSE_KEY")
     google_cse_cx: Optional[str] = os.getenv("GOOGLE_CSE_CX")
     # 사람이 구글 상위 티스토리 글 링크를 붙여 넣는 CSV (group,keyword,rank,url)

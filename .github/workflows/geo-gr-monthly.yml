@@ -4,7 +4,7 @@ name: G-R 모범 글 구조 분석 (월간)
 # 아티팩트(CSV·JSON·요약 MD)로 올린다. 산출물은 커밋하지 않는다.
 #
 # 필요한 Secrets:
-#   NAVER_CLIENT_ID, NAVER_CLIENT_SECRET   네이버 검색 API (필수 — 없으면 실패)
+#   NAVER_CLIENT_ID, NAVER_CLIENT_SECRET   NAVER API HUB 인증 정보 (필수 — 없으면 실패)
 #   GOOGLE_CSE_KEY, GOOGLE_CSE_CX          티스토리(구글 CSE, 선택 — 없으면 티스토리는 건너뜀)
 # 글 페이지 구조 측정은 Variables 의 GR_FETCH_PAGES=true 일 때만 (RULE-11: 약관 확인 후).
 #
@@ -35,6 +35,8 @@ jobs:
         env:
           GR_SOURCES: naver,tistory_cse
           GR_FETCH_PAGES: ${{ vars.GR_FETCH_PAGES || 'false' }}
+          NAVER_API_MODE: ${{ vars.NAVER_API_MODE || 'hub' }}
+          NAVER_BLOG_ENDPOINT: ${{ vars.NAVER_BLOG_ENDPOINT }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
           GOOGLE_CSE_KEY: ${{ secrets.GOOGLE_CSE_KEY }}

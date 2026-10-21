@@ -31,7 +31,7 @@ PYTHONPATH=geo_pipeline python -m pipeline.cli gr
 
 | 소스 | 채널 | 방식 | 필요 값 |
 |------|------|------|---------|
-| `naver` | 네이버 블로그 | 공식 네이버 검색 API(블로그, 정확도순) | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` |
+| `naver` | 네이버 블로그 | 공식 네이버 검색 API(블로그, 정확도순). 기본은 NAVER API HUB, `NAVER_API_MODE=legacy`면 개발자센터 | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` |
 | `tistory_cse` | 티스토리 | Google Programmable Search API, `site:tistory.com` | `GOOGLE_CSE_KEY`, `GOOGLE_CSE_CX` |
 | `tistory_manual` | 티스토리 | 사람이 구글 상위 글 링크를 CSV로 붙여 넣음 | `GR_TISTORY_URLS_CSV` |
 | `sample` | 둘 다 | 로컬 가상 데이터 | — |

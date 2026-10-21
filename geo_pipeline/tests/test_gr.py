@@ -108,6 +108,19 @@ def test_naver_api_items_filter_and_clean():
     assert refs[0].group == "의사"
 
 
+def test_naver_hub_and_legacy_auth(tmp_path):
+    base = dict(naver_client_id="id", naver_client_secret="secret")
+    hub = NaverBlogSource(_config(tmp_path, naver_api_mode="hub", **base))
+    assert hub.headers()["X-NCP-APIGW-API-KEY-ID"] == "id"
+    assert hub.headers()["X-NCP-APIGW-API-KEY"] == "secret"
+    assert hub.endpoint().startswith("https://naverapihub.apigw.ntruss.com/")
+    legacy = NaverBlogSource(_config(tmp_path, naver_api_mode="legacy", **base))
+    assert legacy.headers()["X-Naver-Client-Id"] == "id"
+    assert legacy.endpoint() == "https://openapi.naver.com/v1/search/blog.json"
+    custom = NaverBlogSource(_config(tmp_path, naver_blog_endpoint="https://x.example/blog", **base))
+    assert custom.endpoint() == "https://x.example/blog"
+
+
 def test_naver_mobile_url():
     assert to_mobile_url("https://blog.naver.com/a/123") == "https://m.blog.naver.com/a/123"
     assert (

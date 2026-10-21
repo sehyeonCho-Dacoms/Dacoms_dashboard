@@ -1,8 +1,12 @@
-"""네이버 검색 API(블로그) 어댑터 — 공식 Open API.
+"""네이버 검색 API(블로그) 어댑터 — 공식 API 두 창구.
 
-- 문서: https://developers.naver.com/docs/serviceapi/search/blog/blog.md
-- 인증: 헤더 X-Naver-Client-Id / X-Naver-Client-Secret (NAVER_CLIENT_ID/SECRET)
-- 응답: JSON. items[] 에 title(<b> 강조 포함)·link·postdate(YYYYMMDD)
+- hub (기본)  : 네이버 클라우드 NAVER API HUB. 콘솔 > NAVER API HUB > Application > 인증 정보
+               헤더 X-NCP-APIGW-API-KEY-ID / X-NCP-APIGW-API-KEY
+- legacy      : 네이버 개발자센터 (2026-07-31 신규 발급 종료, 2027-06-30 종료 예정으로 알려짐)
+               헤더 X-Naver-Client-Id / X-Naver-Client-Secret
+- 두 창구 모두 키는 NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 에 넣는다 (NAVER_API_MODE로 고름)
+- 파라미터·응답은 같다: items[] 에 title(<b> 강조 포함)·link·postdate(YYYYMMDD)
+- HUB 주소는 첫 실행에서 확인 필요. 다르면 NAVER_BLOG_ENDPOINT 로 덮어쓴다.
 
 블로그 검색 결과에는 네이버 밖 블로그도 섞이므로 blog.naver.com 글만 남긴다.
 허브 기준 '검색어의 블로그 탭 상위'는 정확도순(sort=sim)에 해당한다.
@@ -19,7 +23,14 @@ from ..keywords import Query
 from ..models import PostRef
 from .base import BaseSource
 
-ENDPOINT = "https://openapi.naver.com/v1/search/blog.json"
+ENDPOINTS = {
+    "hub": "https://naverapihub.apigw.ntruss.com/search/v1/blog",
+    "legacy": "https://openapi.naver.com/v1/search/blog.json",
+}
+AUTH_HEADERS = {
+    "hub": ("X-NCP-APIGW-API-KEY-ID", "X-NCP-APIGW-API-KEY"),
+    "legacy": ("X-Naver-Client-Id", "X-Naver-Client-Secret"),
+}
 _TAG = re.compile(r"<[^>]+>")
 
 
@@ -35,14 +46,20 @@ class NaverBlogSource(BaseSource):
             "start": 1,
             "sort": "sim",
         }
-        headers = {
-            "X-Naver-Client-Id": self.config.naver_client_id or "",
-            "X-Naver-Client-Secret": self.config.naver_client_secret or "",
-            "User-Agent": self.config.user_agent,
-        }
-        data = _http.get_json(ENDPOINT, params=params, headers=headers)
+        data = _http.get_json(self.endpoint(), params=params, headers=self.headers())
         _http.polite_sleep(self.config.request_delay_sec)
         return parse_items(data.get("items") or [], query, self.key)
+
+    def endpoint(self) -> str:
+        return self.config.naver_blog_endpoint or ENDPOINTS[self.config.naver_api_mode]
+
+    def headers(self) -> dict:
+        id_header, secret_header = AUTH_HEADERS[self.config.naver_api_mode]
+        return {
+            id_header: self.config.naver_client_id or "",
+            secret_header: self.config.naver_client_secret or "",
+            "User-Agent": self.config.user_agent,
+        }
 
     def page_url(self, ref: PostRef) -> str:
         return to_mobile_url(ref.url)
