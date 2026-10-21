@@ -58,8 +58,12 @@ def test_first_run_false_positives_are_dropped():
 
 
 def test_cap_keeps_passed_articles_first(tmp_path):
-    articles = run_g0(_config(tmp_path, g0_max=4), NOW)
+    stats: dict = {}
+    articles = run_g0(_config(tmp_path, g0_max=4), NOW, stats)
     assert len(articles) == 4 and all(a.screen == SCREEN_PASS for a in articles)
+    assert (stats["deduped"], stats["passed"]) == (11, 5)
+    summary = write_g0_outputs(articles, tmp_path, "d", stats)["summary"].read_text(encoding="utf-8")
+    assert "검토 11건" in summary and "거름망 통과 5건 → 통과 기사 먼저 4건 기록" in summary
 
 
 def test_offtopic_title_kept_when_title_is_about_workforce():
