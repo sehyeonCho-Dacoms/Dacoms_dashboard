@@ -75,3 +75,25 @@ def test_looks_like_photo_skips_events_and_people():
               "File:June 21, 2012 EPA Job Training Announcement, New Orleans (7510108712).jpg",
               "File:Groundwork RVA's Green Team (34930246713).jpg"):
         assert not images.looks_like_photo(t, ok), t
+
+
+def test_pexels_used_when_key_set(monkeypatch):
+    import io
+    import json as _json
+
+    body = {"photos": [{"id": 7, "url": "https://www.pexels.com/photo/contract-7/", "photographer": "Kim",
+                        "alt": "Person signing a contract", "src": {"large2x": "https://images.pexels.com/7.jpeg"}}]}
+    seen = {}
+
+    def fake_urlopen(req, timeout=0):
+        seen["url"], seen["auth"] = req.full_url, req.headers.get("Authorization")
+        return io.BytesIO(_json.dumps(body).encode())
+
+    monkeypatch.setenv("PEXELS_API_KEY", "k")
+    monkeypatch.setattr(images.urllib.request, "urlopen", fake_urlopen)
+    ph = images.find_photo("contract signing")
+    assert "api.pexels.com" in seen["url"] and "orientation=landscape" in seen["url"] and seen["auth"] == "k"
+    assert ph["url"].endswith("7.jpeg") and ph["source"] == "Pexels" and ph["artist"] == "Kim"
+    assert images.photo_caption(ph) == "사진: Kim / Pexels https://www.pexels.com/photo/contract-7/"
+    assert images.photo_caption({"artist": "Lee", "license": "CC0", "page": "https://commons.wikimedia.org/x"}) \
+        == "사진: Lee / Wikimedia Commons (CC0) https://commons.wikimedia.org/x"

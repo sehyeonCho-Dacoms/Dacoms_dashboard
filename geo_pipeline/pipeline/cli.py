@@ -171,7 +171,7 @@ def build_parser() -> argparse.ArgumentParser:
     bd.add_argument("--images", action="store_true", help="블로그 이미지 4장 생성 (Playwright·Chromium 필요)")
     bd.add_argument("--notion", action="store_true", help="노션 '블로그 GEO 체인' DB에 행 만들기 (NOTION_TOKEN 필요)")
     bd.set_defaults(func=cmd_build)
-    ph = sub.add_parser("photo", help="Wikimedia Commons CC0 사진 후보 찾기")
+    ph = sub.add_parser("photo", help="사진 후보 찾기 (Pexels 키가 있으면 Pexels, 없으면 Wikimedia CC0)")
     ph.add_argument("queries", nargs="+", help="영어 검색어 (여러 개 가능)")
     ph.add_argument("--limit", type=int, default=3)
     ph.set_defaults(func=cmd_photo)

@@ -162,7 +162,8 @@ PYTHONPATH=geo_pipeline python -m pipeline.cli review https://doctoronhr.tistory
   - `images.md` 파일별 넣을 위치·alt·캡션. 글꼴 Pretendard(SIL OFL)는 처음 실행할 때 내려받는다
   - 필요: `pip install playwright` + Chromium (`CHROMIUM_PATH`로 경로 지정 가능)
   - **사진은 자동**: 검색어는 제목·대상 질문에서 만든다(`photos.TOPIC_QUERIES`, `photo:`로 직접 지정도 가능).
-    작업 환경 IP가 Wikimedia 검색 API에서 막히는(429) 문제가 있어, Actions **'블로그 사진 찾기 (CC0)'**가
-    매일 10:30 KST 노션 원고 행(게시 전·사진 없음)마다 후보 3장을 붙인다(`photo-sync`).
-    행에 붙은 `photo_url` 등 4줄을 원고 머리말에 넣으면 build 는 검색 없이 그 사진을 쓴다
+    출처는 `PEXELS_API_KEY`가 있으면 **Pexels** 스톡 사진(캡션 `사진: 작가 / Pexels 링크`), 없으면 Wikimedia CC0.
+    Wikimedia CC0 는 실존 인물·행사 사진이 많아 자동 선택 품질이 낮다(10/22 확인).
+    Actions **'블로그 사진 찾기'**가 매일 10:30 KST 노션 원고 행(게시 전·사진 없음)마다 후보 3장을 붙인다(`photo-sync`,
+    글마다 다른 사진, `replace`로 교체). 행에 붙은 `photo_url` 등 4줄을 원고 머리말에 넣으면 build 는 그 사진을 쓴다
 

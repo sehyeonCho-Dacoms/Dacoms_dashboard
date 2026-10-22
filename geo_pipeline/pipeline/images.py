@@ -3,7 +3,8 @@
   1_cover.png   대표 이미지(1080×1080) — 제목 + 한 줄 요약. 네이버 대표 사진·검색 미리보기용
   2_table.png   원고 첫 표를 그림으로 — 네이버에 표를 붙이면 서식이 깨지는 문제도 피한다
   3_card.png    원고 첫 목록(체크리스트·핵심 3가지)을 카드 한 장으로
-  4_photo.jpg   Wikimedia Commons 의 CC0 사진 (검색어는 제목·질문에서 자동, photo: 로 지정 가능)
+  4_photo.jpg   Pexels 스톡 사진(PEXELS_API_KEY 가 있을 때) 또는 Wikimedia Commons CC0 사진
+                (검색어는 제목·질문에서 자동, photo: 로 지정 가능)
                 → 못 구하면 4_faq.png (FAQ 질문 카드)로 대신
                 검색 API가 막힌 곳(429)에서는 `photo` 명령(또는 Actions '사진 찾기')으로 찾은
                 photo_url·photo_page·photo_license·photo_artist 를 머리말에 넣으면 검색을 건너뛴다
@@ -142,14 +143,21 @@ li { display: flex; gap: 20px; font-size: 30px; line-height: 1.45; background: #
 
 
 # --------------------------------------------------------------------------- #
-# 사진 (Wikimedia Commons, CC0만)
+# 사진 — Pexels(키가 있으면) → 없으면 Wikimedia Commons(CC0만)
 # --------------------------------------------------------------------------- #
 def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
     """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록.
 
+    PEXELS_API_KEY 가 있으면 Pexels 스톡 사진(가로)에서 찾는다. 없으면 Wikimedia Commons 의
     CC0 분류(Category:CC-zero) 안에서 먼저 찾고, 없으면 전체에서 찾는다(CC0 필터는 그대로).
+    Wikimedia CC0 는 실존 인물·행사 사진이 많아 자동 선택 품질이 낮다(10/22 확인).
     """
     found: list[dict] | None = []
+    if key := os.getenv("PEXELS_API_KEY"):
+        found = _pexels(query, limit, key)
+        if limit == 1:
+            return found[0] if found else None
+        return found or []
     for scope in (" incategory:CC-zero", ""):
         found = _search(query + scope, limit)
         if found is None or found:
@@ -157,6 +165,32 @@ def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
     if limit == 1:
         return found[0] if found else None
     return found or []
+
+
+def _pexels(query: str, limit: int, key: str) -> list[dict] | None:
+    """Pexels 검색 (Pexels License: 상업적 사용 가능, 출처 표기 권장 → 캡션에 작가·Pexels 표기)."""
+    url = "https://api.pexels.com/v1/search?" + urllib.parse.urlencode(
+        {"query": query, "orientation": "landscape", "per_page": max(limit, 15)})
+    try:
+        req = urllib.request.Request(url, headers={"Authorization": key, "User-Agent": UA})
+        data = json.load(urllib.request.urlopen(req, timeout=20))  # noqa: S310
+    except Exception as exc:
+        print(f"   ⚠️  Pexels 검색 실패({getattr(exc, 'code', exc)})")
+        return None
+    return [pexels_item(ph) for ph in data.get("photos", [])][:limit]
+
+
+def pexels_item(ph: dict) -> dict:
+    src = ph.get("src", {})
+    return {"url": src.get("large2x") or src.get("large") or src.get("original", ""), "page": ph.get("url", ""),
+            "license": "Pexels License", "artist": (ph.get("photographer") or "작자 미상")[:60],
+            "title": ph.get("alt") or f"Pexels {ph.get('id', '')}", "source": "Pexels"}
+
+
+def photo_caption(ph: dict) -> str:
+    if ph.get("source") == "Pexels" or "pexels.com" in ph.get("page", ""):
+        return f"사진: {ph['artist']} / Pexels {ph['page']}"
+    return f"사진: {ph['artist']} / Wikimedia Commons ({ph['license']}) {ph['page']}"
 
 
 def _search(query: str, limit: int) -> list[dict] | None:
@@ -284,7 +318,7 @@ def render(d: Draft, out_dir: Path) -> list[Image]:
         req = urllib.request.Request(photo["url"], headers={"User-Agent": UA})
         (out_dir / "4_photo.jpg").write_bytes(urllib.request.urlopen(req, timeout=30).read())  # noqa: S310
         images.append(Image("4_photo.jpg", d.meta.get("photo_alt", d.meta["photo"]),
-                            f"사진: {photo['artist']} / Wikimedia Commons ({photo['license']}) {photo['page']}",
+                            photo_caption(photo),
                             "첫 소제목 아래"))
 
     lines = [f"# 이미지 — {d.title}", "", "| 파일 | 넣을 위치 | 설명(alt) | 캡션 |", "| --- | --- | --- | --- |"]

@@ -1,7 +1,7 @@
 """글 주제에 맞는 CC0 사진을 알아서 찾아 노션 원고 행에 붙인다 (사람이 검색어를 넣지 않음).
 
 1. 제목·대상 질문의 한국어 핵심어 → 영어 검색어 (TOPIC_QUERIES, 순서가 우선순위)
-2. Wikimedia Commons 에서 CC0 사진만 후보 3장 (images.find_photo)
+2. Pexels 스톡 사진(PEXELS_API_KEY) 또는 Wikimedia Commons CC0 사진 후보 3장 (images.find_photo)
 3. 노션 '블로그 GEO 체인' DB에서 아직 게시 전이고 사진이 없는 행에
    '📷 사진 후보 (CC0)' 섹션을 붙인다: 1순위 사진 미리보기 + 출처 캡션 + 다른 후보 링크 +
    원고 머리말에 붙여 넣을 photo_url 등.
@@ -19,7 +19,7 @@ import time
 from . import _http, images
 from .notion import DEFAULT_DB, VERSION, _text
 
-MARKER = "📷 사진 후보 (CC0)"
+MARKER = "📷 사진 후보"   # 예전 섹션 제목 "📷 사진 후보 (CC0)" 도 이 문자열로 찾는다
 ACTIVE = {"원고작성", "검수통과", "사람확인"}   # 게시 전 단계
 FALLBACK = ["doctor", "stethoscope", "hospital"]
 
@@ -79,14 +79,14 @@ def candidates(queries: list[str], want: int = 3, pause: float = 1.0, exclude: s
 
 
 def caption(ph: dict) -> str:
-    return f"사진: {ph['artist']} / Wikimedia Commons ({ph['license']}) {ph['page']}"
+    return images.photo_caption(ph)
 
 
 def blocks_for(found: list[dict]) -> list[dict]:
     best, rest = found[0], found[1:]
     front = "\n".join(f"photo_{k}: {best[k]}" for k in ("url", "page", "license", "artist"))
     out: list[dict] = [
-        {"object": "block", "type": "heading_2", "heading_2": {"rich_text": _text(MARKER)}},
+        {"object": "block", "type": "heading_2", "heading_2": {"rich_text": _text(f"{MARKER} ({best.get('source', 'CC0')})")}},
         {"object": "block", "type": "image",
          "image": {"type": "external", "external": {"url": best["url"]}, "caption": _text(caption(best))}},
         {"object": "block", "type": "paragraph", "paragraph": {"rich_text": _text(
