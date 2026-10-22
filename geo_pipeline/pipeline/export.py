@@ -193,8 +193,11 @@ G0_COLUMNS: list[tuple[str, str]] = [
     ("screen_reasons", "탈락 근거"),
     ("flags", "표시"),
     ("query", "검색어"),
-    ("description", "요약(채점용·게시 금지)"),
 ]
+# 기사 요약(API description)은 산출물에 넣지 않는다. 저장소가 공개라 아티팩트를 누구나
+# 내려받을 수 있어, 요약 100건 묶음이 RULE-11 ③(본문 대량 재배포 금지)에 걸릴 수 있다.
+# 요약은 메모리에서 거름망 판단에만 쓴다 (G2도 같은 실행 안에서 읽게 할 것).
+G0_OMIT_FIELDS = ("description",)
 
 
 def write_g0_outputs(articles, out_dir: Path, day: str, stats: dict | None = None) -> dict[str, Path]:
@@ -204,7 +207,7 @@ def write_g0_outputs(articles, out_dir: Path, day: str, stats: dict | None = Non
         "csv": out_dir / f"g0_{day}.csv",
         "summary": out_dir / f"g0_{day}_summary.md",
     }
-    rows = [a.to_dict() for a in articles]
+    rows = [{k: v for k, v in a.to_dict().items() if k not in G0_OMIT_FIELDS} for a in articles]
     paths["json"].write_text(
         json.dumps({"day": day, "count": len(rows), "articles": rows}, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -246,16 +249,16 @@ def build_g0_summary(articles, day: str, stats: dict | None = None) -> str:
     lines += [
         f"- 기록 {len(articles)}건 · 거름망 통과 {len(passed)}건 · 탈락 {len(dropped)}건"
         + (f" ({', '.join(f'{k} {v}' for k, v in sorted(by_reason.items()))})" if by_reason else ""),
-        "- 거름망은 제목·요약 단어로 거른 1차 표시입니다. 최종 판단은 G2 흥미도 점수와 사람이 합니다.",
-        "- '논쟁' 표시 기사의 입장은 AI가 정하지 않습니다 (DR-MKT-02 사람 확인).",
+        "- 거름망은 제목 단어로 거른 1차 표시입니다. 최종 판단은 G2 흥미도 점수와 사람이 합니다.",
+        "- 표시: '논쟁'은 입장을 사람이 정하고(DR-MKT-02), '법률'은 글에 \"법률 자문이 아닙니다\"와 법령 원문 링크를 넣습니다.",
         "",
-        "## 채점 보정용 5건 (G2 · AX 스터디)",
+        "## 채점 보정용 5건",
         "",
-        "출력 형식: `기사ID | 거름망 | A B C D E F | 총점 | 타깃 | 매칭 질문(GQ-n) | 채널 | 표시 | 한 줄 이유`",
+        "흥미도 점수(G2)는 아직 사람이 채점표에 매깁니다. 준칙 v1 3-2(100점·6항목) 기준입니다.",
         "",
     ]
     for a in pick_calibration(articles):
-        lines.append(f"- `{a.id}` [{_md(a.title)}]({a.url}) · {a.press}{' · 논쟁' if a.flags else ''}")
+        lines.append(f"- `{a.id}` [{_md(a.title)}]({a.url}) · {a.press}{''.join(' · ' + f for f in a.flags)}")
     lines += ["", "## 거름망 통과", "", "| ID | 시각 | 매체 | 제목 | 표시 |", "| --- | --- | --- | --- | --- |"]
     for a in passed:
         lines.append(f"| `{a.id}` | {_hm(a)} | {a.press} | [{_md(a.title)}]({a.url}) | {'·'.join(a.flags)} |")
