@@ -161,7 +161,8 @@ PYTHONPATH=geo_pipeline python -m pipeline.cli review https://doctoronhr.tistory
   - `4_photo.jpg` 머리말 `photo:`(영어 검색어)로 Wikimedia Commons의 CC0·퍼블릭 도메인 사진만. 못 구하면 `4_faq.png`(FAQ 카드)
   - `images.md` 파일별 넣을 위치·alt·캡션. 글꼴 Pretendard(SIL OFL)는 처음 실행할 때 내려받는다
   - 필요: `pip install playwright` + Chromium (`CHROMIUM_PATH`로 경로 지정 가능)
-  - Wikimedia 검색 API가 막히면(429, 클라우드 공용 IP에서 자주 생김) Actions **'블로그 사진 찾기 (CC0)'**를
-    실행하거나 `pipeline.cli photo "검색어"`로 후보를 찾아, 나온 `photo_url`·`photo_page`·`photo_license`·`photo_artist`를
-    원고 머리말에 붙여 넣는다. 그러면 build 는 검색 없이 그 사진을 쓴다
+  - **사진은 자동**: 검색어는 제목·대상 질문에서 만든다(`photos.TOPIC_QUERIES`, `photo:`로 직접 지정도 가능).
+    작업 환경 IP가 Wikimedia 검색 API에서 막히는(429) 문제가 있어, Actions **'블로그 사진 찾기 (CC0)'**가
+    매일 10:30 KST 노션 원고 행(게시 전·사진 없음)마다 후보 3장을 붙인다(`photo-sync`).
+    행에 붙은 `photo_url` 등 4줄을 원고 머리말에 넣으면 build 는 검색 없이 그 사진을 쓴다
 

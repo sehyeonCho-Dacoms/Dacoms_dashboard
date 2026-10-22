@@ -138,6 +138,11 @@ def cmd_photo(config: Config, args) -> None:
         print()
 
 
+def cmd_photo_sync(config: Config, args) -> None:
+    from . import photos
+    print("\n".join(photos.sync(dry_run=args.dry_run)))
+
+
 def cmd_notion_check(config: Config, args) -> None:
     from . import notion
 
@@ -170,6 +175,9 @@ def build_parser() -> argparse.ArgumentParser:
     ph.add_argument("queries", nargs="+", help="영어 검색어 (여러 개 가능)")
     ph.add_argument("--limit", type=int, default=3)
     ph.set_defaults(func=cmd_photo)
+    ps = sub.add_parser("photo-sync", help="노션 원고 행마다 글 주제에 맞는 CC0 사진 후보를 자동으로 붙임")
+    ps.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 결과만 출력")
+    ps.set_defaults(func=cmd_photo_sync)
     sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
     return p
 

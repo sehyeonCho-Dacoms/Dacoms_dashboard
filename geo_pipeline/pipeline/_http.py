@@ -75,3 +75,13 @@ def post_json(url: str, payload: dict, headers: dict | None = None, timeout: int
                                  headers={"Content-Type": "application/json", **(headers or {})})
     with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 (Notion API)
         return json.loads(resp.read().decode("utf-8"))
+
+
+def request_json(method: str, url: str, payload: dict | None = None, headers: dict | None = None,
+                 timeout: int = DEFAULT_TIMEOUT) -> Any:
+    """GET·POST·PATCH 공용 (노션 API)."""
+    body = json.dumps(payload).encode("utf-8") if payload is not None else None
+    req = urllib.request.Request(url, data=body, method=method,
+                                 headers={"Content-Type": "application/json", **(headers or {})})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 (Notion API)
+        return json.loads(resp.read().decode("utf-8"))

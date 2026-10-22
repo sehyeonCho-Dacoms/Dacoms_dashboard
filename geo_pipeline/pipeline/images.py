@@ -3,7 +3,7 @@
   1_cover.png   대표 이미지(1080×1080) — 제목 + 한 줄 요약. 네이버 대표 사진·검색 미리보기용
   2_table.png   원고 첫 표를 그림으로 — 네이버에 표를 붙이면 서식이 깨지는 문제도 피한다
   3_card.png    원고 첫 목록(체크리스트·핵심 3가지)을 카드 한 장으로
-  4_photo.jpg   Wikimedia Commons 의 CC0·퍼블릭 도메인 사진 (머리말 photo: 영어 검색어)
+  4_photo.jpg   Wikimedia Commons 의 CC0·퍼블릭 도메인 사진 (검색어는 제목·질문에서 자동, photo: 로 지정 가능)
                 → 못 구하면 4_faq.png (FAQ 질문 카드)로 대신
                 검색 API가 막힌 곳(429)에서는 `photo` 명령(또는 Actions '사진 찾기')으로 찾은
                 photo_url·photo_page·photo_license·photo_artist 를 머리말에 넣으면 검색을 건너뛴다
@@ -213,7 +213,11 @@ def render(d: Draft, out_dir: Path) -> list[Image]:
     images: list[Image] = []
     alts = {"1_cover.png": f"{d.title} 대표 이미지", "2_table.png": "비교표", "3_card.png": "핵심 정리 카드"}
 
-    photo = photo_from_meta(d) or (find_photo(d.meta["photo"]) if d.meta.get("photo") else None)
+    if not (photo := photo_from_meta(d)):
+        from .photos import queries_for   # photo: 가 없으면 제목·질문에서 검색어를 만든다
+        for q in [d.meta["photo"]] if d.meta.get("photo") else queries_for(d.title, d.meta.get("question", "")):
+            if photo := find_photo(q):
+                break
     if photo is None:
         faqs = [b.text for b in d.blocks if b.kind == "heading" and b.text.startswith("Q.")]
         if faqs:
