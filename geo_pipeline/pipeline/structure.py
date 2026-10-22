@@ -28,6 +28,13 @@ CONTENT_CLASSES = [
 ]
 # 소제목으로 볼 class (네이버 스마트에디터의 소제목 컴포넌트)
 HEADING_CLASSES = ["se-section-sectionTitle"]
+# 네이버는 소제목 컴포넌트 대신 '큰 글씨 한 줄'로 소제목을 쓰는 글이 많다(본문 fs15, 소제목 fs24 등).
+# 문단 글자가 전부 이 크기 이상이고 짧으면 소제목으로 센다 (10/22 닥터온 네이버 글에서 0개로 잡힘)
+PSEUDO_HEADING_MIN_FS = 19
+PSEUDO_HEADING_MAX_CHARS = 60
+_FONT_SIZE = re.compile(r"^se-fs-?(?:fs)?(\d+)$")
+# 본문 속 해시태그 (#검체검사). 네이버는 태그를 본문 끝에 글자로 붙이는 글이 많다
+_HASHTAG = re.compile(r"(?<![\w#&/])#([가-힣A-Za-z][\w가-힣]{0,29})")
 # 태그 묶음 class (본문 밖에 있어도 센다)
 TAG_AREA_CLASSES = ["post_tag", "tag_area", "tagList", "tags", "tag-list", "tag_label"]
 
@@ -96,6 +103,10 @@ class _Parser(HTMLParser):
         self.heading_buf: list[str] = []
         self.in_tag_area = 0
         self.tag_area_depth = -1
+        self.para_depth = -1           # 네이버 문단(se-text-paragraph) — 큰 글씨 소제목 판별용
+        self.para_buf: list[str] = []
+        self.para_sizes: list[int] = []
+        self.fs_stack: list[tuple[int, int]] = []   # (깊이, 글자 크기)
         self.skip = 0                  # script/style
         self.text: list[str] = []
         self.links: list[str] = []
@@ -138,6 +149,13 @@ class _Parser(HTMLParser):
 
         if tag in _BLOCK:
             self.text.append("\n")
+        if tag == "span":
+            size = next((int(m.group(1)) for c in classes if (m := _FONT_SIZE.match(c))), None)
+            if size is not None:
+                self.fs_stack.append((depth, size))
+        if tag == "p" and "se-text-paragraph" in classes and not self.in_heading and self.para_depth < 0:
+            self.para_depth = depth
+            self.para_buf, self.para_sizes = [], []
         if not self.in_heading and (tag in ("h2", "h3", "h4") or classes & set(HEADING_CLASSES)):
             self.in_heading = 1
             self.heading_depth = depth
@@ -168,6 +186,10 @@ class _Parser(HTMLParser):
                     self.m.headings += 1
                     self.m.heading_texts.append(text)
                 self.in_heading = 0
+            if self.fs_stack and self.fs_stack[-1][0] == depth:
+                self.fs_stack.pop()
+            if depth == self.para_depth:
+                self._end_paragraph()
             if self.in_tag_area and depth == self.tag_area_depth:
                 self.in_tag_area = 0
             if self.in_container and depth == self.container_depth:
@@ -183,6 +205,17 @@ class _Parser(HTMLParser):
         self.text.append(data)
         if self.in_heading:
             self.heading_buf.append(data)
+        if self.para_depth >= 0 and data.strip():
+            self.para_buf.append(data)
+            self.para_sizes.append(self.fs_stack[-1][1] if self.fs_stack else 0)
+
+    def _end_paragraph(self) -> None:
+        text = "".join(self.para_buf).strip()
+        if (text and len(text) <= PSEUDO_HEADING_MAX_CHARS
+                and min(self.para_sizes) >= PSEUDO_HEADING_MIN_FS):
+            self.m.headings += 1
+            self.m.heading_texts.append(text)
+        self.para_depth = -1
 
 
 def _pick_container(html: str) -> tuple[str | None, bool]:
@@ -215,6 +248,7 @@ def analyze_html(html: str, page_url: str, keyword: str = "") -> Metrics:
         re.search(r"자주\s*묻는\s*질문|FAQ", body)
     )
     m.internal_links, m.external_links = _count_links(p.links, page_url)
+    m.tags = max(m.tags, len(set(_HASHTAG.findall(body))))
     return m
 
 
