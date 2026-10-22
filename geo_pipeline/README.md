@@ -158,11 +158,12 @@ PYTHONPATH=geo_pipeline python -m pipeline.cli review https://doctoronhr.tistory
 - 네이버 스마트에디터는 붙여 넣을 때 글자 크기가 빠질 수 있어, 소제목은 에디터의 '소제목' 블록으로 바꾸는 것을 권한다.
 - **이미지 (`--images`)**: 글마다 블로그 이미지 4장을 `images/`에 만든다. 기사 사진·그래픽은 쓰지 않는다(G6 3번).
   - `1_cover.png` 대표 이미지(제목+한 줄 요약) · `2_table.png` 원고 첫 표를 다시 그린 그림 · `3_card.png` 첫 목록 카드
-  - `4_photo.jpg` 머리말 `photo:`(영어 검색어)로 Wikimedia Commons의 CC0·퍼블릭 도메인 사진만. 못 구하면 `4_faq.png`(FAQ 카드)
+  - `4_photo.jpg` 머리말 `photo:`(영어 검색어)로 Wikimedia Commons의 CC0 사진만. 못 구하면 `4_faq.png`(FAQ 카드)
   - `images.md` 파일별 넣을 위치·alt·캡션. 글꼴 Pretendard(SIL OFL)는 처음 실행할 때 내려받는다
   - 필요: `pip install playwright` + Chromium (`CHROMIUM_PATH`로 경로 지정 가능)
   - **사진은 자동**: 검색어는 제목·대상 질문에서 만든다(`photos.TOPIC_QUERIES`, `photo:`로 직접 지정도 가능).
-    작업 환경 IP가 Wikimedia 검색 API에서 막히는(429) 문제가 있어, Actions **'블로그 사진 찾기 (CC0)'**가
-    매일 10:30 KST 노션 원고 행(게시 전·사진 없음)마다 후보 3장을 붙인다(`photo-sync`).
-    행에 붙은 `photo_url` 등 4줄을 원고 머리말에 넣으면 build 는 검색 없이 그 사진을 쓴다
+    출처는 `PIXABAY_API_KEY`가 있으면 **Pixabay** 스톡 사진(캡션 `사진: 작가 / Pixabay 링크`, 핫링크 금지라 파일로 올림), 없으면 Wikimedia CC0.
+    Wikimedia CC0 는 실존 인물·행사 사진이 많아 자동 선택 품질이 낮다(10/22 확인).
+    Actions **'블로그 사진 찾기'**가 매일 10:30 KST 노션 원고 행(게시 전·사진 없음)마다 후보 3장을 붙인다(`photo-sync`,
+    글마다 다른 사진, `replace`로 교체). 행에 붙은 `photo_url` 등 4줄을 원고 머리말에 넣으면 build 는 그 사진을 쓴다
 

@@ -57,3 +57,43 @@ def test_photo_from_meta_skips_search(monkeypatch):
     ph = images.photo_from_meta(d)
     assert ph["url"].endswith("a.jpg") and ph["license"] == "CC0" and ph["artist"] == "Kim"
     assert images.photo_from_meta(parse("---\ntitle: t\n---\n본문\n")) is None
+
+
+def test_looks_like_photo_filters_scans_and_old():
+    ok = {"width": 1600, "height": 1067, "mime": "image/jpeg", "extmetadata": {}}
+    assert images.looks_like_photo("File:Business agreement handshake at coffee shop.jpg", ok)
+    assert not images.looks_like_photo("File:AUCCTU. Socialist labor contract. img 01.jpg", ok)
+    assert not images.looks_like_photo("File:Desk.jpg", {**ok, "width": 800, "height": 1200})   # 세로·작음
+    old = {**ok, "extmetadata": {"DateTimeOriginal": {"value": "1975-05-01"}}}
+    assert not images.looks_like_photo("File:Office.jpg", old)
+    assert images._series("File:AUCCTU img 01.jpg") == images._series("File:AUCCTU img 13.jpg")
+
+
+def test_looks_like_photo_skips_events_and_people():
+    ok = {"width": 1600, "height": 1067, "mime": "image/jpeg", "extmetadata": {}}
+    for t in ("File:Gavin Newsom signs SB206 on The Shop 03.jpg",
+              "File:June 21, 2012 EPA Job Training Announcement, New Orleans (7510108712).jpg",
+              "File:Groundwork RVA's Green Team (34930246713).jpg"):
+        assert not images.looks_like_photo(t, ok), t
+
+
+def test_pixabay_used_when_key_set(monkeypatch):
+    import io
+    import json as _json
+
+    body = {"hits": [{"id": 7, "pageURL": "https://pixabay.com/photos/contract-7/", "user": "Kim",
+                      "tags": "contract, signing", "largeImageURL": "https://pixabay.com/get/7_1280.jpg"}]}
+    seen = {}
+
+    def fake_urlopen(req, timeout=0):
+        seen["url"] = req.full_url
+        return io.BytesIO(_json.dumps(body).encode())
+
+    monkeypatch.setenv("PIXABAY_API_KEY", "k")
+    monkeypatch.setattr(images.urllib.request, "urlopen", fake_urlopen)
+    ph = images.find_photo("contract signing")
+    assert "pixabay.com/api" in seen["url"] and "orientation=horizontal" in seen["url"]
+    assert ph["url"].endswith("7_1280.jpg") and ph["source"] == "Pixabay" and ph["artist"] == "Kim"
+    assert images.photo_caption(ph) == "사진: Kim / Pixabay https://pixabay.com/photos/contract-7/"
+    assert images.photo_caption({"artist": "Lee", "license": "CC0", "page": "https://commons.wikimedia.org/x"}) \
+        == "사진: Lee / Wikimedia Commons (CC0) https://commons.wikimedia.org/x"

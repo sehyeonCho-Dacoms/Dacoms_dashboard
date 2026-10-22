@@ -3,7 +3,8 @@
   1_cover.png   대표 이미지(1080×1080) — 제목 + 한 줄 요약. 네이버 대표 사진·검색 미리보기용
   2_table.png   원고 첫 표를 그림으로 — 네이버에 표를 붙이면 서식이 깨지는 문제도 피한다
   3_card.png    원고 첫 목록(체크리스트·핵심 3가지)을 카드 한 장으로
-  4_photo.jpg   Wikimedia Commons 의 CC0·퍼블릭 도메인 사진 (검색어는 제목·질문에서 자동, photo: 로 지정 가능)
+  4_photo.jpg   Pixabay 스톡 사진(PIXABAY_API_KEY 가 있을 때) 또는 Wikimedia Commons CC0 사진
+                (검색어는 제목·질문에서 자동, photo: 로 지정 가능)
                 → 못 구하면 4_faq.png (FAQ 질문 카드)로 대신
                 검색 API가 막힌 곳(429)에서는 `photo` 명령(또는 Actions '사진 찾기')으로 찾은
                 photo_url·photo_page·photo_license·photo_artist 를 머리말에 넣으면 검색을 건너뛴다
@@ -33,7 +34,7 @@ FONT_URLS = {
 }
 FONT_DIR = Path(os.getenv("GEO_FONT_DIR", Path.home() / ".cache" / "doctoron-fonts"))
 UA = "DoctorOnGeoBot/0.1 (+https://doctoronhr.tistory.com)"
-FREE_LICENSES = ("CC0", "Public domain", "PD")
+FREE_LICENSES = ("CC0",)   # 스톡형 CC0만. 퍼블릭 도메인은 대부분 정부 행사 사진(실존 인물·날짜)이라 뺀다
 BRAND = "닥터온 · 의사 채용·연봉·이직 정보"
 
 _CSS = """
@@ -142,13 +143,68 @@ li { display: flex; gap: 20px; font-size: 30px; line-height: 1.45; background: #
 
 
 # --------------------------------------------------------------------------- #
-# 사진 (Wikimedia Commons, CC0·퍼블릭 도메인만)
+# 사진 — Pixabay(키가 있으면) → 없으면 Wikimedia Commons(CC0만)
 # --------------------------------------------------------------------------- #
 def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
-    """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록."""
+    """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록.
+
+    PIXABAY_API_KEY 가 있으면 Pixabay 스톡 사진(가로)에서 찾는다. 없으면 Wikimedia Commons 의
+    CC0 분류(Category:CC-zero) 안에서 먼저 찾고, 없으면 전체에서 찾는다(CC0 필터는 그대로).
+    Wikimedia CC0 는 실존 인물·행사 사진이 많아 자동 선택 품질이 낮다(10/22 확인).
+    """
+    found: list[dict] | None = []
+    if key := os.getenv("PIXABAY_API_KEY"):
+        found = _pixabay(query, limit, key)
+        if limit == 1:
+            return found[0] if found else None
+        return found or []
+    for scope in (" incategory:CC-zero", ""):
+        found = _search(query + scope, limit)
+        if found is None or found:
+            break
+    if limit == 1:
+        return found[0] if found else None
+    return found or []
+
+
+def _pixabay(query: str, limit: int, key: str) -> list[dict] | None:
+    """Pixabay 검색 (Pixabay Content License: 상업적 사용 가능, 출처 표기 불필요하지만 캡션에 표기).
+
+    Pixabay 는 이미지 직접 링크(핫링크)를 금지하므로 쓸 때는 내려받아 올린다(render·노션 업로드).
+    """
+    url = "https://pixabay.com/api/?" + urllib.parse.urlencode(
+        {"key": key, "q": query, "image_type": "photo", "orientation": "horizontal", "safesearch": "true",
+         "min_width": 1200, "per_page": max(limit, 20)})
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        data = json.load(urllib.request.urlopen(req, timeout=20))  # noqa: S310
+    except Exception as exc:
+        print(f"   ⚠️  Pixabay 검색 실패({getattr(exc, 'code', type(exc).__name__)})")   # URL에 키가 있어 예외 문구는 찍지 않음
+        return None
+    return [pixabay_item(h) for h in data.get("hits", [])][:limit]
+
+
+def pixabay_item(h: dict) -> dict:
+    return {"url": h.get("largeImageURL") or h.get("webformatURL", ""), "page": h.get("pageURL", ""),
+            "license": "Pixabay License", "artist": (h.get("user") or "작자 미상")[:60],
+            "title": h.get("tags") or f"Pixabay {h.get('id', '')}", "source": "Pixabay"}
+
+
+def download(url: str) -> bytes:
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    return urllib.request.urlopen(req, timeout=30).read()  # noqa: S310
+
+
+def photo_caption(ph: dict) -> str:
+    if ph.get("source") == "Pixabay" or "pixabay.com" in ph.get("page", ""):
+        return f"사진: {ph['artist']} / Pixabay {ph['page']}"
+    return f"사진: {ph['artist']} / Wikimedia Commons ({ph['license']}) {ph['page']}"
+
+
+def _search(query: str, limit: int) -> list[dict] | None:
     params = {"action": "query", "format": "json", "generator": "search", "gsrnamespace": "6",
-              "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": "30", "prop": "imageinfo",
-              "iiprop": "url|extmetadata|size", "iiurlwidth": "1280"}
+              "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": "50", "prop": "imageinfo",
+              "iiprop": "url|extmetadata|size|mime", "iiurlwidth": "1280"}
     url = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(params)
     try:
         req = urllib.request.Request(url, headers={"User-Agent": UA})
@@ -162,16 +218,46 @@ def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
         info = (p.get("imageinfo") or [{}])[0]
         meta = info.get("extmetadata", {})
         lic = re.sub(r"<[^>]+>", "", meta.get("LicenseShortName", {}).get("value", ""))
-        if not lic.startswith(FREE_LICENSES) or info.get("width", 0) < 1000:
+        if not lic.startswith(FREE_LICENSES) or not looks_like_photo(p.get("title", ""), info):
             continue
+        series = _series(p.get("title", ""))
+        if any(_series(f["title"]) == series for f in found):
+            continue   # 같은 묶음(스캔 01·02·13 등)은 하나만
         artist = re.sub(r"<[^>]+>", "", meta.get("Artist", {}).get("value", "")).strip() or "작자 미상"
         found.append({"url": info.get("thumburl") or info["url"], "page": info.get("descriptionurl", ""),
                       "license": lic, "artist": artist[:60], "title": p.get("title", "")})
         if len(found) >= limit:
             break
-    if limit == 1:
-        return found[0] if found else None
     return found
+
+
+# 블로그 사진으로 맞지 않는 것: 스캔·문서·지도·도표·옛 자료
+_NOT_PHOTO = re.compile(r"\b(img|scan|scanned|page|p\.|pp\.|document|certificate|poster|map|diagram|chart|"
+                        r"logo|icon|drawing|illustration|painting|engraving|stamp|newspaper|archive|distribution|graph|"
+                        r"statistics|infographic|screenshot|"
+                        r"socialist|soviet|ussr|19[0-8]\d|"
+                        # 행사·인물 사진 (블로그 사진으로 쓰면 실존 인물을 오해하게 만든다)
+                        r"signs?|announcement|ceremony|conference|summit|governor|president|senator|minister|"
+                        r"mayor|secretary|congress|parliament|election|visit|meets?|award|"
+                        r"january|february|march|april|may|june|july|august|september|october|november|december)\b"
+                        r"|\(\d{8,}\)", re.I)   # (7510108712) = Flickr 일괄 업로드(대개 기관 행사 사진)
+
+
+def looks_like_photo(title: str, info: dict) -> bool:
+    """JPEG 가로 사진(폭 1000 이상)이고, 촬영 연도가 있으면 2000년 이후."""
+    w, h = info.get("width", 0), info.get("height", 1)
+    if info.get("mime", "image/jpeg") != "image/jpeg" or w < 1000 or w < h:
+        return False
+    if _NOT_PHOTO.search(title.replace("_", " ")):
+        return False
+    date = info.get("extmetadata", {}).get("DateTimeOriginal", {}).get("value", "")
+    year = re.search(r"(1[89]\d\d|20\d\d)", date)
+    return not (year and int(year.group(1)) < 2000)
+
+
+def _series(title: str) -> str:
+    """'File:AUCCTU. ... img 01.jpg' → 숫자·확장자를 뺀 묶음 이름."""
+    return re.sub(r"[\d_\s.\-()]+", "", title.rsplit(".", 1)[0]).lower()[:40]
 
 
 def photo_from_meta(d: Draft) -> dict | None:
@@ -237,11 +323,12 @@ def render(d: Draft, out_dir: Path) -> list[Image]:
         browser.close()
 
     if photo:
-        req = urllib.request.Request(photo["url"], headers={"User-Agent": UA})
-        (out_dir / "4_photo.jpg").write_bytes(urllib.request.urlopen(req, timeout=30).read())  # noqa: S310
-        images.append(Image("4_photo.jpg", d.meta.get("photo_alt", d.meta["photo"]),
-                            f"사진: {photo['artist']} / Wikimedia Commons ({photo['license']}) {photo['page']}",
-                            "첫 소제목 아래"))
+        try:
+            (out_dir / "4_photo.jpg").write_bytes(download(photo["url"]))
+            images.append(Image("4_photo.jpg", d.meta.get("photo_alt") or d.meta.get("photo") or photo.get("title", "사진"),
+                                photo_caption(photo), "첫 소제목 아래"))
+        except Exception as exc:
+            print(f"   ⚠️  사진 내려받기 실패({getattr(exc, 'code', type(exc).__name__)}) → 사진 없이 진행")
 
     lines = [f"# 이미지 — {d.title}", "", "| 파일 | 넣을 위치 | 설명(alt) | 캡션 |", "| --- | --- | --- | --- |"]
     lines += [f"| {i.file} | {i.place} | {i.alt} | {i.caption} |" for i in images]
