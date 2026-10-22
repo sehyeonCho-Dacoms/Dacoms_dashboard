@@ -139,3 +139,11 @@ def test_notion_check_reports_without_leaking_token(monkeypatch):
 
     monkeypatch.setattr(_http, "get_json", boom)
     assert "연결되지 않음" in notion.check()
+
+
+def test_overlap_ignores_sources_and_disclaimer():
+    common = ("\n## 출처\n\n- [근로기준법 제17조(근로조건의 명시)](https://www.law.go.kr/x) — 국가법령정보센터, 2026.10.22 확인\n"
+              "\n이 글은 일반 정보이며 법률 자문이 아닙니다. 개별 계약은 노무·법률 전문가와 확인하세요.\n")
+    a = from_draft(parse("---\ntitle: a\n---\n헤드헌팅과 매칭 플랫폼은 연락하는 주체가 다릅니다. 비용 구조도 다릅니다.\n" + common))
+    b = from_draft(parse("---\ntitle: b\n---\n근로계약서는 서명 전에 여덟 가지를 확인해야 합니다. 임금부터 봅니다.\n" + common))
+    assert not any(f.rule == "6 복붙" for f in review(a, b))

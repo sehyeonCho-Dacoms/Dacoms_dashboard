@@ -292,12 +292,21 @@ def _source_lines(text: str) -> list[str]:
     return out
 
 
+# 글마다 같아도 되는 문장 (면책 문구) — 복붙 비교에서 뺀다
+_BOILERPLATE = re.compile(r"법률 자문이 아닙니다|전문가와 확인하세요|정보 제공용|닥터온 팀")
+
+
+def _comparable(doc: Doc) -> list[str]:
+    """복붙 비교 대상 문장: 출처 섹션(같은 법령·기사를 인용하는 게 정상)과 면책 문구는 뺀다."""
+    body = re.split(r"(?m)^\s*(?:##\s*)?출처\s*$", doc.text, maxsplit=1)[0]
+    return [s.strip() for s in _SENT.split(body)
+            if len(s.strip()) >= 20 and not _BOILERPLATE.search(s)]
+
+
 def _overlap(a: Doc, b: Doc, threshold: float = 0.75) -> list[str]:
-    bs = [s for s in b.sentences() if len(s) >= 20]
+    bs = _comparable(b)
     out = []
-    for s in a.sentences():
-        if len(s) < 20:
-            continue
+    for s in _comparable(a):
         if any(SequenceMatcher(None, s, t).ratio() >= threshold for t in bs):
             out.append(s)
     return out
