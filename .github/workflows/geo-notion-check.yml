@@ -1,0 +1,26 @@
+name: 노션 연결 확인
+
+# NOTION_TOKEN 시크릿으로 '블로그 GEO 체인' DB를 읽어 본다. 토큰 값은 출력하지 않는다.
+# 실패하면 이유(토큰 오류 / DB에 통합 미연결 / 권한)를 Summary 에 적는다.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 노션 DB 접속
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: |
+          PYTHONPATH=geo_pipeline python -m pipeline.cli notion-check | tee result.txt
+          cat result.txt >> "$GITHUB_STEP_SUMMARY"
+          grep -q "✅" result.txt

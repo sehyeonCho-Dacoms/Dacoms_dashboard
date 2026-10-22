@@ -118,6 +118,12 @@ def cmd_build(config: Config, args) -> None:
         print(f"   노션: {url}" if url else "   노션: NOTION_TOKEN 이 없어 건너뜀")
 
 
+def cmd_notion_check(config: Config, args) -> None:
+    from . import notion
+
+    print(notion.check())
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="geo", description="닥터온 블로그 GEO 체인 노드")
     sub = p.add_subparsers(dest="command", required=True)
@@ -139,6 +145,7 @@ def build_parser() -> argparse.ArgumentParser:
     bd.add_argument("--other", help="다른 채널 글(원고 또는 URL) — 복붙 비교")
     bd.add_argument("--notion", action="store_true", help="노션 '블로그 GEO 체인' DB에 행 만들기 (NOTION_TOKEN 필요)")
     bd.set_defaults(func=cmd_build)
+    sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
     return p
 
 

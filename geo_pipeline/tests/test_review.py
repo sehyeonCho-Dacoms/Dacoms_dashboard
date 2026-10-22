@@ -118,3 +118,32 @@ def test_notion_push_needs_token_and_builds_page(monkeypatch):
     assert sent["headers"]["Authorization"] == "Bearer secret-test"
     code = sent["payload"]["children"][3]["code"]["rich_text"]
     assert all(len(c["text"]["content"]) <= 2000 for c in code) and len(code) > 1   # 2000자 조각
+
+
+def test_notion_check_reports_without_leaking_token(monkeypatch):
+    monkeypatch.delenv("NOTION_TOKEN", raising=False)
+    assert notion.check().startswith("❌ NOTION_TOKEN")
+
+    monkeypatch.setenv("NOTION_TOKEN", "secret-test")
+    monkeypatch.setattr(_http, "get_json", lambda url, headers=None, **k: {
+        "title": [{"plain_text": "블로그 GEO 체인"}],
+        "properties": {n: {} for n in ["글 번호", "제목", "상태", "검수 결과", "대상 질문", "채널", "타깃"]}})
+    out = notion.check()
+    assert out.startswith("✅") and "secret-test" not in out
+
+    class E(Exception):
+        code = 404
+
+    def boom(*a, **k):
+        raise E("nf")
+
+    monkeypatch.setattr(_http, "get_json", boom)
+    assert "연결되지 않음" in notion.check()
+
+
+def test_overlap_ignores_sources_and_disclaimer():
+    common = ("\n## 출처\n\n- [근로기준법 제17조(근로조건의 명시)](https://www.law.go.kr/x) — 국가법령정보센터, 2026.10.22 확인\n"
+              "\n이 글은 일반 정보이며 법률 자문이 아닙니다. 개별 계약은 노무·법률 전문가와 확인하세요.\n")
+    a = from_draft(parse("---\ntitle: a\n---\n헤드헌팅과 매칭 플랫폼은 연락하는 주체가 다릅니다. 비용 구조도 다릅니다.\n" + common))
+    b = from_draft(parse("---\ntitle: b\n---\n근로계약서는 서명 전에 여덟 가지를 확인해야 합니다. 임금부터 봅니다.\n" + common))
+    assert not any(f.rule == "6 복붙" for f in review(a, b))
