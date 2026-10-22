@@ -108,6 +108,11 @@ def cmd_build(config: Config, args) -> None:
     (out / "review.md").write_text(review.report_md(review.from_draft(d), findings), encoding="utf-8")
 
     report = review.report_md(review.from_draft(d), findings)
+    if args.images:
+        from . import images
+
+        made = images.render(d, out / "images")
+        print(f"   🖼  이미지 {len(made)}장 → {out / 'images'}/ ({', '.join(i.file for i in made)})")
     print(f"📝 {d.title} → {out}/ (tistory.html · naver.html · review.md)")
     print(f"   G6 자동 검수: {review.verdict(findings)}")
     if args.notion:
@@ -143,6 +148,7 @@ def build_parser() -> argparse.ArgumentParser:
     bd = sub.add_parser("build", help="원고 .md → 티스토리·네이버 완성본 + 검수 보고서")
     bd.add_argument("draft", help="원고 .md 경로")
     bd.add_argument("--other", help="다른 채널 글(원고 또는 URL) — 복붙 비교")
+    bd.add_argument("--images", action="store_true", help="블로그 이미지 4장 생성 (Playwright·Chromium 필요)")
     bd.add_argument("--notion", action="store_true", help="노션 '블로그 GEO 체인' DB에 행 만들기 (NOTION_TOKEN 필요)")
     bd.set_defaults(func=cmd_build)
     sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
