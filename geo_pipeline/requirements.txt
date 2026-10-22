@@ -2,3 +2,4 @@
 # 아래는 선택 의존성:
 python-dotenv>=1.0     # .env 로딩 (없으면 환경변수만 사용)
 pytest>=8.0            # 테스트
+playwright>=1.40       # build --images (블로그 이미지 렌더링, Chromium 필요)
