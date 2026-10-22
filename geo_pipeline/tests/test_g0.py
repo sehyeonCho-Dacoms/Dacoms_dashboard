@@ -39,7 +39,7 @@ def test_screen_passes_workforce_news_and_flags_controversy():
 def test_screen_reasons():
     assert screen(_a("대학병원 항암 신약 임상시험 결과"), NOW).screen_reasons[0].startswith("①")
     assert screen(_a("기업 이사회 의사결정 구조 개편"), NOW).screen_reasons == ["① 주제 밖(제목에 의료 단어 없음)"]
-    assert screen(_a("병원 홍보 행사 개최"), NOW).screen_reasons == ["① 주제 밖(인력·채용 단어 없음)"]
+    assert screen(_a("병원 홍보 행사 개최"), NOW).screen_reasons == ["① 주제 밖(제목에 인력·채용 단어 없음)"]
     assert screen(_a("전문의가 알려주는 감기 증상과 예방법"), NOW).screen_reasons == ["② 의료 조언형(증상·예방법)"]
     assert screen(_a("병원 운영 혐의로 의사 기소"), NOW).screen_reasons[0].startswith("③")
     assert screen(_a("전공의 복귀 찌라시 확산"), NOW).screen_reasons[0].startswith("④")
@@ -55,6 +55,34 @@ def test_first_run_false_positives_are_dropped():
     assert b.screen == SCREEN_DROP
     c = screen(_a("일본·중국 노선 여객 급증…항공 여객 역대 최다"), NOW)
     assert c.screen == SCREEN_DROP
+
+
+def test_calibration_false_passes_are_dropped_by_title_rule():
+    # 10/22 채점 보정에서 사람·Claude가 ① 주제 밖으로 본 기사: 요약의 '인력'·'근무'로 통과했었다
+    kt = screen(_a("KT, 전국 병원 관계자 60여 명에 의료 AI 모델 소개", "간호 인력 근무 일정 관리"), NOW)
+    expo = screen(_a("보건의료 통합행사 '코메드 2026' 개최", "의료 인력 채용 박람회 부스"), NOW)
+    assert kt.screen == SCREEN_DROP and expo.screen == SCREEN_DROP
+    assert screen(_a('"상주 의사 0명"…장애인선수촌 의료 공백 질타'), NOW).screen == SCREEN_PASS
+    assert screen(_a("대학병원 신약 임상시험 결과"), NOW).screen_reasons == [
+        "① 주제 밖(제목에 인력·채용 단어 없음: 신약·임상시험)"
+    ]
+
+
+def test_legal_flag():
+    a = screen(_a("봉직의 근로계약서 분쟁 늘어…퇴직금 판결 잇따라"), NOW)
+    assert a.screen == SCREEN_PASS and "법률" in a.flags
+    both = screen(_a("전공의 파업 관련 의료법 개정안 반발"), NOW)
+    assert both.flags == ["논쟁", "법률"]
+
+
+def test_outputs_do_not_include_article_summaries(tmp_path):
+    articles = run_g0(_config(tmp_path), NOW)
+    assert any(a.description for a in articles)               # 메모리에는 있다 (거름망 판단용)
+    paths = write_g0_outputs(articles, tmp_path, "d")
+    for p in paths.values():
+        text = p.read_text(encoding="utf-8-sig")
+        assert "가상 기사." not in text                         # 샘플 요약 문구가 파일에 없어야 함
+    assert "요약" not in paths["csv"].read_text(encoding="utf-8-sig").splitlines()[0]
 
 
 def test_cap_keeps_passed_articles_first(tmp_path):
