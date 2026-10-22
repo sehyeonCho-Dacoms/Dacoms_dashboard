@@ -49,3 +49,11 @@ def test_card_uses_longest_list(monkeypatch):
     d = parse("---\ntitle: t\n---\n## 예시\n- 가\n- 나\n\n## 꼭 적을 3가지\n- 하나\n- 둘\n- 셋\n")
     name, card, place = images.plan(d)[-1]
     assert name == "3_card.png" and place == "'꼭 적을 3가지' 소제목 아래" and "셋" in card
+
+
+def test_photo_from_meta_skips_search(monkeypatch):
+    d = parse("---\ntitle: t\nphoto: x\nphoto_url: https://upload.wikimedia.org/a.jpg\n"
+              "photo_license: CC0\nphoto_artist: Kim\n---\n본문\n")
+    ph = images.photo_from_meta(d)
+    assert ph["url"].endswith("a.jpg") and ph["license"] == "CC0" and ph["artist"] == "Kim"
+    assert images.photo_from_meta(parse("---\ntitle: t\n---\n본문\n")) is None

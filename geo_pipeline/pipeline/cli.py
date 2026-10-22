@@ -123,6 +123,21 @@ def cmd_build(config: Config, args) -> None:
         print(f"   노션: {url}" if url else "   노션: NOTION_TOKEN 이 없어 건너뜀")
 
 
+def cmd_photo(config: Config, args) -> None:
+    from . import images
+    for q in args.queries:
+        print(f"### {q}")
+        found = images.find_photo(q, limit=args.limit) or []
+        if not found:
+            print("(CC0·퍼블릭 도메인 후보 없음)\n")
+        for i, ph in enumerate(found, 1):
+            print(f"{i}. {ph['title']} — {ph['license']} · {ph['artist']}\n   {ph['page']}")
+            print("   원고 머리말에 붙여 넣기:")
+            for k in ("url", "page", "license", "artist"):
+                print(f"   photo_{k}: {ph[k]}")
+        print()
+
+
 def cmd_notion_check(config: Config, args) -> None:
     from . import notion
 
@@ -151,6 +166,10 @@ def build_parser() -> argparse.ArgumentParser:
     bd.add_argument("--images", action="store_true", help="블로그 이미지 4장 생성 (Playwright·Chromium 필요)")
     bd.add_argument("--notion", action="store_true", help="노션 '블로그 GEO 체인' DB에 행 만들기 (NOTION_TOKEN 필요)")
     bd.set_defaults(func=cmd_build)
+    ph = sub.add_parser("photo", help="Wikimedia Commons CC0·퍼블릭 도메인 사진 후보 찾기")
+    ph.add_argument("queries", nargs="+", help="영어 검색어 (여러 개 가능)")
+    ph.add_argument("--limit", type=int, default=3)
+    ph.set_defaults(func=cmd_photo)
     sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
     return p
 
