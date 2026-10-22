@@ -21,31 +21,31 @@ from .notion import DEFAULT_DB, VERSION, _text
 
 MARKER = "📷 사진 후보 (CC0)"
 ACTIVE = {"원고작성", "검수통과", "사람확인"}   # 게시 전 단계
-FALLBACK = "doctor stethoscope"
+FALLBACK = ["doctor", "stethoscope", "hospital"]
 
-# (한국어 핵심어들, 영어 검색어). 주제어는 제목에서 먼저 나오는 것부터 쓰고,
-# 일반어(GENERIC: 이직·의사·병원)는 주제어가 모자랄 때만 쓴다.
-TOPIC_QUERIES: list[tuple[tuple[str, ...], str]] = [
-    (("근로계약", "계약서", "서명"), "signing contract pen"),
-    (("면접",), "job interview office"),
-    (("네트", "그로스", "세금", "원천징수", "연말정산", "세후", "세전"), "calculator tax"),
-    (("퇴직금",), "piggy bank coins"),
-    (("연봉", "급여", "수수료", "인센티브", "당직비"), "calculator money"),
-    (("헤드헌팅", "헤드헌터", "매칭"), "business handshake"),
-    (("당직",), "hospital corridor night"),
-    (("지방", "지역의사"), "rural hospital"),
-    (("간호사",), "nurse hospital"),
-    (("원무과", "행정직", "인사 담당"), "hospital reception desk"),
+# (한국어 핵심어들, 영어 검색어 후보). 주제어는 제목에서 먼저 나오는 것부터 쓰고,
+# 일반어(GENERIC: 이직·의사·병원)는 주제어가 모자랄 때만 쓴다. 검색어는 짧을수록 CC0 후보가 많다.
+TOPIC_QUERIES: list[tuple[tuple[str, ...], list[str]]] = [
+    (("근로계약", "계약서", "서명"), ["contract signing", "signing document", "pen paper"]),
+    (("면접",), ["job interview", "interview", "business meeting"]),
+    (("네트", "그로스", "세금", "원천징수", "연말정산", "세후", "세전"), ["tax", "calculator", "payroll"]),
+    (("퇴직금",), ["piggy bank", "savings", "coins"]),
+    (("연봉", "급여", "수수료", "인센티브", "당직비"), ["salary", "calculator", "money"]),
+    (("헤드헌팅", "헤드헌터", "매칭"), ["business handshake", "handshake", "recruitment"]),
+    (("당직",), ["hospital corridor", "night shift", "hospital"]),
+    (("지방", "지역의사"), ["rural hospital", "countryside", "hospital"]),
+    (("간호사",), ["nurse", "hospital"]),
+    (("원무과", "행정직", "인사 담당"), ["reception desk", "office", "paperwork"]),
 ]
-GENERIC: list[tuple[tuple[str, ...], str]] = [
-    (("이직", "구인", "구직", "채용", "공고"), "job search laptop"),
-    (("전공의", "전문의", "공보의", "봉직의", "페이닥터"), "doctor stethoscope"),
-    (("병원", "의원"), "hospital building"),
+GENERIC: list[tuple[tuple[str, ...], list[str]]] = [
+    (("이직", "구인", "구직", "채용", "공고"), ["job search", "laptop office", "career"]),
+    (("전공의", "전문의", "공보의", "봉직의", "페이닥터"), ["doctor", "physician"]),
+    (("병원", "의원"), ["hospital", "clinic"]),
 ]
 
 
 def queries_for(title: str, *more: str, n: int = 2) -> list[str]:
-    """제목(+질문)에서 검색어를 n개 고르고 마지막에 기본 검색어를 붙인다.
+    """제목(+질문)에서 주제를 n개 고르고, 주제마다 검색어 후보를 이어 붙인 뒤 기본 검색어를 붙인다.
 
     주제어는 제목에서 먼저 나온 순서 → 질문에서 나온 순서, 그다음 일반어.
     """
@@ -54,15 +54,13 @@ def queries_for(title: str, *more: str, n: int = 2) -> list[str]:
     def first_pos(words: tuple[str, ...]) -> int:
         return min((text.find(w) for w in words if w in text), default=-1)
 
-    hits = sorted((pos, q) for words, q in TOPIC_QUERIES if (pos := first_pos(words)) >= 0)
-    hits += [(10**6, q) for words, q in GENERIC if first_pos(words) >= 0]
+    hits = sorted(((pos, i, qs) for i, (words, qs) in enumerate(TOPIC_QUERIES) if (pos := first_pos(words)) >= 0),
+                  key=lambda t: t[:2])
+    hits += [(10**6, i, qs) for i, (words, qs) in enumerate(GENERIC) if first_pos(words) >= 0]
     out: list[str] = []
-    for _, q in hits:
-        if q not in out:
-            out.append(q)
-    out = out[:n]
-    if FALLBACK not in out:
-        out.append(FALLBACK)
+    for _, _, qs in hits[:n]:
+        out += [q for q in qs if q not in out]
+    out += [q for q in FALLBACK if q not in out]
     return out
 
 

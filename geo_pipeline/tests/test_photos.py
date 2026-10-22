@@ -7,14 +7,12 @@ from pipeline import photos
 
 def test_queries_from_topic():
     # 제목에서 먼저 나온 주제어가 먼저 (T-003·N-003·N-002·T-002 실제 제목)
-    assert photos.queries_for("의사 연봉 네트와 그로스, 뭐가 다를까? 계약서에 꼭 적을 5가지")[:2] == [
-        "calculator money", "calculator tax"]
-    assert photos.queries_for("면접 때 들은 조건이 계약서에서 바뀌었다면?")[:2] == [
-        "job interview office", "signing contract pen"]
-    assert photos.queries_for("봉직의 근로계약서, 서명 전에 꼭 확인할 8가지")[0] == "signing contract pen"
-    assert photos.queries_for("의사 헤드헌팅과 매칭 플랫폼, 뭐가 다를까? 이직 경로")[:2] == [
-        "business handshake", "job search laptop"]
-    assert photos.queries_for("아무 관련 없는 제목") == [photos.FALLBACK]
+    q = photos.queries_for("의사 연봉 네트와 그로스, 뭐가 다를까? 계약서에 꼭 적을 5가지")
+    assert q[:4] == ["salary", "calculator", "money", "tax"] and q[-3:] == photos.FALLBACK
+    assert photos.queries_for("면접 때 들은 조건이 계약서에서 바뀌었다면?")[:2] == ["job interview", "interview"]
+    assert photos.queries_for("봉직의 근로계약서, 서명 전에 꼭 확인할 8가지")[0] == "contract signing"
+    assert photos.queries_for("의사 헤드헌팅과 매칭 플랫폼, 뭐가 다를까? 이직 경로")[0] == "business handshake"
+    assert photos.queries_for("아무 관련 없는 제목") == photos.FALLBACK
 
 
 def test_candidates_dedupe_and_stop(monkeypatch):

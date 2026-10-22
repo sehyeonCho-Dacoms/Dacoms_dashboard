@@ -145,7 +145,21 @@ li { display: flex; gap: 20px; font-size: 30px; line-height: 1.45; background: #
 # 사진 (Wikimedia Commons, CC0만)
 # --------------------------------------------------------------------------- #
 def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
-    """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록."""
+    """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록.
+
+    CC0 분류(Category:CC-zero) 안에서 먼저 찾고, 없으면 전체에서 찾는다(CC0 필터는 그대로).
+    """
+    found: list[dict] | None = []
+    for scope in (" incategory:CC-zero", ""):
+        found = _search(query + scope, limit)
+        if found is None or found:
+            break
+    if limit == 1:
+        return found[0] if found else None
+    return found or []
+
+
+def _search(query: str, limit: int) -> list[dict] | None:
     params = {"action": "query", "format": "json", "generator": "search", "gsrnamespace": "6",
               "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": "50", "prop": "imageinfo",
               "iiprop": "url|extmetadata|size|mime", "iiurlwidth": "1280"}
@@ -172,14 +186,13 @@ def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
                       "license": lic, "artist": artist[:60], "title": p.get("title", "")})
         if len(found) >= limit:
             break
-    if limit == 1:
-        return found[0] if found else None
     return found
 
 
 # 블로그 사진으로 맞지 않는 것: 스캔·문서·지도·도표·옛 자료
 _NOT_PHOTO = re.compile(r"\b(img|scan|scanned|page|p\.|pp\.|document|certificate|poster|map|diagram|chart|"
-                        r"logo|icon|drawing|illustration|painting|engraving|stamp|newspaper|archive|"
+                        r"logo|icon|drawing|illustration|painting|engraving|stamp|newspaper|archive|distribution|graph|"
+                        r"statistics|infographic|screenshot|"
                         r"socialist|soviet|ussr|19[0-8]\d|"
                         # 행사·인물 사진 (블로그 사진으로 쓰면 실존 인물을 오해하게 만든다)
                         r"signs?|announcement|ceremony|conference|summit|governor|president|senator|minister|"
