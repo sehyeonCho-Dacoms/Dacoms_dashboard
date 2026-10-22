@@ -85,6 +85,31 @@ def test_article_fallback_ignores_outside_text():
     assert m_naver.body_chars < 200
 
 
+_NAVER_BIG_TEXT = """
+<div class="se-main-container">
+  <div class="se-component se-text"><p class="se-text-paragraph"><span class="se-fs-fs15">원장님, 수가 개편 확인하셨나요? 연 1조 원 규모입니다.</span></p>
+  <p class="se-text-paragraph"><span class="se-fs-fs24"><b>📌 무엇이 바뀌나요?</b></span></p>
+  <p class="se-text-paragraph"><span class="se-fs-fs15"><b>굵은 본문 한 줄</b></span></p>
+  <p class="se-text-paragraph"><span class="se-fs-fs24"><b>💡 자주 묻는 질문</b></span></p>
+  <p class="se-text-paragraph"><span class="se-fs-fs24">크게</span><span class="se-fs-fs15">작게 섞인 문단</span></p>
+  <p class="se-text-paragraph"><span class="se-fs-fs15">#검체검사 #수가개편 #검체검사 #닥터온</span></p></div>
+</div>"""
+
+
+def test_naver_big_font_paragraphs_count_as_headings_and_hashtags_as_tags():
+    # 10/22 닥터온 네이버 글: 소제목 컴포넌트 대신 fs24 굵은 글씨, 태그는 본문 끝 해시태그
+    m = analyze_html(_NAVER_BIG_TEXT, "https://m.blog.naver.com/x/1", "수가 개편")
+    assert m.heading_texts == ["📌 무엇이 바뀌나요?", "💡 자주 묻는 질문"]   # 굵은 본문·크기 섞인 문단은 제외
+    assert m.question_headings == 1 and m.has_faq
+    assert m.tags == 3                                                      # 중복 해시태그는 한 번
+
+
+def test_section_title_component_not_double_counted():
+    html = ('<div class="se-main-container"><div class="se-section-sectionTitle">'
+            '<p class="se-text-paragraph"><span class="se-fs-fs24">소제목</span></p></div></div>')
+    assert analyze_html(html, "https://m.blog.naver.com/x/1").headings == 1
+
+
 def test_naver_link_between_different_blog_ids_is_external():
     html = '<div class="se-main-container"><a href="https://blog.naver.com/other/1">x</a></div>'
     m = analyze_html(html, "https://m.blog.naver.com/me/2")

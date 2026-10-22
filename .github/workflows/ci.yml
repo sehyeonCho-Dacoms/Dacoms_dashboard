@@ -49,6 +49,7 @@ jobs:
         run: |
           PYTHONPATH=geo_pipeline python -m pipeline.cli gr
           PYTHONPATH=geo_pipeline python -m pipeline.cli g0
+          PYTHONPATH=geo_pipeline python -m pipeline.cli build geo_pipeline/sample_data/draft_sample.md
 
       - name: 테스트
         run: cd geo_pipeline && python -m pytest -q

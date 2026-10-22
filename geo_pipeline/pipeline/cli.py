@@ -5,6 +5,8 @@
   keywords  G-R 수집 검색어 목록 표시
   gr        G-R 모범 글 구조 분석 실행 → geo_pipeline/out/gr_YYYY-MM.*
   g0        G0 이슈 트래커 실행 → geo_pipeline/out/g0_YYYY-MM-DD.*
+  review    G6 자동 검수 (원고 .md 또는 게시된 글 URL, --other 로 다른 채널 글과 복붙 비교)
+  build     원고 .md → 채널별 붙여 넣기 완성본(HTML) + 검수 보고서 → geo_pipeline/out/drafts/
 
 예시:
   python -m pipeline.cli gr                                   # 오프라인 sample 로 즉시 체험
@@ -16,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime
+from pathlib import Path
 
 from .config import Config
 from .export import write_g0_outputs, write_outputs
@@ -69,6 +72,52 @@ def cmd_g0(config: Config, args) -> None:
         print(f"   {kind:8s}→ {path}")
 
 
+def _load_doc(target: str):
+    from . import _http, review
+    from .draft import load
+    from .sources.naver import to_mobile_url
+
+    if target.startswith("http"):
+        url = to_mobile_url(target.split("?")[0])
+        html = _http.get_text(url, headers={"User-Agent": "Mozilla/5.0"})
+        return review.from_html(html, url)
+    return review.from_draft(load(Path(target)))
+
+
+def cmd_review(config: Config, args) -> None:
+    from . import review
+
+    doc = _load_doc(args.target)
+    other = _load_doc(args.other) if args.other else None
+    findings = review.review(doc, other)
+    print(review.report_md(doc, findings))
+
+
+def cmd_build(config: Config, args) -> None:
+    from . import render, review
+    from .draft import load
+
+    src = Path(args.draft)
+    d = load(src)
+    other = _load_doc(args.other) if args.other else None
+    out = config.out_dir / "drafts" / src.stem
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "tistory.html").write_text(render.to_tistory(d), encoding="utf-8")
+    (out / "naver.html").write_text(render.to_naver(d), encoding="utf-8")
+    findings = review.review(review.from_draft(d), other)
+    (out / "review.md").write_text(review.report_md(review.from_draft(d), findings), encoding="utf-8")
+
+    report = review.report_md(review.from_draft(d), findings)
+    print(f"📝 {d.title} → {out}/ (tistory.html · naver.html · review.md)")
+    print(f"   G6 자동 검수: {review.verdict(findings)}")
+    if args.notion:
+        from . import notion
+
+        url = notion.push(d, (out / "tistory.html").read_text(encoding="utf-8"),
+                          (out / "naver.html").read_text(encoding="utf-8"), report, review.verdict(findings))
+        print(f"   노션: {url}" if url else "   노션: NOTION_TOKEN 이 없어 건너뜀")
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="geo", description="닥터온 블로그 GEO 체인 노드")
     sub = p.add_subparsers(dest="command", required=True)
@@ -81,6 +130,15 @@ def build_parser() -> argparse.ArgumentParser:
     g0 = sub.add_parser("g0", help="G0 이슈 트래커 (DR-MKT-01)")
     g0.add_argument("--hours", type=int, help="최근 몇 시간 기사를 볼지 (기본 G0_WINDOW_HOURS=26)")
     g0.set_defaults(func=cmd_g0)
+    rv = sub.add_parser("review", help="G6 자동 검수 (원고 .md 또는 게시 글 URL)")
+    rv.add_argument("target", help="원고 .md 경로 또는 게시된 글 URL")
+    rv.add_argument("--other", help="다른 채널 글(원고 또는 URL) — 복붙 비교")
+    rv.set_defaults(func=cmd_review)
+    bd = sub.add_parser("build", help="원고 .md → 티스토리·네이버 완성본 + 검수 보고서")
+    bd.add_argument("draft", help="원고 .md 경로")
+    bd.add_argument("--other", help="다른 채널 글(원고 또는 URL) — 복붙 비교")
+    bd.add_argument("--notion", action="store_true", help="노션 '블로그 GEO 체인' DB에 행 만들기 (NOTION_TOKEN 필요)")
+    bd.set_defaults(func=cmd_build)
     return p
 
 
