@@ -67,3 +67,11 @@ def test_looks_like_photo_filters_scans_and_old():
     old = {**ok, "extmetadata": {"DateTimeOriginal": {"value": "1975-05-01"}}}
     assert not images.looks_like_photo("File:Office.jpg", old)
     assert images._series("File:AUCCTU img 01.jpg") == images._series("File:AUCCTU img 13.jpg")
+
+
+def test_looks_like_photo_skips_events_and_people():
+    ok = {"width": 1600, "height": 1067, "mime": "image/jpeg", "extmetadata": {}}
+    for t in ("File:Gavin Newsom signs SB206 on The Shop 03.jpg",
+              "File:June 21, 2012 EPA Job Training Announcement, New Orleans (7510108712).jpg",
+              "File:Groundwork RVA's Green Team (34930246713).jpg"):
+        assert not images.looks_like_photo(t, ok), t

@@ -158,7 +158,7 @@ PYTHONPATH=geo_pipeline python -m pipeline.cli review https://doctoronhr.tistory
 - 네이버 스마트에디터는 붙여 넣을 때 글자 크기가 빠질 수 있어, 소제목은 에디터의 '소제목' 블록으로 바꾸는 것을 권한다.
 - **이미지 (`--images`)**: 글마다 블로그 이미지 4장을 `images/`에 만든다. 기사 사진·그래픽은 쓰지 않는다(G6 3번).
   - `1_cover.png` 대표 이미지(제목+한 줄 요약) · `2_table.png` 원고 첫 표를 다시 그린 그림 · `3_card.png` 첫 목록 카드
-  - `4_photo.jpg` 머리말 `photo:`(영어 검색어)로 Wikimedia Commons의 CC0·퍼블릭 도메인 사진만. 못 구하면 `4_faq.png`(FAQ 카드)
+  - `4_photo.jpg` 머리말 `photo:`(영어 검색어)로 Wikimedia Commons의 CC0 사진만. 못 구하면 `4_faq.png`(FAQ 카드)
   - `images.md` 파일별 넣을 위치·alt·캡션. 글꼴 Pretendard(SIL OFL)는 처음 실행할 때 내려받는다
   - 필요: `pip install playwright` + Chromium (`CHROMIUM_PATH`로 경로 지정 가능)
   - **사진은 자동**: 검색어는 제목·대상 질문에서 만든다(`photos.TOPIC_QUERIES`, `photo:`로 직접 지정도 가능).

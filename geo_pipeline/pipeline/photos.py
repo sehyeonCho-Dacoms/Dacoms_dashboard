@@ -1,7 +1,7 @@
 """글 주제에 맞는 CC0 사진을 알아서 찾아 노션 원고 행에 붙인다 (사람이 검색어를 넣지 않음).
 
 1. 제목·대상 질문의 한국어 핵심어 → 영어 검색어 (TOPIC_QUERIES, 순서가 우선순위)
-2. Wikimedia Commons 에서 CC0·퍼블릭 도메인 사진만 후보 3장 (images.find_photo)
+2. Wikimedia Commons 에서 CC0 사진만 후보 3장 (images.find_photo)
 3. 노션 '블로그 GEO 체인' DB에서 아직 게시 전이고 사진이 없는 행에
    '📷 사진 후보 (CC0)' 섹션을 붙인다: 1순위 사진 미리보기 + 출처 캡션 + 다른 후보 링크 +
    원고 머리말에 붙여 넣을 photo_url 등.
@@ -182,7 +182,7 @@ def sync(dry_run: bool = False, pause: float = 1.0, replace: bool = False) -> li
                     _http.request_json("DELETE", f"{api}/blocks/{b['id']}", headers=h)
             _http.request_json("PATCH", f"{api}/blocks/{row['id']}/children",
                                {"children": blocks_for(found)}, headers=h)   # 페이지 끝에 붙음
-        log.append(f"- {no} {title}: {found[0]['title']} ({found[0]['license']}) 외 {len(found) - 1}장"
-                   f" · 검색어 {', '.join(qs)}" + (" [미리보기]" if dry_run else ""))
+        log.append(f"- {no} {title} · 검색어 {', '.join(qs)}" + (" [미리보기]" if dry_run else ""))
+        log += [f"  {i}. {ph['title']} ({ph['license']}) {ph['page']}" for i, ph in enumerate(found, 1)]
         time.sleep(pause)
     return log or ["- 사진을 붙일 원고 행이 없습니다 (게시 전 행 모두 처리됨)"]

@@ -3,7 +3,7 @@
   1_cover.png   대표 이미지(1080×1080) — 제목 + 한 줄 요약. 네이버 대표 사진·검색 미리보기용
   2_table.png   원고 첫 표를 그림으로 — 네이버에 표를 붙이면 서식이 깨지는 문제도 피한다
   3_card.png    원고 첫 목록(체크리스트·핵심 3가지)을 카드 한 장으로
-  4_photo.jpg   Wikimedia Commons 의 CC0·퍼블릭 도메인 사진 (검색어는 제목·질문에서 자동, photo: 로 지정 가능)
+  4_photo.jpg   Wikimedia Commons 의 CC0 사진 (검색어는 제목·질문에서 자동, photo: 로 지정 가능)
                 → 못 구하면 4_faq.png (FAQ 질문 카드)로 대신
                 검색 API가 막힌 곳(429)에서는 `photo` 명령(또는 Actions '사진 찾기')으로 찾은
                 photo_url·photo_page·photo_license·photo_artist 를 머리말에 넣으면 검색을 건너뛴다
@@ -33,7 +33,7 @@ FONT_URLS = {
 }
 FONT_DIR = Path(os.getenv("GEO_FONT_DIR", Path.home() / ".cache" / "doctoron-fonts"))
 UA = "DoctorOnGeoBot/0.1 (+https://doctoronhr.tistory.com)"
-FREE_LICENSES = ("CC0", "Public domain", "PD")
+FREE_LICENSES = ("CC0",)   # 스톡형 CC0만. 퍼블릭 도메인은 대부분 정부 행사 사진(실존 인물·날짜)이라 뺀다
 BRAND = "닥터온 · 의사 채용·연봉·이직 정보"
 
 _CSS = """
@@ -142,7 +142,7 @@ li { display: flex; gap: 20px; font-size: 30px; line-height: 1.45; background: #
 
 
 # --------------------------------------------------------------------------- #
-# 사진 (Wikimedia Commons, CC0·퍼블릭 도메인만)
+# 사진 (Wikimedia Commons, CC0만)
 # --------------------------------------------------------------------------- #
 def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
     """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록."""
@@ -180,7 +180,12 @@ def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
 # 블로그 사진으로 맞지 않는 것: 스캔·문서·지도·도표·옛 자료
 _NOT_PHOTO = re.compile(r"\b(img|scan|scanned|page|p\.|pp\.|document|certificate|poster|map|diagram|chart|"
                         r"logo|icon|drawing|illustration|painting|engraving|stamp|newspaper|archive|"
-                        r"socialist|soviet|ussr|19[0-8]\d)\b", re.I)
+                        r"socialist|soviet|ussr|19[0-8]\d|"
+                        # 행사·인물 사진 (블로그 사진으로 쓰면 실존 인물을 오해하게 만든다)
+                        r"signs?|announcement|ceremony|conference|summit|governor|president|senator|minister|"
+                        r"mayor|secretary|congress|parliament|election|visit|meets?|award|"
+                        r"january|february|march|april|may|june|july|august|september|october|november|december)\b"
+                        r"|\(\d{8,}\)", re.I)   # (7510108712) = Flickr 일괄 업로드(대개 기관 행사 사진)
 
 
 def looks_like_photo(title: str, info: dict) -> bool:
