@@ -16,6 +16,14 @@ on:
         description: "(선택) 직접 찾아볼 영어 검색어, 쉼표 구분. 비우면 노션 원고 행에 자동으로 붙임"
         required: false
         default: ""
+      replace:
+        description: "이미 붙은 사진 후보를 지우고 다시 찾기"
+        type: boolean
+        default: false
+      dry_run:
+        description: "노션에 쓰지 않고 결과만 보기"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -33,7 +41,10 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: |
-          PYTHONPATH=geo_pipeline python -m pipeline.cli photo-sync | tee result.md
+          FLAGS=()
+          [ "${{ inputs.replace }}" = "true" ] && FLAGS+=(--replace)
+          [ "${{ inputs.dry_run }}" = "true" ] && FLAGS+=(--dry-run)
+          PYTHONPATH=geo_pipeline python -m pipeline.cli photo-sync "${FLAGS[@]}" | tee result.md
           { echo "## 📷 사진 후보 자동 첨부"; cat result.md; } >> "$GITHUB_STEP_SUMMARY"
           ! grep -q "❌" result.md
       - name: 검색어로 직접 찾기

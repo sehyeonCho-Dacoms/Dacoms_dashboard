@@ -147,8 +147,8 @@ li { display: flex; gap: 20px; font-size: 30px; line-height: 1.45; background: #
 def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
     """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록."""
     params = {"action": "query", "format": "json", "generator": "search", "gsrnamespace": "6",
-              "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": "30", "prop": "imageinfo",
-              "iiprop": "url|extmetadata|size", "iiurlwidth": "1280"}
+              "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": "50", "prop": "imageinfo",
+              "iiprop": "url|extmetadata|size|mime", "iiurlwidth": "1280"}
     url = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(params)
     try:
         req = urllib.request.Request(url, headers={"User-Agent": UA})
@@ -162,8 +162,11 @@ def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
         info = (p.get("imageinfo") or [{}])[0]
         meta = info.get("extmetadata", {})
         lic = re.sub(r"<[^>]+>", "", meta.get("LicenseShortName", {}).get("value", ""))
-        if not lic.startswith(FREE_LICENSES) or info.get("width", 0) < 1000:
+        if not lic.startswith(FREE_LICENSES) or not looks_like_photo(p.get("title", ""), info):
             continue
+        series = _series(p.get("title", ""))
+        if any(_series(f["title"]) == series for f in found):
+            continue   # 같은 묶음(스캔 01·02·13 등)은 하나만
         artist = re.sub(r"<[^>]+>", "", meta.get("Artist", {}).get("value", "")).strip() or "작자 미상"
         found.append({"url": info.get("thumburl") or info["url"], "page": info.get("descriptionurl", ""),
                       "license": lic, "artist": artist[:60], "title": p.get("title", "")})
@@ -172,6 +175,29 @@ def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
     if limit == 1:
         return found[0] if found else None
     return found
+
+
+# 블로그 사진으로 맞지 않는 것: 스캔·문서·지도·도표·옛 자료
+_NOT_PHOTO = re.compile(r"\b(img|scan|scanned|page|p\.|pp\.|document|certificate|poster|map|diagram|chart|"
+                        r"logo|icon|drawing|illustration|painting|engraving|stamp|newspaper|archive|"
+                        r"socialist|soviet|ussr|19[0-8]\d)\b", re.I)
+
+
+def looks_like_photo(title: str, info: dict) -> bool:
+    """JPEG 가로 사진(폭 1000 이상)이고, 촬영 연도가 있으면 2000년 이후."""
+    w, h = info.get("width", 0), info.get("height", 1)
+    if info.get("mime", "image/jpeg") != "image/jpeg" or w < 1000 or w < h:
+        return False
+    if _NOT_PHOTO.search(title.replace("_", " ")):
+        return False
+    date = info.get("extmetadata", {}).get("DateTimeOriginal", {}).get("value", "")
+    year = re.search(r"(1[89]\d\d|20\d\d)", date)
+    return not (year and int(year.group(1)) < 2000)
+
+
+def _series(title: str) -> str:
+    """'File:AUCCTU. ... img 01.jpg' → 숫자·확장자를 뺀 묶음 이름."""
+    return re.sub(r"[\d_\s.\-()]+", "", title.rsplit(".", 1)[0]).lower()[:40]
 
 
 def photo_from_meta(d: Draft) -> dict | None:

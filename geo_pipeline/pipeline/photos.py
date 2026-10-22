@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import os
+import re
 import time
 
 from . import _http, images
@@ -22,44 +23,56 @@ MARKER = "📷 사진 후보 (CC0)"
 ACTIVE = {"원고작성", "검수통과", "사람확인"}   # 게시 전 단계
 FALLBACK = "doctor stethoscope"
 
-# (한국어 핵심어들, 영어 검색어) — 위에 있을수록 먼저 쓴다
+# (한국어 핵심어들, 영어 검색어). 주제어는 제목에서 먼저 나오는 것부터 쓰고,
+# 일반어(GENERIC: 이직·의사·병원)는 주제어가 모자랄 때만 쓴다.
 TOPIC_QUERIES: list[tuple[tuple[str, ...], str]] = [
-    (("근로계약", "계약서", "서명"), "signing contract document"),
-    (("면접",), "job interview"),
-    (("세금", "원천징수", "연말정산", "네트", "그로스", "세후", "세전"), "tax calculator"),
-    (("퇴직금",), "piggy bank savings"),
+    (("근로계약", "계약서", "서명"), "signing contract pen"),
+    (("면접",), "job interview office"),
+    (("네트", "그로스", "세금", "원천징수", "연말정산", "세후", "세전"), "calculator tax"),
+    (("퇴직금",), "piggy bank coins"),
     (("연봉", "급여", "수수료", "인센티브", "당직비"), "calculator money"),
     (("헤드헌팅", "헤드헌터", "매칭"), "business handshake"),
     (("당직",), "hospital corridor night"),
     (("지방", "지역의사"), "rural hospital"),
     (("간호사",), "nurse hospital"),
     (("원무과", "행정직", "인사 담당"), "hospital reception desk"),
+]
+GENERIC: list[tuple[tuple[str, ...], str]] = [
     (("이직", "구인", "구직", "채용", "공고"), "job search laptop"),
     (("전공의", "전문의", "공보의", "봉직의", "페이닥터"), "doctor stethoscope"),
     (("병원", "의원"), "hospital building"),
 ]
 
 
-def queries_for(*texts: str, n: int = 2) -> list[str]:
-    """제목·질문에서 검색어를 n개 고르고 마지막에 기본 검색어를 붙인다."""
-    joined = " ".join(texts)
+def queries_for(title: str, *more: str, n: int = 2) -> list[str]:
+    """제목(+질문)에서 검색어를 n개 고르고 마지막에 기본 검색어를 붙인다.
+
+    주제어는 제목에서 먼저 나온 순서 → 질문에서 나온 순서, 그다음 일반어.
+    """
+    text = " ".join((title, *more))
+
+    def first_pos(words: tuple[str, ...]) -> int:
+        return min((text.find(w) for w in words if w in text), default=-1)
+
+    hits = sorted((pos, q) for words, q in TOPIC_QUERIES if (pos := first_pos(words)) >= 0)
+    hits += [(10**6, q) for words, q in GENERIC if first_pos(words) >= 0]
     out: list[str] = []
-    for words, q in TOPIC_QUERIES:
-        if q not in out and any(w in joined for w in words):
+    for _, q in hits:
+        if q not in out:
             out.append(q)
-        if len(out) >= n:
-            break
+    out = out[:n]
     if FALLBACK not in out:
         out.append(FALLBACK)
     return out
 
 
-def candidates(queries: list[str], want: int = 3, pause: float = 1.0) -> list[dict]:
-    """검색어 순서대로 후보를 모은다 (같은 파일 중복 제외)."""
+def candidates(queries: list[str], want: int = 3, pause: float = 1.0, exclude: set[str] | None = None) -> list[dict]:
+    """검색어 순서대로 후보를 모은다 (같은 파일·다른 글에서 쓴 사진 제외)."""
     found: list[dict] = []
+    exclude = exclude or set()
     for q in queries:
-        for ph in images.find_photo(q, limit=want) or []:
-            if all(ph["page"] != f["page"] for f in found):
+        for ph in images.find_photo(q, limit=want + len(exclude)) or []:
+            if ph["page"] not in exclude and all(ph["page"] != f["page"] for f in found):
                 found.append({**ph, "query": q})
         if len(found) >= want:
             break
@@ -92,12 +105,27 @@ def blocks_for(found: list[dict]) -> list[dict]:
     return out
 
 
+def _block_text(b: dict) -> str:
+    rt = b.get(b.get("type", ""), {}).get("rich_text", [])
+    return "".join(t.get("plain_text", "") or t.get("text", {}).get("content", "") for t in rt)
+
+
+def marker_index(blocks: list[dict]) -> int:
+    """'📷 사진 후보' 제목 블록 위치, 없으면 -1."""
+    return next((i for i, b in enumerate(blocks) if MARKER in _block_text(b)), -1)
+
+
 def has_marker(blocks: list[dict]) -> bool:
-    for b in blocks:
-        rt = b.get(b.get("type", ""), {}).get("rich_text", [])
-        if MARKER in "".join(t.get("plain_text", "") or t.get("text", {}).get("content", "") for t in rt):
-            return True
-    return False
+    return marker_index(blocks) >= 0
+
+
+def used_photo(blocks: list[dict]) -> str | None:
+    """붙어 있는 사진 섹션의 1순위 photo_page."""
+    i = marker_index(blocks)
+    for b in blocks[i:] if i >= 0 else []:
+        if m := re.search(r"photo_page:\s*(\S+)", _block_text(b)):
+            return m.group(1)
+    return None
 
 
 def _plain(prop: dict) -> str:
@@ -112,33 +140,47 @@ def _plain(prop: dict) -> str:
     return ""
 
 
-def sync(dry_run: bool = False, pause: float = 1.0) -> list[str]:
-    """노션 원고 행마다 사진 후보를 붙인다. 처리 결과 줄 목록을 돌려준다."""
+def sync(dry_run: bool = False, pause: float = 1.0, replace: bool = False) -> list[str]:
+    """노션 원고 행마다 사진 후보를 붙인다. replace=True 면 이미 붙은 사진 섹션을 지우고 다시 찾는다."""
     token = os.getenv("NOTION_TOKEN")
     if not token:
         return ["❌ NOTION_TOKEN 이 없습니다"]
     h = {"Authorization": f"Bearer {token}", "Notion-Version": VERSION}
+    api = "https://api.notion.com/v1"
     db = os.getenv("NOTION_GEO_DB", DEFAULT_DB)
-    rows = _http.request_json("POST", f"https://api.notion.com/v1/databases/{db}/query",
-                              {"page_size": 100}, headers=h).get("results", [])
+    rows = _http.request_json("POST", f"{api}/databases/{db}/query", {"page_size": 100}, headers=h).get("results", [])
+
+    # 1차: 게시 전 행과 그 본문을 모으고, 다른 글에 이미 쓰인 사진을 기록한다
+    todo: list[tuple[dict, list[dict]]] = []
+    used: set[str] = set()
     log: list[str] = []
     for row in rows:
         p = row.get("properties", {})
-        no, title = _plain(p.get("글 번호", {})), _plain(p.get("제목", {}))
         if _plain(p.get("상태", {})) not in ACTIVE or _plain(p.get("게시 URL", {})):
             continue
-        kids = _http.request_json("GET", f"https://api.notion.com/v1/blocks/{row['id']}/children?page_size=100",
-                                  headers=h).get("results", [])
-        if has_marker(kids):
-            log.append(f"- {no}: 이미 사진 후보 있음 → 건너뜀")
+        kids = _http.request_json("GET", f"{api}/blocks/{row['id']}/children?page_size=100", headers=h).get("results", [])
+        if has_marker(kids) and not replace:
+            if page := used_photo(kids):
+                used.add(page)
+            log.append(f"- {_plain(p.get('글 번호', {}))}: 이미 사진 후보 있음 → 건너뜀")
             continue
+        todo.append((row, kids))
+
+    # 2차: 글마다 다른 사진으로 후보를 찾아 붙인다
+    for row, kids in todo:
+        p = row["properties"]
+        no, title = _plain(p.get("글 번호", {})), _plain(p.get("제목", {}))
         qs = queries_for(title, _plain(p.get("대상 질문", {})))
-        found = candidates(qs, pause=pause)
+        found = candidates(qs, pause=pause, exclude=used)
         if not found:
             log.append(f"- {no}: 후보 없음 (검색어 {', '.join(qs)}) → TOPIC_QUERIES 보강 필요")
             continue
+        used.add(found[0]["page"])
         if not dry_run:
-            _http.request_json("PATCH", f"https://api.notion.com/v1/blocks/{row['id']}/children",
+            if (i := marker_index(kids)) >= 0:   # replace: 예전 사진 섹션(맨 끝)을 지운다
+                for b in kids[i:]:
+                    _http.request_json("DELETE", f"{api}/blocks/{b['id']}", headers=h)
+            _http.request_json("PATCH", f"{api}/blocks/{row['id']}/children",
                                {"children": blocks_for(found)}, headers=h)   # 페이지 끝에 붙음
         log.append(f"- {no} {title}: {found[0]['title']} ({found[0]['license']}) 외 {len(found) - 1}장"
                    f" · 검색어 {', '.join(qs)}" + (" [미리보기]" if dry_run else ""))

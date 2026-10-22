@@ -57,3 +57,13 @@ def test_photo_from_meta_skips_search(monkeypatch):
     ph = images.photo_from_meta(d)
     assert ph["url"].endswith("a.jpg") and ph["license"] == "CC0" and ph["artist"] == "Kim"
     assert images.photo_from_meta(parse("---\ntitle: t\n---\n본문\n")) is None
+
+
+def test_looks_like_photo_filters_scans_and_old():
+    ok = {"width": 1600, "height": 1067, "mime": "image/jpeg", "extmetadata": {}}
+    assert images.looks_like_photo("File:Business agreement handshake at coffee shop.jpg", ok)
+    assert not images.looks_like_photo("File:AUCCTU. Socialist labor contract. img 01.jpg", ok)
+    assert not images.looks_like_photo("File:Desk.jpg", {**ok, "width": 800, "height": 1200})   # 세로·작음
+    old = {**ok, "extmetadata": {"DateTimeOriginal": {"value": "1975-05-01"}}}
+    assert not images.looks_like_photo("File:Office.jpg", old)
+    assert images._series("File:AUCCTU img 01.jpg") == images._series("File:AUCCTU img 13.jpg")
