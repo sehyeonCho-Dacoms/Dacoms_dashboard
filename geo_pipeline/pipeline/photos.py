@@ -1,7 +1,7 @@
 """글 주제에 맞는 CC0 사진을 알아서 찾아 노션 원고 행에 붙인다 (사람이 검색어를 넣지 않음).
 
 1. 제목·대상 질문의 한국어 핵심어 → 영어 검색어 (TOPIC_QUERIES, 순서가 우선순위)
-2. Pexels 스톡 사진(PEXELS_API_KEY) 또는 Wikimedia Commons CC0 사진 후보 3장 (images.find_photo)
+2. Pixabay 스톡 사진(PIXABAY_API_KEY) 또는 Wikimedia Commons CC0 사진 후보 3장 (images.find_photo)
 3. 노션 '블로그 GEO 체인' DB에서 아직 게시 전이고 사진이 없는 행에
    '📷 사진 후보 (CC0)' 섹션을 붙인다: 1순위 사진 미리보기 + 출처 캡션 + 다른 후보 링크 +
    원고 머리말에 붙여 넣을 photo_url 등.
@@ -15,6 +15,8 @@ from __future__ import annotations
 import os
 import re
 import time
+import urllib.request
+import uuid
 
 from . import _http, images
 from .notion import DEFAULT_DB, VERSION, _text
@@ -82,13 +84,34 @@ def caption(ph: dict) -> str:
     return images.photo_caption(ph)
 
 
-def blocks_for(found: list[dict]) -> list[dict]:
+def upload_image(url: str, name: str, headers: dict) -> str | None:
+    """사진을 내려받아 노션에 파일로 올리고 file_upload id 를 돌려준다 (핫링크 금지 출처용)."""
+    try:
+        data = images.download(url)
+        up = _http.request_json("POST", "https://api.notion.com/v1/file_uploads",
+                                {"filename": name, "content_type": "image/jpeg"}, headers=headers)
+        boundary = "----geoPhoto" + uuid.uuid4().hex
+        body = (f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{name}"\r\n'
+                f"Content-Type: image/jpeg\r\n\r\n").encode() + data + f"\r\n--{boundary}--\r\n".encode()
+        req = urllib.request.Request(f"https://api.notion.com/v1/file_uploads/{up['id']}/send", data=body,
+                                     method="POST", headers={**headers,
+                                                             "Content-Type": f"multipart/form-data; boundary={boundary}"})
+        urllib.request.urlopen(req, timeout=60).read()  # noqa: S310 (Notion API)
+        return up["id"]
+    except Exception as exc:
+        print(f"   ⚠️  노션 사진 업로드 실패({getattr(exc, 'code', type(exc).__name__)}) → 링크로 붙임")
+        return None
+
+
+def blocks_for(found: list[dict], upload_id: str | None = None) -> list[dict]:
     best, rest = found[0], found[1:]
+    image = ({"type": "file_upload", "file_upload": {"id": upload_id}} if upload_id
+             else {"type": "external", "external": {"url": best["url"]}})
     front = "\n".join(f"photo_{k}: {best[k]}" for k in ("url", "page", "license", "artist"))
     out: list[dict] = [
         {"object": "block", "type": "heading_2", "heading_2": {"rich_text": _text(f"{MARKER} ({best.get('source', 'CC0')})")}},
         {"object": "block", "type": "image",
-         "image": {"type": "external", "external": {"url": best["url"]}, "caption": _text(caption(best))}},
+         "image": {**image, "caption": _text(caption(best))}},
         {"object": "block", "type": "paragraph", "paragraph": {"rich_text": _text(
             f"1순위 · 검색어 '{best['query']}'. 4번째 이미지(첫 소제목 아래)로 쓰고 캡션을 그대로 붙이세요. "
             "원고 머리말에 아래 4줄을 넣으면 build --images 가 이 사진으로 4_photo.jpg 를 만듭니다.")}},
@@ -178,8 +201,10 @@ def sync(dry_run: bool = False, pause: float = 1.0, replace: bool = False) -> li
             if (i := marker_index(kids)) >= 0:   # replace: 예전 사진 섹션(맨 끝)을 지운다
                 for b in kids[i:]:
                     _http.request_json("DELETE", f"{api}/blocks/{b['id']}", headers=h)
+            uid = (upload_image(found[0]["url"], f"{no or 'photo'}_4_photo.jpg", h)
+                   if found[0].get("source") == "Pixabay" else None)   # Pixabay 는 핫링크 금지 → 파일로
             _http.request_json("PATCH", f"{api}/blocks/{row['id']}/children",
-                               {"children": blocks_for(found)}, headers=h)   # 페이지 끝에 붙음
+                               {"children": blocks_for(found, uid)}, headers=h)   # 페이지 끝에 붙음
         log.append(f"- {no} {title} · 검색어 {', '.join(qs)}" + (" [미리보기]" if dry_run else ""))
         log += [f"  {i}. {ph['title']} ({ph['license']}) {ph['page']}" for i, ph in enumerate(found, 1)]
         time.sleep(pause)

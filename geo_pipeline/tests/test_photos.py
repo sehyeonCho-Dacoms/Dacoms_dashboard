@@ -53,3 +53,12 @@ def test_candidates_skip_other_posts_photo(monkeypatch):
         {"url": f"u{i}", "page": f"p{i}", "license": "CC0", "artist": "a", "title": f"t{i}"} for i in range(3)])
     found = photos.candidates(["a"], want=2, pause=0, exclude={"p0"})
     assert [f["page"] for f in found] == ["p1", "p2"]
+
+
+def test_blocks_use_uploaded_file_when_given():
+    found = [{"url": "https://pixabay.com/get/x.jpg", "page": "https://pixabay.com/photos/x/", "license": "Pixabay License",
+              "artist": "Kim", "title": "x", "query": "q", "source": "Pixabay"}]
+    img = photos.blocks_for(found, "up-1")[1]["image"]
+    assert img["type"] == "file_upload" and img["file_upload"]["id"] == "up-1"
+    assert img["caption"][0]["text"]["content"] == "사진: Kim / Pixabay https://pixabay.com/photos/x/"
+    assert photos.blocks_for(found)[0]["heading_2"]["rich_text"][0]["text"]["content"].endswith("(Pixabay)")

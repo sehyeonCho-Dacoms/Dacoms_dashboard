@@ -4,7 +4,7 @@ name: 블로그 사진 찾기
 # 검색어를 자동으로 만들고 Wikimedia Commons 의 CC0 사진 후보 3장을 행에 붙인다.
 # 검색어를 입력할 필요 없음. 작업 환경 IP가 Wikimedia 검색 API에서 막혀(429) GitHub 서버에서 돌린다.
 #
-# Secrets: NOTION_TOKEN, PEXELS_API_KEY (pexels.com/api 무료 키. 없으면 Wikimedia CC0로 찾지만 품질이 낮다)
+# Secrets: NOTION_TOKEN, PIXABAY_API_KEY (pixabay.com/api/docs 무료 키. 없으면 Wikimedia CC0로 찾지만 품질이 낮다)
 # ⚠️ schedule 은 기본 브랜치(main)에서만 발동한다.
 
 on:
@@ -40,19 +40,19 @@ jobs:
         if: ${{ !inputs.queries }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: |
           FLAGS=()
           [ "${{ inputs.replace }}" = "true" ] && FLAGS+=(--replace)
           [ "${{ inputs.dry_run }}" = "true" ] && FLAGS+=(--dry-run)
           PYTHONPATH=geo_pipeline python -m pipeline.cli photo-sync "${FLAGS[@]}" | tee result.md
-          { echo "## 📷 사진 후보 자동 첨부 ($([ -n "$PEXELS_API_KEY" ] && echo Pexels || echo Wikimedia CC0))"; cat result.md; } >> "$GITHUB_STEP_SUMMARY"
+          { echo "## 📷 사진 후보 자동 첨부 ($([ -n "$PIXABAY_API_KEY" ] && echo Pixabay || echo Wikimedia CC0))"; cat result.md; } >> "$GITHUB_STEP_SUMMARY"
           ! grep -q "❌" result.md
       - name: 검색어로 직접 찾기
         if: ${{ inputs.queries }}
         env:
           QUERIES: ${{ inputs.queries }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: |
           IFS=',' read -ra QS <<< "$QUERIES"
           ARGS=()
