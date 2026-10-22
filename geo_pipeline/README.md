@@ -7,6 +7,7 @@
 |------|------|------|----------|
 | **G0 이슈 트래커** (DR-MKT-01) | 매일 10시 | `g0` | `geo-g0-daily.yml` |
 | **G-R 모범 글 구조 분석** (DR-GEO-12) | 월 1회 | `gr` | `geo-gr-monthly.yml` |
+| **G5 완성본 · G6 자동 검수** | 글마다 | `build` · `review` | — (사람이 실행) |
 
 아래는 G-R부터 설명하고, G0는 [맨 아래](#g0-이슈-트래커-dr-mkt-01)에 있다.
 
@@ -132,3 +133,26 @@ G0_SOURCES=naver_news NAVER_CLIENT_ID=… NAVER_CLIENT_SECRET=… \
   저장소가 공개라 아티팩트를 누구나 내려받을 수 있어서다(RULE-11 ③). 기사 본문은 받지 않는다.
 - **채점 보정용 5건**: 요약 MD 맨 위에 거름망 통과 기사 중 검색어가 겹치지 않는 최신 5건을 뽑아 둔다.
 - 네이버 뉴스 API 주소는 블로그와 같은 HUB 패턴으로 추정한 값이다. 다르면 `NAVER_NEWS_ENDPOINT`로 덮어쓴다.
+
+## G5 완성본 · G6 자동 검수
+
+원고 하나(.md)를 쓰면 채널별 붙여 넣기 완성본과 검수 보고서를 만든다. **게시는 사람이 한다**
+(체인 v1 G7 = 사람. 티스토리·네이버 모두 공식 글쓰기 API가 없고, 자동 로그인은 약관·계정 위험이 있다).
+
+```bash
+# 원고 → out/drafts/<이름>/ tistory.html · naver.html · review.md (+ --notion 이면 노션 DB에 행)
+PYTHONPATH=geo_pipeline python -m pipeline.cli build 원고.md --other 다른채널원고.md
+# 게시된 글 검수 (두 채널 복붙 비교 포함)
+PYTHONPATH=geo_pipeline python -m pipeline.cli review https://doctoronhr.tistory.com/1 \
+  --other https://blog.naver.com/doctoronhr/224449578868
+```
+
+- 원고 형식: 머리말(title·channel·target·question·tags) + 단순 마크다운. 예시: `sample_data/draft_sample.md`
+- **G6 자동 검수**(검수 준칙 v0 중 기계로 볼 수 있는 것)
+  - 위반: 클릭되는 출처 링크 2개 미만, 기사 캡처 이미지, 다른 채널 글과 거의 같은 문장 3개 이상, 경쟁사 이름(`G6_COMPETITORS`)
+  - 확인(사람): 언론사 출처 이미지, 사람 이름+직함(같은 사람 직함이 다르면 표시), 입장 표현(DR-MKT-02), 닥터온 수치, 의료 조언 표현, 법률 문구, 우리만의 관점(7번)
+  - 권장: 첫 3문장 핵심어·숫자, 출처 날짜, 이미지 설명(alt), 채널 형식(티스토리 H2·표 / 네이버 해시태그), FAQ
+  - 규칙은 10/22 첫 두 글(T-001·N-001)에서 실제로 나온 문제를 기준으로 만들었다
+- **노션**: `NOTION_TOKEN`(내부 통합 토큰, '블로그 GEO 체인' DB에 연결)이 있으면 `--notion`으로 행을 만든다.
+  상태는 위반이 있으면 '사람확인', 없으면 '검수통과'. 완성본과 보고서는 페이지 본문 코드 블록에 들어간다.
+- 네이버 스마트에디터는 붙여 넣을 때 글자 크기가 빠질 수 있어, 소제목은 에디터의 '소제목' 블록으로 바꾸는 것을 권한다.

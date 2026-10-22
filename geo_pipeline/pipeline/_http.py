@@ -67,3 +67,11 @@ def polite_sleep(seconds: float) -> None:
     """요청 간 지연 (RULE-11: 빈도 최소)."""
     if seconds > 0:
         time.sleep(seconds)
+
+
+def post_json(url: str, payload: dict, headers: dict | None = None, timeout: int = DEFAULT_TIMEOUT) -> Any:
+    body = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(url, data=body, method="POST",
+                                 headers={"Content-Type": "application/json", **(headers or {})})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 (Notion API)
+        return json.loads(resp.read().decode("utf-8"))
