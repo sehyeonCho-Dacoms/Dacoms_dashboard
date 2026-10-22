@@ -5,6 +5,8 @@
   3_card.png    원고 첫 목록(체크리스트·핵심 3가지)을 카드 한 장으로
   4_photo.jpg   Wikimedia Commons 의 CC0·퍼블릭 도메인 사진 (머리말 photo: 영어 검색어)
                 → 못 구하면 4_faq.png (FAQ 질문 카드)로 대신
+                검색 API가 막힌 곳(429)에서는 `photo` 명령(또는 Actions '사진 찾기')으로 찾은
+                photo_url·photo_page·photo_license·photo_artist 를 머리말에 넣으면 검색을 건너뛴다
   images.md     각 이미지의 alt·캡션·넣을 위치
 
 G6 검수 준칙 3번(기사 사진·그래픽 복제 0)에 맞춰 기사 이미지는 쓰지 않는다. 숫자는 원고 표에서
@@ -142,10 +144,11 @@ li { display: flex; gap: 20px; font-size: 30px; line-height: 1.45; background: #
 # --------------------------------------------------------------------------- #
 # 사진 (Wikimedia Commons, CC0·퍼블릭 도메인만)
 # --------------------------------------------------------------------------- #
-def find_photo(query: str) -> dict | None:
+def find_photo(query: str, limit: int = 1) -> dict | list[dict] | None:
+    """limit=1 이면 첫 후보(dict) 또는 None, 그보다 크면 후보 목록."""
     params = {"action": "query", "format": "json", "generator": "search", "gsrnamespace": "6",
               "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": "30", "prop": "imageinfo",
-              "iiprop": "url|extmetadata|size", "iiurlwidth": "1080"}
+              "iiprop": "url|extmetadata|size", "iiurlwidth": "1280"}
     url = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(params)
     try:
         req = urllib.request.Request(url, headers={"User-Agent": UA})
@@ -154,6 +157,7 @@ def find_photo(query: str) -> dict | None:
         print(f"   ⚠️  Wikimedia 검색 실패({getattr(exc, 'code', exc)}) → FAQ 카드로 대신")
         return None
     pages = sorted(data.get("query", {}).get("pages", {}).values(), key=lambda p: p.get("index", 0))
+    found: list[dict] = []
     for p in pages:
         info = (p.get("imageinfo") or [{}])[0]
         meta = info.get("extmetadata", {})
@@ -161,9 +165,21 @@ def find_photo(query: str) -> dict | None:
         if not lic.startswith(FREE_LICENSES) or info.get("width", 0) < 1000:
             continue
         artist = re.sub(r"<[^>]+>", "", meta.get("Artist", {}).get("value", "")).strip() or "작자 미상"
-        return {"url": info.get("thumburl") or info["url"], "page": info.get("descriptionurl", ""),
-                "license": lic, "artist": artist[:60], "title": p.get("title", "")}
-    return None
+        found.append({"url": info.get("thumburl") or info["url"], "page": info.get("descriptionurl", ""),
+                      "license": lic, "artist": artist[:60], "title": p.get("title", "")})
+        if len(found) >= limit:
+            break
+    if limit == 1:
+        return found[0] if found else None
+    return found
+
+
+def photo_from_meta(d: Draft) -> dict | None:
+    """머리말에 미리 찾아 둔 사진(photo_url 등)이 있으면 그것을 쓴다."""
+    if not d.meta.get("photo_url"):
+        return None
+    return {"url": d.meta["photo_url"], "page": d.meta.get("photo_page", ""),
+            "license": d.meta.get("photo_license", ""), "artist": d.meta.get("photo_artist", "작자 미상")}
 
 
 # --------------------------------------------------------------------------- #
@@ -197,7 +213,7 @@ def render(d: Draft, out_dir: Path) -> list[Image]:
     images: list[Image] = []
     alts = {"1_cover.png": f"{d.title} 대표 이미지", "2_table.png": "비교표", "3_card.png": "핵심 정리 카드"}
 
-    photo = find_photo(d.meta["photo"]) if d.meta.get("photo") else None
+    photo = photo_from_meta(d) or (find_photo(d.meta["photo"]) if d.meta.get("photo") else None)
     if photo is None:
         faqs = [b.text for b in d.blocks if b.kind == "heading" and b.text.startswith("Q.")]
         if faqs:

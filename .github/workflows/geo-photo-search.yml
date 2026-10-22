@@ -1,0 +1,33 @@
+name: 블로그 사진 찾기 (CC0)
+
+# Wikimedia Commons 에서 CC0·퍼블릭 도메인 사진 후보를 찾는다.
+# 작업 환경 IP가 Wikimedia 검색 API에서 막힐 때(429) GitHub 서버에서 대신 찾는 용도.
+# 결과(파일 주소·라이선스·작가)를 Summary 에 적고, 원고 머리말에 붙여 넣으면 build --images 가 그 사진을 쓴다.
+
+on:
+  workflow_dispatch:
+    inputs:
+      queries:
+        description: "영어 검색어, 쉼표로 구분 (예: calculator salary, job interview)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 사진 후보 검색
+        env:
+          QUERIES: ${{ inputs.queries }}
+        run: |
+          IFS=',' read -ra QS <<< "$QUERIES"
+          ARGS=()
+          for q in "${QS[@]}"; do q="$(echo "$q" | xargs)"; [ -n "$q" ] && ARGS+=("$q"); done
+          PYTHONPATH=geo_pipeline python -m pipeline.cli photo "${ARGS[@]}" | tee result.md
+          cat result.md >> "$GITHUB_STEP_SUMMARY"
