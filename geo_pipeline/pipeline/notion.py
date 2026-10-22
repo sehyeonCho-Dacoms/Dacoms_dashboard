@@ -51,6 +51,28 @@ def build_page(d: Draft, tistory_html: str, naver_html: str, report: str, verdic
     return {"parent": {"database_id": db}, "properties": props, "children": children}
 
 
+def check() -> str:
+    """토큰으로 DB를 읽어 본다. 연결 안 됨·권한 없음이면 이유를 돌려준다(토큰 값은 출력하지 않음)."""
+    token = os.getenv("NOTION_TOKEN")
+    if not token:
+        return "❌ NOTION_TOKEN 이 없습니다 (GitHub Secrets 에 등록했는지 확인)"
+    db = os.getenv("NOTION_GEO_DB", DEFAULT_DB)
+    try:
+        res = _http.get_json(f"https://api.notion.com/v1/databases/{db}",
+                             headers={"Authorization": f"Bearer {token}", "Notion-Version": VERSION})
+    except Exception as exc:
+        code = getattr(exc, "code", "")
+        hint = {401: "토큰이 틀렸거나 만료됨", 404: "DB에 통합이 연결되지 않음 (DB 페이지 ⋯ → 연결 → 통합 추가)",
+                403: "통합에 읽기·쓰기 권한이 없음"}.get(code, str(exc))
+        return f"❌ 노션 접속 실패 ({code}): {hint}"
+    title = "".join(t.get("plain_text", "") for t in res.get("title", []))
+    props = res.get("properties", {})
+    need = ["글 번호", "제목", "상태", "검수 결과", "대상 질문", "채널", "타깃"]
+    missing = [n for n in need if n not in props]
+    return (f"✅ 노션 연결 OK — DB '{title}', 속성 {len(props)}개"
+            + (f" · 없는 속성: {', '.join(missing)}" if missing else " · 원고 행에 필요한 속성 모두 있음"))
+
+
 def push(d: Draft, tistory_html: str, naver_html: str, report: str, verdict: str) -> str | None:
     token = os.getenv("NOTION_TOKEN")
     if not token:

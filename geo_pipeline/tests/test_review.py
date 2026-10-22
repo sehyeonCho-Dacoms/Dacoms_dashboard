@@ -118,3 +118,24 @@ def test_notion_push_needs_token_and_builds_page(monkeypatch):
     assert sent["headers"]["Authorization"] == "Bearer secret-test"
     code = sent["payload"]["children"][3]["code"]["rich_text"]
     assert all(len(c["text"]["content"]) <= 2000 for c in code) and len(code) > 1   # 2000자 조각
+
+
+def test_notion_check_reports_without_leaking_token(monkeypatch):
+    monkeypatch.delenv("NOTION_TOKEN", raising=False)
+    assert notion.check().startswith("❌ NOTION_TOKEN")
+
+    monkeypatch.setenv("NOTION_TOKEN", "secret-test")
+    monkeypatch.setattr(_http, "get_json", lambda url, headers=None, **k: {
+        "title": [{"plain_text": "블로그 GEO 체인"}],
+        "properties": {n: {} for n in ["글 번호", "제목", "상태", "검수 결과", "대상 질문", "채널", "타깃"]}})
+    out = notion.check()
+    assert out.startswith("✅") and "secret-test" not in out
+
+    class E(Exception):
+        code = 404
+
+    def boom(*a, **k):
+        raise E("nf")
+
+    monkeypatch.setattr(_http, "get_json", boom)
+    assert "연결되지 않음" in notion.check()
