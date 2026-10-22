@@ -42,3 +42,10 @@ def test_first_sentence_skips_notes_and_trims():
     d = parse("※ 참고 문구\n\n" + "가" * 80 + ". 다음 문장.")
     s = images._first_sentence(d)
     assert s.endswith("…") and len(s) == 69
+
+
+def test_card_uses_longest_list(monkeypatch):
+    _no_fonts(monkeypatch)
+    d = parse("---\ntitle: t\n---\n## 예시\n- 가\n- 나\n\n## 꼭 적을 3가지\n- 하나\n- 둘\n- 셋\n")
+    name, card, place = images.plan(d)[-1]
+    assert name == "3_card.png" and place == "'꼭 적을 3가지' 소제목 아래" and "셋" in card

@@ -173,16 +173,19 @@ def plan(d: Draft) -> list[tuple[str, str, str]]:
     """(파일, 렌더용 HTML 또는 '', 넣을 위치) — 사진은 따로 처리."""
     out = [("1_cover.png", cover_html(d), "글 맨 위 (대표 이미지로 지정)")]
     heading = d.title
-    table_done = list_done = False
+    table_done = False
+    best_list: tuple[str, Block] | None = None   # 카드는 항목이 가장 많은 목록(체크리스트)으로
     for b in d.blocks:
         if b.kind == "heading":
             heading = b.text
         elif b.kind == "table" and not table_done and b.rows:
             out.append(("2_table.png", table_html(heading, b), f"'{strip_inline(heading)}' 소제목 아래"))
             table_done = True
-        elif b.kind == "list" and not list_done:
-            out.append(("3_card.png", list_card_html(heading, b.items), f"'{strip_inline(heading)}' 소제목 아래"))
-            list_done = True
+        elif b.kind == "list" and (best_list is None or len(b.items) > len(best_list[1].items)):
+            best_list = (heading, b)
+    if best_list:
+        h, b = best_list
+        out.append(("3_card.png", list_card_html(h, b.items), f"'{strip_inline(h)}' 소제목 아래"))
     return out
 
 
