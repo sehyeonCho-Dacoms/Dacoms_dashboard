@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-22T23:55:06",
+  "generatedAt": "2026-10-23T14:07:55",
   "kpis": {
-    "collected": 89,
-    "uploadReady": 12,
-    "uploadReadyPct": 13,
-    "hotLeads": 0,
-    "pipelineValue": 0,
-    "pipelineValueLabel": "₩0만"
+    "collected": 94,
+    "uploadReady": 15,
+    "uploadReadyPct": 16,
+    "hotLeads": 1,
+    "pipelineValue": 28200,
+    "pipelineValueLabel": "₩2.8억"
   },
   "jobs": [
     {
@@ -26,6 +26,23 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=72686"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "대한펜싱협회(체육회 지원) 국가대표 전담팀(영상) 비디오 분석 담당자) 채용 공고",
+      "role": "데이터",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 90,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73217"
     },
     {
       "platform": "대한체육회",
@@ -145,6 +162,40 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73137"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2027-2028년 대한골프협회 국가대표(국가상비군) 코치 및 국가대표 체력트레이너 채용 최종합격후보자 공고(수정)",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 75,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "골프",
+        "협회"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73216"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2027-2028년 대한골프협회 국가대표(국가상비군) 코치 및 국가대표 체력트레이너 채용 최종합격후보자 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 75,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "골프",
+        "협회"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73214"
     },
     {
       "platform": "대한체육회",
@@ -1522,20 +1573,54 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73205"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2026 대한펜싱협회(협회 지원) 국가대표 전담팀(체력트레이너) 채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73219"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "대한펜싱협회(체육회 지원) 국가대표 전담팀(의료면허소지자) 채용 공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73218"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 89,
-      "growth": "±0",
+      "open": 94,
+      "growth": "+5",
       "senior": 0,
-      "tier": "Warm",
-      "score": 52,
-      "fee": 26700,
+      "tier": "Hot",
+      "score": 65,
+      "fee": 28200,
       "stage": "신규",
-      "signal": "89개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "5건↑ 채용 확대 중(스케일업 신호) · 94개 직무 동시 채용 — 스케일업 정황"
     }
   ],
   "actions": {
@@ -1548,15 +1633,15 @@
         "cta": "지금 업로드"
       },
       {
-        "pr": "P1",
-        "title": "대한체육회 · (대한롤러스포츠연맹) 사무처 직원(회계.총무) 공개채용 공고 업로드",
-        "company": "대한체육회 · 적합도 75",
-        "why": "스포츠 기업(체육회) / 스포츠 / 협회",
+        "pr": "P0",
+        "title": "대한체육회 · 대한펜싱협회(체육회 지원) 국가대표 전담팀(영상) 비디오 분석 담당자) 채용 공고 업로드",
+        "company": "대한체육회 · 적합도 90",
+        "why": "스포츠 기업(체육회) / 협회 / 체육",
         "cta": "지금 업로드"
       },
       {
         "pr": "P1",
-        "title": "대한체육회 · [대한롤러스포츠연맹]사무처 직원(회계.총무) 공개채용 서류전형 합격자 공고 업로드",
+        "title": "대한체육회 · (대한롤러스포츠연맹) 사무처 직원(회계.총무) 공개채용 공고 업로드",
         "company": "대한체육회 · 적합도 75",
         "why": "스포츠 기업(체육회) / 스포츠 / 협회",
         "cta": "지금 업로드"
@@ -1564,32 +1649,32 @@
     ],
     "demand": [
       {
-        "pr": "P1",
-        "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩26,700만",
-        "why": "89개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
-        "cta": "콜드 아웃리치"
+        "pr": "P0",
+        "title": "대한체육회 헤드헌팅 계약 제안",
+        "company": "예상 수수료 ₩28,200만",
+        "why": "5건↑ 채용 확대 중(스케일업 신호) · 94개 직무 동시 채용 — 스케일업 정황",
+        "cta": "제안서 발송"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 69,
-      "코치/트레이너": 19,
-      "데이터": 1
+      "기타": 70,
+      "코치/트레이너": 22,
+      "데이터": 2
     },
     "size": {
-      "공공/협회": 89
+      "공공/협회": 94
     },
     "platform": {
-      "대한체육회": 89
+      "대한체육회": 94
     },
     "sector": {
-      "협회": 89
+      "협회": 94
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 89,
+      "미들(3~5년)": 94,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -1604,24 +1689,24 @@
         "이번주"
       ],
       "total": [
+        7,
+        3,
         5,
         3,
         6,
-        4,
-        5,
-        12,
-        7,
-        8
+        11,
+        8,
+        12
       ],
       "uploadReady": [
         2,
-        1,
-        1,
+        2,
+        0,
         0,
         0,
         5,
         0,
-        0
+        3
       ]
     }
   }
