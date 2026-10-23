@@ -181,13 +181,15 @@ def _pixabay(query: str, limit: int, key: str) -> list[dict] | None:
     except Exception as exc:
         print(f"   ⚠️  Pixabay 검색 실패({getattr(exc, 'code', type(exc).__name__)})")   # URL에 키가 있어 예외 문구는 찍지 않음
         return None
-    return [pixabay_item(h) for h in data.get("hits", [])][:limit]
+    hits = [h for h in data.get("hits", []) if "ai generated" not in h.get("tags", "").lower()]   # AI 생성 이미지 제외
+    return [pixabay_item(h) for h in hits][:limit]
 
 
 def pixabay_item(h: dict) -> dict:
+    tags = list(dict.fromkeys(t.strip() for t in h.get("tags", "").split(",") if t.strip()))[:5]   # 중복 태그 정리
     return {"url": h.get("largeImageURL") or h.get("webformatURL", ""), "page": h.get("pageURL", ""),
             "license": "Pixabay License", "artist": (h.get("user") or "작자 미상")[:60],
-            "title": h.get("tags") or f"Pixabay {h.get('id', '')}", "source": "Pixabay"}
+            "title": ", ".join(tags) or f"Pixabay {h.get('id', '')}", "source": "Pixabay"}
 
 
 def download(url: str) -> bytes:
