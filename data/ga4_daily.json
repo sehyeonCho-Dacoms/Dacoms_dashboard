@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-23T23:46:57.289403+00:00",
+  "generated_at": "2026-10-24T13:11:03.014262+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -503,10 +503,10 @@
       "date": "20261023",
       "sessions": 74,
       "totalUsers": 65,
-      "newUsers": 43,
+      "newUsers": 42,
       "screenPageViews": 354,
-      "engagementRate": 0.6622,
-      "averageSessionDuration": 114.9249
+      "engagementRate": 0.7027,
+      "averageSessionDuration": 118.9341
     }
   ],
   "by_channel": [
@@ -2007,8 +2007,8 @@
     {
       "date": "20261023",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 42,
-      "totalUsers": 38
+      "sessions": 43,
+      "totalUsers": 39
     },
     {
       "date": "20261023",
@@ -2021,12 +2021,6 @@
       "sessionDefaultChannelGroup": "Organic Social",
       "sessions": 4,
       "totalUsers": 3
-    },
-    {
-      "date": "20261023",
-      "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 4,
-      "totalUsers": 4
     },
     {
       "date": "20261023",
@@ -4884,7 +4878,7 @@
       "date": "20261023",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 42
+      "sessions": 43
     },
     {
       "date": "20261023",
@@ -4903,12 +4897,6 @@
       "sessionSource": "naver",
       "sessionMedium": "organic",
       "sessions": 5
-    },
-    {
-      "date": "20261023",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 4
     },
     {
       "date": "20261023",

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-23T23:46:57.339381+00:00",
-  "source_generated_at": "2026-10-23T23:46:57.289403+00:00",
+  "generated_at": "2026-10-24T13:11:03.089656+00:00",
+  "source_generated_at": "2026-10-24T13:11:03.014262+00:00",
   "window": {
     "current": {
       "start": "20261017",
@@ -23,9 +23,9 @@
       "change_pct": -20.3
     },
     "newUsers": {
-      "current": 272,
+      "current": 271,
       "previous": 337,
-      "change_pct": -19.3
+      "change_pct": -19.6
     },
     "screenPageViews": {
       "current": 2790,
@@ -33,37 +33,37 @@
       "change_pct": -30.8
     },
     "engagementRate": {
-      "current": 0.6526,
+      "current": 0.6584,
       "previous": 0.6909,
-      "change_pct": -5.5
+      "change_pct": -4.7
     },
     "averageSessionDuration": {
-      "current": 199.2694,
+      "current": 199.8421,
       "previous": 238.7061,
-      "change_pct": -16.5
+      "change_pct": -16.3
     }
   },
   "by_channel": [
     {
       "channel": "Direct",
-      "current": 292,
+      "current": 293,
       "previous": 363,
-      "change_pct": -19.6,
-      "share_pct": 58.8
+      "change_pct": -19.3,
+      "share_pct": 59.3
     },
     {
       "channel": "Organic Search",
       "current": 166,
       "previous": 208,
       "change_pct": -20.2,
-      "share_pct": 33.4
+      "share_pct": 33.6
     },
     {
       "channel": "Organic Social",
       "current": 21,
       "previous": 36,
       "change_pct": -41.7,
-      "share_pct": 4.2
+      "share_pct": 4.3
     },
     {
       "channel": "AI Assistant",
@@ -71,13 +71,6 @@
       "previous": 6,
       "change_pct": 50.0,
       "share_pct": 1.8
-    },
-    {
-      "channel": "Unassigned",
-      "current": 4,
-      "previous": 1,
-      "change_pct": 300.0,
-      "share_pct": 0.8
     },
     {
       "channel": "Email",
@@ -92,6 +85,13 @@
       "previous": 6,
       "change_pct": -66.7,
       "share_pct": 0.4
+    },
+    {
+      "channel": "Unassigned",
+      "current": 0,
+      "previous": 1,
+      "change_pct": -100.0,
+      "share_pct": 0.0
     },
     {
       "channel": "Paid Social",
@@ -163,7 +163,7 @@
       "week_end": "20261023",
       "sessions": 494,
       "totalUsers": 424,
-      "newUsers": 272,
+      "newUsers": 271,
       "screenPageViews": 2790
     }
   ],
