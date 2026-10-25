@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-24T22:59:49.514926+00:00",
-  "source_generated_at": "2026-10-24T22:59:49.416978+00:00",
+  "generated_at": "2026-10-25T13:37:18.091697+00:00",
+  "source_generated_at": "2026-10-25T13:37:17.995351+00:00",
   "yesterday": {
     "date": "20261024",
     "sessions": 41,
     "totalUsers": 37,
     "newUsers": 20,
-    "engagementRate": 0.6098,
-    "averageSessionDuration": 80.9,
+    "engagementRate": 0.6341,
+    "averageSessionDuration": 122.9,
     "sessions_prev_day": 74,
     "sessions_dod_pct": -44.6
   },
@@ -33,14 +33,14 @@
       "change_pct": -29.7
     },
     "engagementRate": {
-      "current": 0.6615,
+      "current": 0.6649,
       "previous": 0.6736,
-      "change_pct": -1.8
+      "change_pct": -1.3
     },
     "averageSessionDuration": {
-      "current": 180.3333,
+      "current": 186.3261,
       "previous": 241.8989,
-      "change_pct": -25.5
+      "change_pct": -23.0
     }
   },
   "window": {
@@ -60,21 +60,21 @@
       "current": 279,
       "previous": 362,
       "change_pct": -22.9,
-      "share_pct": 57.4
+      "share_pct": 57.6
     },
     {
       "channel": "Organic Search",
       "current": 166,
       "previous": 202,
       "change_pct": -17.8,
-      "share_pct": 34.2
+      "share_pct": 34.3
     },
     {
       "channel": "Organic Social",
       "current": 24,
       "previous": 35,
       "change_pct": -31.4,
-      "share_pct": 4.9
+      "share_pct": 5.0
     },
     {
       "channel": "AI Assistant",
@@ -84,18 +84,18 @@
       "share_pct": 1.9
     },
     {
-      "channel": "Unassigned",
+      "channel": "Email",
       "current": 3,
       "previous": 1,
       "change_pct": 200.0,
       "share_pct": 0.6
     },
     {
-      "channel": "Email",
-      "current": 3,
-      "previous": 1,
-      "change_pct": 200.0,
-      "share_pct": 0.6
+      "channel": "Referral",
+      "current": 2,
+      "previous": 5,
+      "change_pct": -60.0,
+      "share_pct": 0.4
     }
   ],
   "instagram_referral": {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T22:59:49.416978+00:00",
+  "generated_at": "2026-10-25T13:37:17.995351+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -505,8 +505,8 @@
       "totalUsers": 37,
       "newUsers": 20,
       "screenPageViews": 209,
-      "engagementRate": 0.6098,
-      "averageSessionDuration": 80.9493
+      "engagementRate": 0.6341,
+      "averageSessionDuration": 122.899
     }
   ],
   "by_channel": [
@@ -2031,8 +2031,8 @@
     {
       "date": "20261024",
       "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 3,
-      "totalUsers": 3
+      "sessions": 1,
+      "totalUsers": 1
     }
   ],
   "by_source": [
@@ -4912,12 +4912,6 @@
     },
     {
       "date": "20261024",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 3
-    },
-    {
-      "date": "20261024",
       "sessionSource": "facebook.com",
       "sessionMedium": "referral",
       "sessions": 2
@@ -4927,6 +4921,12 @@
       "sessionSource": "naver",
       "sessionMedium": "organic",
       "sessions": 2
+    },
+    {
+      "date": "20261024",
+      "sessionSource": "chatgpt.com",
+      "sessionMedium": "(none)",
+      "sessions": 1
     },
     {
       "date": "20261024",
