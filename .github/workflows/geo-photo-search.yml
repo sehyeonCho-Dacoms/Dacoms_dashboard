@@ -9,7 +9,7 @@ name: 블로그 사진 찾기
 
 on:
   schedule:
-    - cron: "30 1 * * *"       # 매일 10:30 KST (G0 이슈 트래커 30분 뒤)
+    - cron: "47 22 * * *"      # 매일 07:47 KST (정각을 피함 — 정각 예약은 몇 시간씩 밀린다)
   workflow_dispatch:
     inputs:
       queries:

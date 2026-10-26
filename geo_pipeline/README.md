@@ -5,7 +5,7 @@
 
 | 노드 | 주기 | 명령 | 워크플로 |
 |------|------|------|----------|
-| **G0 이슈 트래커** (DR-MKT-01) | 매일 10시 | `g0` | `geo-g0-daily.yml` |
+| **G0 이슈 트래커** (DR-MKT-01) | 매일 아침 (07:17 KST 예약) | `g0` | `geo-g0-daily.yml` |
 | **G-R 모범 글 구조 분석** (DR-GEO-12) | 월 1회 | `gr` | `geo-gr-monthly.yml` |
 | **G5 완성본 · G6 자동 검수** | 글마다 | `build` · `review` | — (사람이 실행) |
 
@@ -164,6 +164,6 @@ PYTHONPATH=geo_pipeline python -m pipeline.cli review https://doctoronhr.tistory
   - **사진은 자동**: 검색어는 제목·대상 질문에서 만든다(`photos.TOPIC_QUERIES`, `photo:`로 직접 지정도 가능).
     출처는 `PIXABAY_API_KEY`가 있으면 **Pixabay** 스톡 사진(캡션 `사진: 작가 / Pixabay 링크`, 핫링크 금지라 파일로 올림), 없으면 Wikimedia CC0.
     Wikimedia CC0 는 실존 인물·행사 사진이 많아 자동 선택 품질이 낮다(10/22 확인).
-    Actions **'블로그 사진 찾기'**가 매일 10:30 KST 노션 원고 행(게시 전·사진 없음)마다 후보 3장을 붙인다(`photo-sync`,
+    Actions **'블로그 사진 찾기'**가 매일 07:47 KST 노션 원고 행(게시 전·사진 없음)마다 후보 3장을 붙인다(`photo-sync`,
     글마다 다른 사진, `replace`로 교체). 행에 붙은 `photo_url` 등 4줄을 원고 머리말에 넣으면 build 는 그 사진을 쓴다
 
