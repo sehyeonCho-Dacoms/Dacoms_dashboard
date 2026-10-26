@@ -15,12 +15,13 @@ def _a(i, screen="통과", flags=()):
                    published=datetime(2026, 10, 26, 9, 0, tzinfo=KST), description="요약은 넣지 않음")
 
 
-def test_row_has_no_summary_and_maps_flags():
-    r = notion_g0.row(_a(1, flags=["논쟁", "기타"]), "2026-10-26", "db")
+def test_row_goes_to_chain_db_as_first_stage():
+    r = notion_g0.row(_a(1, flags=["논쟁"]), "2026-10-26", "db")
     p = r["properties"]
-    assert p["제목"]["title"][0]["text"]["content"] == "전공의 복귀 1"
-    assert p["표시"]["multi_select"] == [{"name": "논쟁"}]
-    assert p["발행 시각"]["date"]["start"].startswith("2026-10-26T09:00")
+    assert p["글 번호"]["title"][0]["text"]["content"] == "N-20261026-0001"
+    assert p["제목"]["rich_text"][0]["text"]["content"] == "전공의 복귀 1"
+    assert p["원천 기사"]["url"] == "https://news.example/1" and p["상태"]["select"]["name"] == "질문선택"
+    assert "표시 논쟁" in p["작업 기록"]["rich_text"][0]["text"]["content"]
     assert "요약" not in str(r)
 
 
@@ -30,7 +31,7 @@ def test_push_only_new_passed(monkeypatch):
     def fake(method, url, payload=None, headers=None, timeout=0):
         calls.append((method, url))
         if url.endswith("/query"):
-            return {"results": [{"properties": {"기사 ID": {"rich_text": [{"plain_text": "N-20261026-0001"}]}}}]}
+            return {"results": [{"properties": {"글 번호": {"title": [{"plain_text": "N-20261026-0001"}]}}}]}
         return {}
 
     monkeypatch.setenv("NOTION_TOKEN", "t")
