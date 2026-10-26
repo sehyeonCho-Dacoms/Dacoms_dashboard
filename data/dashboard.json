@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-25T23:05:00",
+  "generatedAt": "2026-10-26T15:57:52",
   "kpis": {
-    "collected": 94,
+    "collected": 96,
     "uploadReady": 15,
     "uploadReadyPct": 16,
-    "hotLeads": 0,
-    "pipelineValue": 0,
-    "pipelineValueLabel": "₩0만"
+    "hotLeads": 1,
+    "pipelineValue": 28800,
+    "pipelineValueLabel": "₩2.9억"
   },
   "jobs": [
     {
@@ -1607,20 +1607,54 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73218"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2026 전략종목육성 사업 전담인력 직원(계약직) 회계분야(경력) 채용 2차 재공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73240"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "「위더스제약 2026 천하장사씨름대축제」 해외선수단 관리 및 통역 단기 인력 채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73239"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 94,
-      "growth": "±0",
+      "open": 96,
+      "growth": "+2",
       "senior": 0,
-      "tier": "Warm",
-      "score": 52,
-      "fee": 28200,
+      "tier": "Hot",
+      "score": 65,
+      "fee": 28800,
       "stage": "신규",
-      "signal": "94개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "2건↑ 채용 확대 중(스케일업 신호) · 96개 직무 동시 채용 — 스케일업 정황"
     }
   ],
   "actions": {
@@ -1649,32 +1683,32 @@
     ],
     "demand": [
       {
-        "pr": "P1",
-        "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩28,200만",
-        "why": "94개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
-        "cta": "콜드 아웃리치"
+        "pr": "P0",
+        "title": "대한체육회 헤드헌팅 계약 제안",
+        "company": "예상 수수료 ₩28,800만",
+        "why": "2건↑ 채용 확대 중(스케일업 신호) · 96개 직무 동시 채용 — 스케일업 정황",
+        "cta": "제안서 발송"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 70,
-      "코치/트레이너": 22,
+      "기타": 71,
+      "코치/트레이너": 23,
       "데이터": 2
     },
     "size": {
-      "공공/협회": 94
+      "공공/협회": 96
     },
     "platform": {
-      "대한체육회": 94
+      "대한체육회": 96
     },
     "sector": {
-      "협회": 94
+      "협회": 96
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 94,
+      "미들(3~5년)": 96,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -1689,17 +1723,17 @@
         "이번주"
       ],
       "total": [
-        7,
+        4,
+        5,
+        4,
         3,
         5,
-        3,
-        6,
-        11,
+        13,
         9,
         11
       ],
       "uploadReady": [
-        2,
+        1,
         2,
         0,
         0,
