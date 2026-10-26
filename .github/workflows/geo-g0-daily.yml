@@ -1,10 +1,9 @@
 name: G0 이슈 트래커 (매일)
 
 # 블로그 GEO 체인 G0 (DR-MKT-01). 매일 아침 의료 기사를 최대 100건 모아 1차 거름망을
-# 적용하고, 통과 기사는 노션 '블로그 GEO 체인' DB에 '질문선택' 행으로, 전체는 아티팩트(CSV·JSON·요약 MD)로
-# 올린다. 산출물은 커밋하지 않는다.
+# 적용하고 아티팩트(CSV·JSON·요약 MD)로 올린다. 산출물은 커밋하지 않는다.
 #
-# Secrets: NAVER_CLIENT_ID, NAVER_CLIENT_SECRET (G-R과 같은 NAVER API HUB 키, 뉴스 API 등록 필요), NOTION_TOKEN
+# Secrets: NAVER_CLIENT_ID, NAVER_CLIENT_SECRET (G-R과 같은 NAVER API HUB 키, 뉴스 API 등록 필요)
 # Variables(선택): G0_RSS_FEEDS (의료 전문지 RSS, 쉼표구분 — 약관 확인 후), NAVER_NEWS_ENDPOINT
 #
 # ⚠️ schedule 은 기본 브랜치(main)에서만 발동한다.
@@ -46,16 +45,15 @@ jobs:
           NAVER_NEWS_ENDPOINT: ${{ vars.NAVER_NEWS_ENDPOINT }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: |
           if [ -z "$NAVER_CLIENT_ID" ] || [ -z "$NAVER_CLIENT_SECRET" ]; then
             echo "::error::NAVER_CLIENT_ID/SECRET 시크릿이 없습니다. sample 데이터로 결과를 만들지 않도록 중단합니다."
             exit 1
           fi
-          PYTHONPATH=geo_pipeline python -m pipeline.cli g0 --notion | tee g0_log.txt
-          grep "노션" g0_log.txt >> "$GITHUB_STEP_SUMMARY" || true
+          # 노션 체인 DB에는 올리지 않는다. 체인 v1: G0 기사 목록 → 거름망 → G2 흥미도 100점 → 60점 이상
+          # 상위 3건 → G3 사람 선택 → 그 1건만 체인 DB의 글 행이 된다. (10/26 통과 74건을 모두 올렸다가 되돌림)
+          PYTHONPATH=geo_pipeline python -m pipeline.cli g0
           cat geo_pipeline/out/g0_*_summary.md >> "$GITHUB_STEP_SUMMARY"
-          ! grep -q "❌" g0_log.txt   # 노션에 못 올렸으면 실패로 표시 (아티팩트는 아래 단계에서 그대로 올림)
 
       - uses: actions/upload-artifact@v4
         if: always()
