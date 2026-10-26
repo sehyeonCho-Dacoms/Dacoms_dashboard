@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import os
+import re
 import time
 from datetime import datetime, timedelta
 
@@ -70,3 +71,32 @@ def push(articles: list[Article], now: datetime, pause: float = 0.35) -> str:
         time.sleep(pause)   # 노션 API 초당 3회 제한
     return (f"   노션 '블로그 GEO 체인': 통과 {len(passed)}건 중 새 기사 {len(new)}건을 '{STAGE}'로 추가"
             f" (이미 있음 {len(passed) - len(new)}건)")
+
+
+def chain_questions(now: datetime) -> tuple[set[int], dict[int, str]] | None:
+    """체인 DB에서 (글을 쓴 질문 GQ 번호들, 최근 14일 안에 쓴 질문 → 글 번호)를 읽는다. 읽기만 한다.
+
+    G2 상록 슬롯(글 없는 질문)과 거름망 ⑥(14일 안 같은 질문 글 → 업데이트 후보)에 쓴다.
+    """
+    token = os.getenv("NOTION_TOKEN")
+    if not token:
+        return None
+    h = {"Authorization": f"Bearer {token}", "Notion-Version": VERSION}
+    db = os.getenv("NOTION_GEO_DB", DEFAULT_DB)
+    written: set[int] = set()
+    recent: dict[int, str] = {}
+    since = (now - timedelta(days=14)).isoformat()
+    body: dict = {"page_size": 100}
+    while True:
+        res = _http.request_json("POST", f"{API}/databases/{db}/query", body, headers=h)
+        for r in res.get("results", []):
+            p = r.get("properties", {})
+            q = "".join(t.get("plain_text", "") for t in p.get("대상 질문", {}).get("rich_text", []))
+            no = "".join(t.get("plain_text", "") for t in p.get("글 번호", {}).get("title", []))
+            for m in re.findall(r"GQ-(\d+)", q):
+                written.add(int(m))
+                if r.get("created_time", "") >= since:
+                    recent[int(m)] = no
+        if not res.get("has_more"):
+            return written, recent
+        body["start_cursor"] = res["next_cursor"]

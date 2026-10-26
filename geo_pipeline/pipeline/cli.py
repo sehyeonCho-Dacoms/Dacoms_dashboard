@@ -70,10 +70,38 @@ def cmd_g0(config: Config, args) -> None:
     paths = write_g0_outputs(articles, config.out_dir, now.strftime("%Y-%m-%d"), stats)
     for kind, path in paths.items():
         print(f"   {kind:8s}→ {path}")
+    _g2(config, articles, now)
     if args.notion:
         from . import notion_g0
 
         print(notion_g0.push(articles, now))
+
+
+def _g2(config: Config, articles, now) -> None:
+    """G2 흥미도 점수 (준칙 v1). 체인 DB는 읽기만 한다(글 쓴 질문·14일 안 같은 질문)."""
+    import json
+
+    from . import g2, notion_g0
+
+    try:
+        chain = notion_g0.chain_questions(now)
+    except Exception as exc:   # 노션을 못 읽어도 채점은 한다 (상록 슬롯·⑥만 덜 정확)
+        print(f"   ⚠️  체인 DB 읽기 실패({getattr(exc, 'code', type(exc).__name__)}) → 글 쓴 질문 정보 없이 채점")
+        chain = None
+    written, recent = chain if chain else (set(), {})
+    scores, top, slots = g2.run_g2(articles, now, written, recent)
+    day = now.strftime("%Y-%m-%d")
+    md = config.out_dir / f"g2_{day}.md"
+    md.write_text(g2.summary_md(scores, top, slots, day), encoding="utf-8")
+    (config.out_dir / f"g2_{day}.json").write_text(json.dumps({
+        "day": day, "cutoff": g2.CUTOFF,
+        "candidates": [{"id": s.article.id, "title": s.article.title, "url": s.article.url, "total": s.total,
+                        "abcdef": [s.a, s.b, s.c, s.d, s.e, s.f], "target": s.target,
+                        "gq": s.gq.gq if s.gq else None, "channel": s.channel, "marks": s.marks} for s in top],
+        "evergreen": [{"gq": q.gq, "question": q.text, "target": q.target, "channel": q.channel} for q in slots],
+        "scored": [g2.line(s) for s in scores],
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"🎯 G2: 채점 {len(scores)}건 · {g2.CUTOFF}점 이상 후보 {len(top)}건 · 상록 슬롯 {len(slots)}건 → {md}")
 
 
 def _load_doc(target: str):
