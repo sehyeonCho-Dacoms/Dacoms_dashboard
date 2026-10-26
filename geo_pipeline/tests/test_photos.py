@@ -62,3 +62,10 @@ def test_blocks_use_uploaded_file_when_given():
     assert img["type"] == "file_upload" and img["file_upload"]["id"] == "up-1"
     assert img["caption"][0]["text"]["content"] == "사진: Kim / Pixabay https://pixabay.com/photos/x/"
     assert photos.blocks_for(found)[0]["heading_2"]["rich_text"][0]["text"]["content"].endswith("(Pixabay)")
+
+
+def test_marker_ignores_body_text_mentioning_section():
+    note = {"type": "paragraph", "paragraph": {"rich_text": [{"plain_text": "※ 맨 아래 '📷 사진 후보'로 붙습니다"}]}}
+    assert not photos.has_marker([note])
+    head = {"type": "heading_2", "heading_2": {"rich_text": [{"plain_text": "📷 사진 후보 (Pixabay)"}]}}
+    assert photos.marker_index([note, head]) == 1

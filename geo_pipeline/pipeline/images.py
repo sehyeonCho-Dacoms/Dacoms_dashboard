@@ -301,7 +301,9 @@ def render(d: Draft, out_dir: Path) -> list[Image]:
     images: list[Image] = []
     alts = {"1_cover.png": f"{d.title} 대표 이미지", "2_table.png": "비교표", "3_card.png": "핵심 정리 카드"}
 
-    if not (photo := photo_from_meta(d)):
+    # 자동 검색은 Pixabay 키가 있을 때만. Wikimedia CC0 자동 선택은 판화·도표·정치인 사진이 나와 쓰지 않는다
+    # (10/22·10/26 확인). 키가 없으면 FAQ 카드로 두고, 사진은 노션 행의 '사진 후보'(매일 Actions)에서 고른다.
+    if not (photo := photo_from_meta(d)) and os.getenv("PIXABAY_API_KEY"):
         from .photos import queries_for   # photo: 가 없으면 제목·질문에서 검색어를 만든다
         for q in [d.meta["photo"]] if d.meta.get("photo") else queries_for(d.title, d.meta.get("question", "")):
             if photo := find_photo(q):
