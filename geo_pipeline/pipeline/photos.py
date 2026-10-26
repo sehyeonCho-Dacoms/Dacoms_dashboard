@@ -133,7 +133,9 @@ def _block_text(b: dict) -> str:
 
 def marker_index(blocks: list[dict]) -> int:
     """'📷 사진 후보' 제목 블록 위치, 없으면 -1."""
-    return next((i for i, b in enumerate(blocks) if MARKER in _block_text(b)), -1)
+    # 제목 블록만 본다 — 본문 안내문에 '📷 사진 후보'라는 말이 있어도 섹션으로 치지 않는다(10/26 T-006·N-006)
+    return next((i for i, b in enumerate(blocks)
+                 if b.get("type", "").startswith("heading") and _block_text(b).startswith(MARKER)), -1)
 
 
 def has_marker(blocks: list[dict]) -> bool:
