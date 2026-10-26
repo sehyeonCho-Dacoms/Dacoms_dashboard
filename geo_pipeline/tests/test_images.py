@@ -97,3 +97,17 @@ def test_pixabay_used_when_key_set(monkeypatch):
     assert images.photo_caption(ph) == "사진: Kim / Pixabay https://pixabay.com/photos/contract-7/"
     assert images.photo_caption({"artist": "Lee", "license": "CC0", "page": "https://commons.wikimedia.org/x"}) \
         == "사진: Lee / Wikimedia Commons (CC0) https://commons.wikimedia.org/x"
+
+
+def test_pixabay_item_tidies_tags_and_skips_ai(monkeypatch):
+    import io
+    import json as _json
+
+    hits = [{"id": 1, "tags": "office, ai generated", "largeImageURL": "a.jpg", "pageURL": "p1", "user": "u"},
+            {"id": 2, "tags": "contract, contract, signing, pen, paper, desk, hand", "largeImageURL": "b.jpg",
+             "pageURL": "p2", "user": "v"}]
+    monkeypatch.setenv("PIXABAY_API_KEY", "k")
+    monkeypatch.setattr(images.urllib.request, "urlopen",
+                        lambda req, timeout=0: io.BytesIO(_json.dumps({"hits": hits}).encode()))
+    ph = images.find_photo("contract")
+    assert ph["page"] == "p2" and ph["title"] == "contract, signing, pen, paper, desk"

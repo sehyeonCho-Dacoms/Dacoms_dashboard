@@ -1,6 +1,6 @@
 name: G0 이슈 트래커 (매일)
 
-# 블로그 GEO 체인 G0 (DR-MKT-01). 매일 10시 의료 기사를 최대 100건 모아 1차 거름망을
+# 블로그 GEO 체인 G0 (DR-MKT-01). 매일 아침 의료 기사를 최대 100건 모아 1차 거름망을
 # 적용하고 아티팩트(CSV·JSON·요약 MD)로 올린다. 산출물은 커밋하지 않는다.
 #
 # Secrets: NAVER_CLIENT_ID, NAVER_CLIENT_SECRET (G-R과 같은 NAVER API HUB 키, 뉴스 API 등록 필요)
@@ -10,7 +10,9 @@ name: G0 이슈 트래커 (매일)
 
 on:
   schedule:
-    - cron: "0 1 * * *"        # 매일 10:00 KST (UTC 01:00)
+    # 정각(UTC 01:00)은 GitHub 예약 실행이 몰려 10/21~26 매일 4시간 넘게 늦게 돌았다(14:12~14:34 KST).
+    # 붐비지 않는 분(17분)으로, 지연돼도 출근 전에 끝나도록 07:17 KST에 예약한다.
+    - cron: "17 22 * * *"      # 매일 07:17 KST (UTC 22:17 전날)
   workflow_dispatch:
     inputs:
       hours:
