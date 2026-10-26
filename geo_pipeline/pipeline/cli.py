@@ -164,7 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
     gr.set_defaults(func=cmd_gr)
     g0 = sub.add_parser("g0", help="G0 이슈 트래커 (DR-MKT-01)")
     g0.add_argument("--hours", type=int, help="최근 몇 시간 기사를 볼지 (기본 G0_WINDOW_HOURS=26)")
-    g0.add_argument("--notion", action="store_true", help="거름망 통과 기사를 노션 'G0 이슈 트래커' DB에 올림")
+    g0.add_argument("--notion", action="store_true", help="거름망 통과 기사를 노션 '블로그 GEO 체인' DB에 '질문선택' 행으로 올림")
     g0.set_defaults(func=cmd_g0)
     rv = sub.add_parser("review", help="G6 자동 검수 (원고 .md 또는 게시 글 URL)")
     rv.add_argument("target", help="원고 .md 경로 또는 게시된 글 URL")

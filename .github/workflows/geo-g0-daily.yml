@@ -1,7 +1,7 @@
 name: G0 이슈 트래커 (매일)
 
 # 블로그 GEO 체인 G0 (DR-MKT-01). 매일 아침 의료 기사를 최대 100건 모아 1차 거름망을
-# 적용하고, 통과 기사는 노션 'G0 이슈 트래커 (매일 의료 기사)' DB에, 전체는 아티팩트(CSV·JSON·요약 MD)로
+# 적용하고, 통과 기사는 노션 '블로그 GEO 체인' DB에 '질문선택' 행으로, 전체는 아티팩트(CSV·JSON·요약 MD)로
 # 올린다. 산출물은 커밋하지 않는다.
 #
 # Secrets: NAVER_CLIENT_ID, NAVER_CLIENT_SECRET (G-R과 같은 NAVER API HUB 키, 뉴스 API 등록 필요), NOTION_TOKEN
@@ -47,7 +47,6 @@ jobs:
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_G0_DB: ${{ vars.NOTION_G0_DB }}
         run: |
           if [ -z "$NAVER_CLIENT_ID" ] || [ -z "$NAVER_CLIENT_SECRET" ]; then
             echo "::error::NAVER_CLIENT_ID/SECRET 시크릿이 없습니다. sample 데이터로 결과를 만들지 않도록 중단합니다."
