@@ -1,0 +1,51 @@
+name: G3 자동 선택 → 체인 DB 행 (웅서 인계)
+
+# 10/27 통합 인수인계 + 세현 결정: 'G2 오늘의 후보' 점수 1·2등을 자동 선택해 '블로그 GEO 체인' DB에
+# 같은 번호의 N-·T- 글 행(상태 근거수집, 담당 웅서, 2장 필수 칸)을 만들고 후보에 '선택'·'체인 글 번호'를 적는다.
+# 평소에는 G0 이슈 트래커 작업 끝에서 돈다. 이 작업은 그게 실패했을 때의 안전망 + 수동 실행용.
+# 그날 이미 넘긴 후보가 있으면 건너뛴다(여러 번 돌아도 안전). 미리 '선택'을 체크한 후보가 있으면 그걸 쓴다.
+#
+# Secrets: NOTION_TOKEN (두 DB 모두 통합 연결 필요)
+# ⚠️ schedule 은 기본 브랜치(main)에서만 발동하고, 예약 시각보다 늦게 돌 수 있다. 급하면 Run workflow.
+
+on:
+  schedule:
+    - cron: "37 7,9 * * *"     # 매일 16:37·18:37 KST 안전망 (G0 예약이 14시대에 돌아서)
+  workflow_dispatch:
+    inputs:
+      day:
+        description: "(선택) 후보 날짜 YYYY-MM-DD. 비우면 오늘"
+        required: false
+        default: ""
+      dry_run:
+        description: "노션에 쓰지 않고 만들 행만 보기"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  g3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 1·2등 후보 → 체인 DB 행
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          DAY: ${{ github.event.inputs.day }}
+          DRY: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -o pipefail
+          args=()
+          if [ -n "$DAY" ]; then
+            [[ "$DAY" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || { echo "::error::날짜 형식은 YYYY-MM-DD"; exit 1; }
+            args+=(--day "$DAY")
+          fi
+          [ "$DRY" = "true" ] && args+=(--dry-run)
+          PYTHONPATH=geo_pipeline python -m pipeline.cli g3 "${args[@]}" | tee g3_log.txt
+          cat g3_log.txt >> "$GITHUB_STEP_SUMMARY"
+          ! grep -q "❌" g3_log.txt
