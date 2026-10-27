@@ -100,3 +100,68 @@ def chain_questions(now: datetime) -> tuple[set[int], dict[int, str]] | None:
         if not res.get("has_more"):
             return written, recent
         body["start_cursor"] = res["next_cursor"]
+
+
+# --------------------------------------------------------------------------- #
+# G2 → 노션 'G2 오늘의 후보' DB (체인 DB 앞 단계). 행 = 그날 후보 1건. G3 담당자가 '선택'을 체크한
+# 1건만 체인 DB의 글 행이 된다. 같은 날짜 행이 이미 있으면 다시 올리지 않는다(수동 재실행 대비).
+# --------------------------------------------------------------------------- #
+DEFAULT_G2_DB = "5c99c33be0114c328d7d41c14bb74105"
+
+
+def candidate_rows(top, slots, day: str, db: str) -> list[dict]:
+    rows = []
+    for i, s in enumerate(top, 1):
+        a = s.article
+        props = {
+            "후보": {"title": _text(a.title)},
+            "날짜": {"date": {"start": day}},
+            "순위": {"number": i},
+            "종류": {"select": {"name": "뉴스"}},
+            "총점": {"number": s.total},
+            "점수 내역": {"rich_text": _text(f"A{s.a} B{s.b} C{s.c} D{s.d} E{s.e} F{s.f}")},
+            "타깃": {"select": {"name": s.target}},
+            "채널": {"select": {"name": s.channel}},
+            "매칭 질문": {"rich_text": _text(f"GQ-{s.gq.gq} {s.gq.text}" if s.gq else "없음 → 좋은 기사면 G1 새 질문 후보")},
+            "원천 기사": {"url": a.url or None},
+            "매체": {"rich_text": _text(a.press)},
+            "표시": {"multi_select": [{"name": m} for m in s.marks if m in ("논쟁", "법률")]},
+            "한 줄 이유": {"rich_text": _text(s.reason)},
+            "기사 ID": {"rich_text": _text(a.id)},
+        }
+        rows.append({"parent": {"database_id": db}, "properties": props})
+    for j, q in enumerate(slots, len(top) + 1):
+        props = {
+            "후보": {"title": _text(f"GQ-{q.gq} {q.text}")},
+            "날짜": {"date": {"start": day}},
+            "순위": {"number": j},
+            "종류": {"select": {"name": "상록 슬롯"}},
+            "타깃": {"select": {"name": q.target}},
+            "채널": {"select": {"name": q.channel}},
+            "매칭 질문": {"rich_text": _text(f"GQ-{q.gq} {q.text}")},
+            "한 줄 이유": {"rich_text": _text("60점 이상 뉴스가 모자라 질문 은행 P1·글 없음·바로 가능에서 채움(준칙 3-4)")},
+        }
+        rows.append({"parent": {"database_id": db}, "properties": props})
+    return rows
+
+
+def push_candidates(top, slots, now: datetime) -> str:
+    token = os.getenv("NOTION_TOKEN")
+    if not token:
+        return "   노션 후보 DB: NOTION_TOKEN 이 없어 건너뜀"
+    h = {"Authorization": f"Bearer {token}", "Notion-Version": VERSION}
+    db = os.getenv("NOTION_G2_DB", DEFAULT_G2_DB)
+    day = now.strftime("%Y-%m-%d")
+    try:
+        res = _http.request_json("POST", f"{API}/databases/{db}/query",
+                                 {"page_size": 1, "filter": {"property": "날짜", "date": {"equals": day}}}, headers=h)
+    except Exception as exc:
+        code = getattr(exc, "code", "")
+        hint = {404: "후보 DB에 통합이 연결되지 않음 (DB 페이지 ⋯ → 연결 → 통합 추가)", 401: "토큰 오류"}.get(code, str(exc))
+        return f"❌ 노션 'G2 오늘의 후보' 접속 실패 ({code}): {hint}"
+    if res.get("results"):
+        return f"   노션 후보 DB: {day} 후보가 이미 있어 건너뜀"
+    for row in candidate_rows(top, slots, day, db):
+        _http.request_json("POST", f"{API}/pages", row, headers=h)
+        time.sleep(0.35)
+    return f"   노션 'G2 오늘의 후보': {day} 후보 {len(top)}건 + 상록 슬롯 {len(slots)}건 저장"

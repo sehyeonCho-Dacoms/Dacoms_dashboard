@@ -45,17 +45,20 @@ jobs:
           NAVER_NEWS_ENDPOINT: ${{ vars.NAVER_NEWS_ENDPOINT }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}   # G2가 체인 DB를 읽기만 함 (글 쓴 질문·14일 규칙)
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}   # G2: 체인 DB 읽기 + 'G2 오늘의 후보' DB에 후보 저장
         run: |
           if [ -z "$NAVER_CLIENT_ID" ] || [ -z "$NAVER_CLIENT_SECRET" ]; then
             echo "::error::NAVER_CLIENT_ID/SECRET 시크릿이 없습니다. sample 데이터로 결과를 만들지 않도록 중단합니다."
             exit 1
           fi
-          # 노션 체인 DB에는 올리지 않는다. 체인 v1: G0 기사 목록 → 거름망 → G2 흥미도 100점 → 60점 이상
+          # 체인 DB에는 행을 만들지 않는다. 후보는 'G2 오늘의 후보' DB에. 체인 v1: G0 → 거름망 → G2 → 60점 이상
           # 상위 3건 → G3 사람 선택 → 그 1건만 체인 DB의 글 행이 된다. (10/26 통과 74건을 모두 올렸다가 되돌림)
-          PYTHONPATH=geo_pipeline python -m pipeline.cli g0
+          set -o pipefail
+          PYTHONPATH=geo_pipeline python -m pipeline.cli g0 | tee g0_log.txt
+          grep "노션" g0_log.txt >> "$GITHUB_STEP_SUMMARY" || true
           cat geo_pipeline/out/g2_*.md >> "$GITHUB_STEP_SUMMARY"      # G2 후보가 맨 위
           cat geo_pipeline/out/g0_*_summary.md >> "$GITHUB_STEP_SUMMARY"
+          ! grep -q "❌" g0_log.txt   # 후보를 노션에 못 올렸으면 실패로 표시 (아티팩트는 그대로 올림)
 
       - uses: actions/upload-artifact@v4
         if: always()

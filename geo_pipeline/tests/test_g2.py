@@ -58,3 +58,11 @@ def test_run_g2_fills_with_evergreen_and_md_has_no_summary():
     md = g2.summary_md(scores, top, slots, "2026-10-21")
     assert "상록 슬롯** GQ-20" in md and "요약 문장" not in md
     assert "A B C D E F" in md   # 준칙 3-5 출력 형식
+
+
+def test_general_wage_news_is_not_our_target():
+    # 10/27 오탐: 전체 근로자 임금 통계가 '월급'만으로 80점 1위
+    s = g2.score(_a("임금근로자 절반 이상 월급 300만원 넘어…복지·의료 일자리 증가"), NOW)
+    assert s.total < g2.CUTOFF and s.b == 5 and s.f == 0 and s.gq is None
+    d = g2.score(_a("의사 평균소득 연 4억 돌파… 변호사 보다 3.8배 더 벌었다"), NOW)
+    assert d.gq.gq == 39

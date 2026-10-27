@@ -78,7 +78,7 @@ def cmd_g0(config: Config, args) -> None:
 
 
 def _g2(config: Config, articles, now) -> None:
-    """G2 흥미도 점수 (준칙 v1). 체인 DB는 읽기만 한다(글 쓴 질문·14일 안 같은 질문)."""
+    """G2 흥미도 점수 (준칙 v1). 체인 DB는 읽기만 하고(글 쓴 질문·14일 안 같은 질문), 후보는 'G2 오늘의 후보' DB에."""
     import json
 
     from . import g2, notion_g0
@@ -102,6 +102,7 @@ def _g2(config: Config, articles, now) -> None:
         "scored": [g2.line(s) for s in scores],
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"🎯 G2: 채점 {len(scores)}건 · {g2.CUTOFF}점 이상 후보 {len(top)}건 · 상록 슬롯 {len(slots)}건 → {md}")
+    print(notion_g0.push_candidates(top, slots, now))   # G3 담당자는 노션 'G2 오늘의 후보'에서 고른다
 
 
 def _load_doc(target: str):
