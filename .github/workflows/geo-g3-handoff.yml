@@ -1,0 +1,38 @@
+name: G3 선택 → 체인 DB 행 (웅서 인계)
+
+# 10/27 통합 인수인계: 세현이 노션 'G2 오늘의 후보'에서 글로 쓸 후보의 '선택'을 체크하면(~12:00),
+# 이 작업이 '블로그 GEO 체인' DB에 글 행(상태 근거수집, 담당 웅서, 2장 필수 칸)을 만들고
+# 후보의 '체인 글 번호'에 번호를 적는다. 이미 번호가 적힌 후보는 건너뛴다(여러 번 돌아도 안전).
+#
+# Secrets: NOTION_TOKEN (두 DB 모두 통합 연결 필요)
+# ⚠️ schedule 은 기본 브랜치(main)에서만 발동하고, 예약 시각보다 늦게 돌 수 있다. 급하면 Run workflow.
+
+on:
+  schedule:
+    - cron: "7 2-9 * * *"      # 매일 11:07~18:07 KST 매시 (정각을 피함)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "노션에 쓰지 않고 만들 행만 보기"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  g3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 선택된 후보 → 체인 DB 행
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: |
+          set -o pipefail
+          PYTHONPATH=geo_pipeline python -m pipeline.cli g3 ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }} | tee g3_log.txt
+          cat g3_log.txt >> "$GITHUB_STEP_SUMMARY"
+          ! grep -q "❌" g3_log.txt

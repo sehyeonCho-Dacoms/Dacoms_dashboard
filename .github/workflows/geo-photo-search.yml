@@ -5,11 +5,10 @@ name: 블로그 사진 찾기
 # 검색어를 입력할 필요 없음. 작업 환경 IP가 Wikimedia 검색 API에서 막혀(429) GitHub 서버에서 돌린다.
 #
 # Secrets: NOTION_TOKEN, PIXABAY_API_KEY (pixabay.com/api/docs 무료 키. 없으면 Wikimedia CC0로 찾지만 품질이 낮다)
-# ⚠️ schedule 은 기본 브랜치(main)에서만 발동한다.
+# 10/27 통합 인수인계: 사진은 웅서 쪽(G5)에서 직접 제작·검수 → 매일 예약(07:47)은 끔. 코드와 수동 실행만 남김.
+# 체인 DB 본문·사진을 쓰므로 통합 후에는 돌리지 않는다.
 
 on:
-  schedule:
-    - cron: "47 22 * * *"      # 매일 07:47 KST (정각을 피함 — 정각 예약은 몇 시간씩 밀린다)
   workflow_dispatch:
     inputs:
       queries:

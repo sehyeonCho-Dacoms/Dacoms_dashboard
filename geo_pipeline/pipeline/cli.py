@@ -7,6 +7,7 @@
   g0        G0 이슈 트래커 실행 → geo_pipeline/out/g0_YYYY-MM-DD.*
   review    G6 자동 검수 (원고 .md 또는 게시된 글 URL, --other 로 다른 채널 글과 복붙 비교)
   build     원고 .md → 채널별 붙여 넣기 완성본(HTML) + 검수 보고서 → geo_pipeline/out/drafts/
+  g3        'G2 오늘의 후보'에서 선택한 후보 → 체인 DB 글 행(근거수집). 여기서 웅서(G4~)에게 넘어감
 
 예시:
   python -m pipeline.cli gr                                   # 오프라인 sample 로 즉시 체험
@@ -176,6 +177,11 @@ def cmd_photo_sync(config: Config, args) -> None:
     print("\n".join(photos.sync(dry_run=args.dry_run, replace=args.replace)))
 
 
+def cmd_g3(config: Config, args) -> None:
+    from . import g3
+    print("\n".join(g3.run(datetime.now(KST), dry_run=args.dry_run)))
+
+
 def cmd_notion_check(config: Config, args) -> None:
     from . import notion
 
@@ -213,6 +219,9 @@ def build_parser() -> argparse.ArgumentParser:
     ps.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 결과만 출력")
     ps.add_argument("--replace", action="store_true", help="이미 붙은 사진 섹션을 지우고 다시 찾음")
     ps.set_defaults(func=cmd_photo_sync)
+    g3p = sub.add_parser("g3", help="G3: 'G2 오늘의 후보'에서 '선택' 체크한 후보 → 체인 DB 글 행(근거수집, 담당 웅서)")
+    g3p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 만들 행만 보기")
+    g3p.set_defaults(func=cmd_g3)
     sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
     return p
 
