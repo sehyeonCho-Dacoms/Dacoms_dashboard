@@ -50,6 +50,14 @@ def test_evergreen_slots_skip_written_questions():
     assert g2.evergreen_slots(1, set(), month=1)[0].evergreen == "시즌"   # 1월엔 신규 전문의 시즌 질문 먼저
 
 
+def test_evergreen_slots_fall_back_to_p2_when_p1_runs_out():
+    p1_ready = {q.gq for q in g2.QUESTIONS if q.priority == "P1" and q.ready == "바로 가능"}
+    slots = g2.evergreen_slots(3, written_gq=p1_ready - {30}, month=10)
+    assert [q.priority for q in slots] == ["P1", "P2", "P2"]   # P1 남은 것 먼저, 모자라면 P2
+    assert slots[0].gq == 30 and all(q.ready == "바로 가능" for q in slots)
+    assert all(q.priority != "P3" for q in g2.evergreen_slots(20, p1_ready, month=10))
+
+
 def test_run_g2_fills_with_evergreen_and_md_has_no_summary():
     arts = [_a("비대면진료 처방일수 '30일 예외' 논란", i="5")]
     arts[0].description = "요약 문장은 산출물에 넣지 않음"
