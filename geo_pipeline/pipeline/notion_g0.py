@@ -139,7 +139,7 @@ def candidate_rows(top, slots, day: str, db: str) -> list[dict]:
             "타깃": {"select": {"name": q.target}},
             "채널": {"select": {"name": q.channel}},
             "매칭 질문": {"rich_text": _text(f"GQ-{q.gq} {q.text}")},
-            "한 줄 이유": {"rich_text": _text("60점 이상 뉴스가 모자라 질문 은행 P1·글 없음·바로 가능에서 채움(준칙 3-4)")},
+            "한 줄 이유": {"rich_text": _text(f"60점 이상 뉴스가 모자라 질문 은행 {q.priority}·글 없음·바로 가능에서 채움(준칙 3-4)")},
         }
         rows.append({"parent": {"database_id": db}, "properties": props})
     return rows

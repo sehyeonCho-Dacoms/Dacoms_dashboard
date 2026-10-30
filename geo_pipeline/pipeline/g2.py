@@ -210,10 +210,11 @@ def pick(scores: list[Score]) -> list[Score]:
 
 
 def evergreen_slots(n: int, written_gq: set[int], month: int) -> list[Question]:
-    """상록 슬롯: P1 · 아직 글 없음 · 답 준비도 '바로 가능', 시즌이 맞는 것 우선(준칙 3-4 3번)."""
-    pool = [q for q in QUESTIONS if q.priority == "P1" and q.ready == "바로 가능" and q.gq not in written_gq]
+    """상록 슬롯: 아직 글 없음 · 답 준비도 '바로 가능', 시즌이 맞는 것 우선(준칙 3-4 3번).
+    P1이 다 떨어지면 P2로 내려간다(10/30 세현: P1 7개 소진으로 후보 0건 → 체인 멈춤)."""
+    pool = [q for q in QUESTIONS if q.priority in ("P1", "P2") and q.ready == "바로 가능" and q.gq not in written_gq]
     in_season = month in (12, 1, 2, 3)   # 신규 전문의·공보의 시즌 캠페인 (질문 은행 메모: Q1 시즌)
-    pool.sort(key=lambda q: (not (in_season and q.evergreen == "시즌"), q.gq))
+    pool.sort(key=lambda q: (q.priority, not (in_season and q.evergreen == "시즌"), q.gq))
     return pool[:n]
 
 
