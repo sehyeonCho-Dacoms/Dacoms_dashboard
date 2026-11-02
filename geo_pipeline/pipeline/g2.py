@@ -209,11 +209,19 @@ def pick(scores: list[Score]) -> list[Score]:
     return ok[:TOP_N]
 
 
+PRIORITY_ORDER = {"P1": 0, "P2": 1, "P3": 2}
+
+
 def evergreen_slots(n: int, written_gq: set[int], month: int) -> list[Question]:
-    """상록 슬롯: P1 · 아직 글 없음 · 답 준비도 '바로 가능', 시즌이 맞는 것 우선(준칙 3-4 3번)."""
-    pool = [q for q in QUESTIONS if q.priority == "P1" and q.ready == "바로 가능" and q.gq not in written_gq]
+    """상록 슬롯: 아직 글 없음 · 답 준비도 '바로 가능', 시즌이 맞는 것 우선(준칙 3-4 3번).
+
+    P1부터 채우고, P1이 바닥나면 P2 → P3 순으로 내려간다(10/30 세현: P1 소진 후 P2·글 없음·바로 가능).
+    P1만 보던 때는 10/28부터 슬롯이 0~1개라 G3가 N 행 하나만 만들거나(10/28·29) 아무 행도 못 만들었다(10/30~).
+    '근거 필요'·'확정값 필요'는 근거 수집·허브 확정이 먼저라 자동 슬롯에 넣지 않는다.
+    """
+    pool = [q for q in QUESTIONS if q.ready == "바로 가능" and q.gq not in written_gq]
     in_season = month in (12, 1, 2, 3)   # 신규 전문의·공보의 시즌 캠페인 (질문 은행 메모: Q1 시즌)
-    pool.sort(key=lambda q: (not (in_season and q.evergreen == "시즌"), q.gq))
+    pool.sort(key=lambda q: (PRIORITY_ORDER.get(q.priority, 9), not (in_season and q.evergreen == "시즌"), q.gq))
     return pool[:n]
 
 

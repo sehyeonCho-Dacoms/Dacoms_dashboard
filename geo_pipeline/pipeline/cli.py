@@ -182,6 +182,14 @@ def cmd_g3(config: Config, args) -> None:
     print("\n".join(g3.run(datetime.now(KST), dry_run=args.dry_run, day=args.day)))
 
 
+def cmd_g8(config: Config, args) -> None:
+    from datetime import date
+
+    from . import g8
+    today = date.fromisoformat(args.today) if args.today else None
+    print("\n".join(g8.run(datetime.now(KST), dry_run=args.dry_run, today=today)))
+
+
 def cmd_notion_check(config: Config, args) -> None:
     from . import notion
 
@@ -223,6 +231,10 @@ def build_parser() -> argparse.ArgumentParser:
     g3p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 만들 행만 보기")
     g3p.add_argument("--day", help="후보 날짜 YYYY-MM-DD (기본: 오늘)")
     g3p.set_defaults(func=cmd_g3)
+    g8p = sub.add_parser("g8", help="G8: 게시 글 D+3·7·30 색인·조회수 측정 → 체인 DB (네이버 검색 API · Search Console · GA4)")
+    g8p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 잴 글·결과만 보기")
+    g8p.add_argument("--today", help="기준일 YYYY-MM-DD (기본: 오늘, 시험용)")
+    g8p.set_defaults(func=cmd_g8)
     sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
     return p
 
