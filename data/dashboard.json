@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-02T00:24:40",
+  "generatedAt": "2026-11-02T19:17:17",
   "kpis": {
-    "collected": 99,
+    "collected": 103,
     "uploadReady": 15,
     "uploadReadyPct": 15,
-    "hotLeads": 0,
-    "pipelineValue": 0,
-    "pipelineValueLabel": "₩0만"
+    "hotLeads": 1,
+    "pipelineValue": 30900,
+    "pipelineValueLabel": "₩3.1억"
   },
   "jobs": [
     {
@@ -1692,20 +1692,88 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73251"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "대한수영연맹 신입(계약직) 직원 채용 서류전형 합격자 공고(사무행정)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73264"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "대한수영연맹 경력(정규직) 직원 채용 서류전형 합격자 공고(사무행정)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73263"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2027년 유도 국가대표팀 지도자, 의료면허소지자 및 트레이너(기술) 공개경쟁채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73261"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한정구헙회] 2027-28 정구 국가대표 지도자 채용공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(대한체육회)",
+        "협회",
+        "체육"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73259"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 99,
-      "growth": "±0",
+      "open": 103,
+      "growth": "+4",
       "senior": 0,
-      "tier": "Warm",
-      "score": 52,
-      "fee": 29700,
+      "tier": "Hot",
+      "score": 65,
+      "fee": 30900,
       "stage": "신규",
-      "signal": "99개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "4건↑ 채용 확대 중(스케일업 신호) · 103개 직무 동시 채용 — 스케일업 정황"
     }
   ],
   "actions": {
@@ -1734,32 +1802,32 @@
     ],
     "demand": [
       {
-        "pr": "P1",
-        "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩29,700만",
-        "why": "99개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
-        "cta": "콜드 아웃리치"
+        "pr": "P0",
+        "title": "대한체육회 헤드헌팅 계약 제안",
+        "company": "예상 수수료 ₩30,900만",
+        "why": "4건↑ 채용 확대 중(스케일업 신호) · 103개 직무 동시 채용 — 스케일업 정황",
+        "cta": "제안서 발송"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 73,
-      "코치/트레이너": 24,
+      "기타": 76,
+      "코치/트레이너": 25,
       "데이터": 2
     },
     "size": {
-      "공공/협회": 99
+      "공공/협회": 103
     },
     "platform": {
-      "대한체육회": 99
+      "대한체육회": 103
     },
     "sector": {
-      "협회": 99
+      "협회": 103
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 99,
+      "미들(3~5년)": 103,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -1781,7 +1849,7 @@
         13,
         9,
         11,
-        3
+        7
       ],
       "uploadReady": [
         2,
