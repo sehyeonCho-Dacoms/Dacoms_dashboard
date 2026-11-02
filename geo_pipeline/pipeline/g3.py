@@ -244,6 +244,9 @@ def run(now: datetime, dry_run: bool = False, pause: float = 0.35, day: str | No
     picks = choose(cands)
     if not picks:
         return out + ["   ⚠️ 매칭 질문(GQ)이 있는 후보가 없어 체인 행을 만들지 않음 → 질문 은행 확인"]
+    if len(picks) < PICKS:   # 10/28·29: 후보 1건 → N 행만 생기고 T가 빈 날이 됨
+        out.append(f"   ⚠️ 쓸 수 있는 후보가 {len(picks)}건뿐이라 {CHANNEL[channels(picks)[0]]} 행만 만듦"
+                   " → 다른 채널은 질문 은행에 '바로 가능' 질문을 추가하거나 후보 '선택'으로 채울 것")
     numbers = [_plain(r.get("properties", {}).get("글 번호", {})) for r in chain]
     logs = [_plain(r.get("properties", {}).get("작업 기록", {})) for r in chain]
     made_before = {c.page_id: [no for no, log in zip(numbers, logs) if c.page_id[:8] in log] for c in picks}

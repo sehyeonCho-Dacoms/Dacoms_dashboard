@@ -1,0 +1,54 @@
+name: G8 색인·조회수 측정 (매일)
+
+# 블로그 GEO 체인 G8 (DR-GEO-07) — 11/2 세현 결정 D-025: API로 잴 수 있는 것은 Actions.
+# 체인 DB의 게시 글마다 D+3·D+7·D+30 시점에 한 번씩 잰다(밀린 글은 D+7부터).
+#   네이버 글   → 네이버 검색 API 노출 (조회수는 웅서 Claude가 월요일에 통계 화면으로)
+#   티스토리 글 → Search Console URL 검사(색인) + GA4 블로그 속성 페이지뷰(조회수 D+7·D+30)
+# 결과는 체인 DB '색인 여부'·'조회수 D+7/D+30'·'측정 기록'(한 줄 추가)에 쓴다.
+#
+# Secrets: NOTION_TOKEN · NAVER_CLIENT_ID · NAVER_CLIENT_SECRET · GSC_GA4_SA_KEY (서비스 계정 JSON 전체)
+# Variables(선택): GSC_SITE_URL · GA4_PROPERTY_ID · NAVER_API_MODE
+# 서비스 계정 geo-measure@doctoron-512308 은 Search Console '제한적' · GA4 '뷰어' (11/2 추가).
+# GCP 프로젝트 doctoron-512308 에서 Search Console API · Google Analytics Data API 를 사용 설정해야 한다.
+# ⚠️ schedule 은 기본 브랜치(main)에서만 발동한다.
+
+on:
+  schedule:
+    - cron: "0 2 * * *"        # 매일 11:00 KST (G0 뒤, 실제로는 늦게 돌 수 있음)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "노션에 쓰지 않고 잴 글·결과만 보기"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  g8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 의존성 설치
+        run: pip install -r geo_pipeline/requirements.txt
+      - name: G8 측정 → 체인 DB
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NAVER_API_MODE: ${{ vars.NAVER_API_MODE || 'hub' }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          GSC_GA4_SA_KEY: ${{ secrets.GSC_GA4_SA_KEY }}
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+          GA4_PROPERTY_ID: ${{ vars.GA4_PROPERTY_ID }}
+          DRY: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -o pipefail
+          args=()
+          [ "$DRY" = "true" ] && args+=(--dry-run)
+          PYTHONPATH=geo_pipeline python -m pipeline.cli g8 "${args[@]}" | tee g8_log.txt
+          cat g8_log.txt >> "$GITHUB_STEP_SUMMARY"
+          ! grep -q "❌" g8_log.txt

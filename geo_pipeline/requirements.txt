@@ -3,3 +3,5 @@
 python-dotenv>=1.0     # .env 로딩 (없으면 환경변수만 사용)
 pytest>=8.0            # 테스트
 playwright>=1.40       # build --images (블로그 이미지 렌더링, Chromium 필요)
+google-auth>=2.20      # g8: 서비스 계정 토큰 (Search Console·GA4 Data API)
+requests>=2.31         # google-auth 토큰 갱신용 전송
