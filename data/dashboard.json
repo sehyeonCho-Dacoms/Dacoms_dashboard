@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-04T01:06:41",
+  "generatedAt": "2026-11-04T16:56:33",
   "kpis": {
-    "collected": 104,
-    "uploadReady": 15,
-    "uploadReadyPct": 14,
-    "hotLeads": 0,
-    "pipelineValue": 0,
-    "pipelineValueLabel": "₩0만"
+    "collected": 106,
+    "uploadReady": 17,
+    "uploadReadyPct": 16,
+    "hotLeads": 1,
+    "pipelineValue": 31800,
+    "pipelineValueLabel": "₩3.2억"
   },
   "jobs": [
     {
@@ -264,6 +264,40 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73120"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2027년 대한육상연맹 육상 국가대표팀 대표코치 채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 71,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73272"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "2027년 대한육상연맹 육상 국가대표팀 트레이너 채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 71,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73271"
     },
     {
       "platform": "대한체육회",
@@ -1783,14 +1817,14 @@
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 104,
-      "growth": "±0",
+      "open": 106,
+      "growth": "+2",
       "senior": 0,
-      "tier": "Warm",
-      "score": 52,
-      "fee": 31200,
+      "tier": "Hot",
+      "score": 65,
+      "fee": 31800,
       "stage": "신규",
-      "signal": "104개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "2건↑ 채용 확대 중(스케일업 신호) · 106개 직무 동시 채용 — 스케일업 정황"
     }
   ],
   "actions": {
@@ -1819,32 +1853,32 @@
     ],
     "demand": [
       {
-        "pr": "P1",
-        "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩31,200만",
-        "why": "104개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
-        "cta": "콜드 아웃리치"
+        "pr": "P0",
+        "title": "대한체육회 헤드헌팅 계약 제안",
+        "company": "예상 수수료 ₩31,800만",
+        "why": "2건↑ 채용 확대 중(스케일업 신호) · 106개 직무 동시 채용 — 스케일업 정황",
+        "cta": "제안서 발송"
       }
     ]
   },
   "trends": {
     "role": {
       "기타": 77,
-      "코치/트레이너": 25,
+      "코치/트레이너": 27,
       "데이터": 2
     },
     "size": {
-      "공공/협회": 104
+      "공공/협회": 106
     },
     "platform": {
-      "대한체육회": 104
+      "대한체육회": 106
     },
     "sector": {
-      "협회": 104
+      "협회": 106
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 104,
+      "미들(3~5년)": 106,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -1866,7 +1900,7 @@
         10,
         7,
         11,
-        7
+        9
       ],
       "uploadReady": [
         1,
@@ -1876,7 +1910,7 @@
         1,
         0,
         3,
-        0
+        2
       ]
     }
   }
