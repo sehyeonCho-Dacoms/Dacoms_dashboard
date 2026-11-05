@@ -242,7 +242,7 @@ def stock_line(written_gq: set[int] | None) -> str:
     if len(left) < REFILL_AT:
         from .notify import alert
         return alert("G1", f"질문 은행 '바로 가능' 재고 {len(left)}개(기준 {REFILL_AT}개 미만: {ids})",
-                     "질문 채택 → 노션 질문 은행 '답 준비도'와 g2.py QUESTIONS 스냅샷 함께 갱신(D-036)")
+                     "G1-Q 자동 검수가 못 채운 만큼 질문 은행에 질문 추가 (D-036·D-056)")
     return f"   질문 은행 재고: '바로 가능' {len(left)}개 ({ids})"
 
 

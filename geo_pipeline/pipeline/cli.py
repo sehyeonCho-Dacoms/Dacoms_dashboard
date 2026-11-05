@@ -18,6 +18,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -90,6 +91,9 @@ def _g2(config: Config, articles, now) -> None:
         print(f"   ⚠️  체인 DB 읽기 실패({getattr(exc, 'code', type(exc).__name__)}) → 글 쓴 질문 정보 없이 채점")
         chain = None
     written, recent = chain if chain else (set(), {})
+    from . import g1q   # D-056: 노션 질문 은행 값 반영 + 재고 5개 미만이면 '근거 필요' 질문 자동 검수·승격
+    for ln in g1q.run(config, now, written if chain else None, dry_run=os.getenv("G1Q_DRY") == "1"):
+        print(ln)
     scores, top, slots = g2.run_g2(articles, now, written, recent)
     day = now.strftime("%Y-%m-%d")
     md = config.out_dir / f"g2_{day}.md"
@@ -105,6 +109,23 @@ def _g2(config: Config, articles, now) -> None:
     print(f"🎯 G2: 채점 {len(scores)}건 · {g2.CUTOFF}점 이상 후보 {len(top)}건 · 상록 슬롯 {len(slots)}건 → {md}")
     print(g2.stock_line(written if chain else None))   # D-036 재고 5개 미만이면 🔔
     print(notion_g0.push_candidates(top, slots, now))   # G3 담당자는 노션 'G2 오늘의 후보'에서 고른다
+
+
+def cmd_g1q(config: Config, args) -> None:
+    """G1-Q 질문 검수만 따로 (미리 보기·수동 실행용). 평소에는 G0 안에서 G2 직전에 돈다."""
+    from . import g1q, notion_g0
+
+    now = datetime.now(KST)
+    try:
+        chain = notion_g0.chain_questions(now)
+    except Exception as exc:
+        print(f"❌ {g1q.TAG}: 체인 DB 읽기 실패({getattr(exc, 'code', type(exc).__name__)})")
+        return
+    for ln in g1q.run(config, now, chain[0] if chain else None, dry_run=args.dry_run):
+        print(ln)
+    from . import g2
+
+    print(g2.stock_line(chain[0] if chain else None))
 
 
 def _load_doc(target: str):
@@ -247,6 +268,9 @@ def build_parser() -> argparse.ArgumentParser:
     g3p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 만들 행만 보기")
     g3p.add_argument("--day", help="후보 날짜 YYYY-MM-DD (기본: 오늘)")
     g3p.set_defaults(func=cmd_g3)
+    g1p = sub.add_parser("g1q", help="G1-Q: 질문 은행 '근거 필요' 질문을 검색 근거로 검수해 '바로 가능'으로 올림 (D-056)")
+    g1p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 판정만 보기")
+    g1p.set_defaults(func=cmd_g1q)
     g8p = sub.add_parser("g8", help="G8: 게시 글 D+3·7·30 색인·조회수 측정 → 체인 DB (네이버 검색 API · Search Console · GA4)")
     g8p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 잴 글·결과만 보기")
     g8p.add_argument("--today", help="기준일 YYYY-MM-DD (기본: 오늘, 시험용)")
