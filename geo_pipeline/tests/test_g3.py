@@ -99,7 +99,8 @@ def _fake(calls, cands, chain):
     return fake
 
 
-def test_run_auto_picks_top2_as_pair(monkeypatch):
+def test_run_one_topic_both_channels(monkeypatch):
+    """D-054 하루 한 주제: 1등 하나로 N·T를 만들고(1등이 원하는 채널 먼저), 2등은 건드리지 않는다."""
     calls = []
     chain = [{"properties": {"글 번호": {"type": "title", "title": [{"plain_text": "N-007"}]}},
               "created_time": "2026-10-26T15:07:15Z"}]
@@ -109,10 +110,11 @@ def test_run_auto_picks_top2_as_pair(monkeypatch):
     out = g3.run(datetime(2026, 10, 28, 14, 50, tzinfo=KST), pause=0)
     posts = [p for m, u, p in calls if m == "POST" and u.endswith("/pages")]
     assert [p["properties"]["글 번호"]["title"][0]["text"]["content"] for p in posts] == ["T-008", "N-008"]
+    assert posts[0]["properties"]["대상 질문"] == posts[1]["properties"]["대상 질문"]   # 같은 주제
     marks = [(u.rsplit("/", 1)[1], p["properties"]) for m, u, p in calls if m == "PATCH"]
-    assert [m[0] for m in marks] == ["a1", "b2"]
+    assert [m[0] for m in marks] == ["a1"]                                               # 2등(b2)은 안 씀
     assert marks[0][1]["선택"]["checkbox"] is True
-    assert marks[0][1]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "T-008"
+    assert marks[0][1]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "T-008, N-008"
     assert "T-008" in out[1] and "N-008" in out[2]
 
 
@@ -145,7 +147,7 @@ def _numbers(calls):
 
 
 def test_single_candidate_makes_both_channels_same_topic(monkeypatch):
-    """D-037: 후보가 1건뿐이면 같은 후보로 N·T 둘 다 만든다 (10/28·29·11/4 T 행 누락)."""
+    """D-037·D-054: 후보가 1건뿐이어도 같은 후보로 N·T 둘 다 만든다 (10/28·29·11/4 T 행 누락)."""
     calls = []
     cands = [_page("a1", rank=1, channel="네이버"), _page("b2", rank=2, question="없음 → 새 질문 후보")]
     monkeypatch.setenv("NOTION_TOKEN", "t")
@@ -158,7 +160,7 @@ def test_single_candidate_makes_both_channels_same_topic(monkeypatch):
     marks = [(u.rsplit("/", 1)[1], p) for m, u, p in calls if m == "PATCH"]
     assert len(marks) == 1 and marks[0][0] == "a1"
     assert marks[0][1]["properties"]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "N-001, T-001"
-    assert any(line.startswith("⏸ [G3]") for line in out) and not any("❌" in line for line in out)
+    assert not any(line.startswith(("⏸", "❌")) for line in out)   # D-054 뒤로는 평소 방식이라 알림 없음
 
 
 def test_single_candidate_resume_makes_only_missing_channel(monkeypatch):
