@@ -121,8 +121,8 @@ def cmd_g1q(config: Config, args) -> None:
     except Exception as exc:
         print(f"❌ {g1q.TAG}: 체인 DB 읽기 실패({getattr(exc, 'code', type(exc).__name__)})")
         return
-    print("
-".join(g1q.run(config, now, chain[0] if chain else None, dry_run=args.dry_run)))
+    for ln in g1q.run(config, now, chain[0] if chain else None, dry_run=args.dry_run):
+        print(ln)
     from . import g2
 
     print(g2.stock_line(chain[0] if chain else None))

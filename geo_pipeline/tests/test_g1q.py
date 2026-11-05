@@ -108,3 +108,11 @@ def test_run_bank_read_failure_falls_back(monkeypatch):
     monkeypatch.setattr(g1q, "load_bank", boom)
     out = g1q.run(None, NOW, set())
     assert out[0].startswith("⏸ [G1-Q] 질문 은행 읽기 실패(404)")
+
+
+def test_cli_has_g1q_command(monkeypatch, capsys):
+    from pipeline import cli   # cli.py 문법 오류를 테스트에서 잡으려고 (11/5 줄바꿈 사고)
+
+    monkeypatch.delenv("NOTION_TOKEN", raising=False)
+    cli.main(["g1q", "--dry-run"])
+    assert "G1-Q" in capsys.readouterr().out
