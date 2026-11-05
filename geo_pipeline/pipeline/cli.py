@@ -200,7 +200,9 @@ def cmd_photo_sync(config: Config, args) -> None:
 
 
 def cmd_g3(config: Config, args) -> None:
-    from . import g3
+    from . import g1q, g3
+
+    g1q.refresh()   # 행 설명의 답 준비도를 노션 값으로 (D-056 승격 반영, 실패하면 코드 사본)
     print("\n".join(g3.run(datetime.now(KST), dry_run=args.dry_run, day=args.day)))
 
 

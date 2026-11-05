@@ -189,6 +189,18 @@ def _memo_payload(old: str, line: str) -> dict:
     return {"rich_text": [{"type": "text", "text": {"content": text}}]}
 
 
+def refresh() -> int | None:
+    """노션 질문 은행 값만 읽어 g2 질문 목록에 반영(쓰기 없음). G3처럼 G0와 다른 단계에서 쓴다. 실패하면 None."""
+    token = os.getenv("NOTION_TOKEN")
+    if not token:
+        return None
+    h = {"Authorization": f"Bearer {token}", "Notion-Version": "2022-06-28"}
+    try:
+        return len(apply_bank(load_bank(h, os.getenv("NOTION_QBANK_DB", DEFAULT_QBANK_DB))))
+    except Exception:
+        return None
+
+
 # --------------------------------------------------------------------------- #
 # 실행
 # --------------------------------------------------------------------------- #

@@ -116,3 +116,14 @@ def test_cli_has_g1q_command(monkeypatch, capsys):
     monkeypatch.delenv("NOTION_TOKEN", raising=False)
     cli.main(["g1q", "--dry-run"])
     assert "G1-Q" in capsys.readouterr().out
+
+
+def test_refresh_updates_by_id_used_by_g3(monkeypatch):
+    from pipeline import g3
+
+    monkeypatch.setenv("NOTION_TOKEN", "x")
+    monkeypatch.setattr(g1q, "load_bank", lambda h, db: {3: g1q.BankRow(3, "p", "바로 가능", "")})
+    assert g1q.refresh() == 1
+    assert g3.BY_ID[3].ready == "바로 가능"     # g3 가 import 한 같은 dict
+    monkeypatch.setattr(g1q, "load_bank", lambda h, db: (_ for _ in ()).throw(Exception("x")))
+    assert g1q.refresh() is None
