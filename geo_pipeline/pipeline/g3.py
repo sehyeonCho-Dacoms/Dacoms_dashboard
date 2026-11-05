@@ -12,6 +12,12 @@ DB에 글 행을 만들고 상태를 '근거수집'으로 둔다. 이 행이 웅
 - 매칭 질문(GQ)이 없는 후보는 고르지 않는다(14일 중복 규칙이 안 돌아감) → 다음 순위로.
 - 고른 후보는 '선택' 체크 + '체인 글 번호'를 적는다.
 - 행을 만든 뒤에는 2장 칸만 고친다(3장 칸은 웅서). 기사 본문·요약은 넣지 않는다(RULE-11).
+
+11/5 세현 결정 (세계관 결정 목록):
+- D-037: 쓸 수 있는 후보가 1건이면 같은 후보로 다른 채널 행도 만든다(같은 번호 N·T). 작업 기록에 '같은 주제
+  다른 채널, 문장 유사도 80% 미만'을 적고 🔔 알림 줄을 남긴다. (10/28·29·11/4에 T 행이 빠졌던 문제)
+- D-026·D-030: 후보 0건(16시 이후)·질문 없는 후보만 있는 날은 ❌로 끝내 워크플로를 실패시키고 🔔 알림을 남긴다.
+  예전에는 초록으로 끝나 아무도 몰랐다(10/30 조용한 실패).
 """
 
 from __future__ import annotations
@@ -22,7 +28,7 @@ import time
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
-from . import _http
+from . import _http, notify
 from .g2 import BY_ID
 from .notion import DEFAULT_DB, VERSION, _text
 from .notion_g0 import DEFAULT_G2_DB
@@ -31,6 +37,7 @@ API = "https://api.notion.com/v1"
 STAGE = "근거수집"
 OWNER = "웅서"
 PICKS = 2
+LATE_HOUR = 16   # KST. 이 시각 뒤에도 후보가 0건이면 실패(❌)로 본다 — G0는 14시대, 첫 안전망은 16:37
 PREF = {"티스토리": "T", "네이버": "N"}   # 둘 다 → 정하지 않음
 CHANNEL = {"N": "네이버 블로그", "T": "티스토리"}
 # 체인 DB 타깃은 의사/반의사 두 칸뿐. 병원(원장·인사 담당)은 반의사 형식, 공통은 의사 형식으로 쓴다.
@@ -153,18 +160,20 @@ def score_text(c: Candidate) -> str:
     return f"{c.total}점 ({c.breakdown})" if c.breakdown else f"{c.total}점"
 
 
-def work_log(c: Candidate, target: str, prefix: str, today: date, note: str) -> str:
+def work_log(c: Candidate, target: str, prefix: str, today: date, note: str, twin: bool = False) -> str:
     why = c.reason or ("상록 슬롯" if not c.news else "")
     must = f"첫 문단에서 GQ-{c.gq} 질문에 바로 답" + (f" · {c.memo}" if c.memo else "")
     avoid = AVOID + (" · 논쟁/법률 표시 → 입장은 사람이 정함(DR-MKT-02)" if c.marks else "")
-    how = "사람 선택" if c.checked else f"자동 선택 {c.rank}등"
+    if twin:   # D-037: 같은 주제 두 번째 채널 — 두 글이 겹치지 않게
+        avoid += " · 같은 주제의 다른 채널 글과 문장 유사도 80% 미만(구성·예시·소제목을 다르게)"
+    how = ("사람 선택" if c.checked else f"자동 선택 {c.rank}등") + (" · 같은 주제 다른 채널(D-037)" if twin else "")
     head = f"{today:%m/%d} G3 {how} ({c.kind} · 후보 {c.day} {c.page_id[:8]})"
     parts = [head, f"고른 이유: {why}" if why else "",
              f"원고 설계(G-R 형식표): {FORMAT[(target, prefix)]}", f"꼭 다룰 점: {must}", f"피할 점: {avoid}", note]
     return "\n".join(x for x in parts if x)
 
 
-def row_for(c: Candidate, prefix: str, number: int, today: date, db: str) -> dict | None:
+def row_for(c: Candidate, prefix: str, number: int, today: date, db: str, twin: bool = False) -> dict | None:
     """후보 1건 → 체인 DB 행 1개. GQ가 없으면 None."""
     q = BY_ID.get(c.gq) if c.gq else None
     if not q:
@@ -181,7 +190,7 @@ def row_for(c: Candidate, prefix: str, number: int, today: date, db: str) -> dic
         "흥미도 점수": {"rich_text": _text(score_text(c))},
         "담당": {"rich_text": _text(OWNER)},
         "리뷰어": {"rich_text": _text(rev)},
-        "작업 기록": {"rich_text": _text(work_log(c, target, prefix, today, note))},
+        "작업 기록": {"rich_text": _text(work_log(c, target, prefix, today, note, twin))},
         "상태": {"select": {"name": STAGE}},
     }
     if c.news and c.url:
@@ -238,36 +247,57 @@ def run(now: datetime, dry_run: bool = False, pause: float = 0.35, day: str | No
     today = now.date()
     out = [f"🧭 G3 {day}: 후보 {len(cands)}건 · {week_balance(chain, today)}"]
     if not cands:
+        if now.hour >= LATE_HOUR:   # 첫 안전망(16:37)에도 후보가 없으면 그날 체인이 멈춘 것 (10/30 사고)
+            return out + [f"❌ G3: {day} 후보가 없어 체인 행을 만들지 못함",
+                          notify.alert("G2→G3", "그날 후보 0건", "G0·G2 실행 기록 확인, 질문 은행 '바로 가능' 보충(D-036)")]
         return out + ["   후보가 아직 없음 (G2가 돌고 나면 다시)"]
     if done := [c.chain_no for c in cands if c.chain_no]:
         return out + [f"   이미 넘김: {', '.join(done)} → 건너뜀"]
     picks = choose(cands)
     if not picks:
-        return out + ["   ⚠️ 매칭 질문(GQ)이 있는 후보가 없어 체인 행을 만들지 않음 → 질문 은행 확인"]
-    if len(picks) < PICKS:   # 10/28·29: 후보 1건 → N 행만 생기고 T가 빈 날이 됨
-        out.append(f"   ⚠️ 쓸 수 있는 후보가 {len(picks)}건뿐이라 {CHANNEL[channels(picks)[0]]} 행만 만듦"
-                   " → 다른 채널은 질문 은행에 '바로 가능' 질문을 추가하거나 후보 '선택'으로 채울 것")
+        return out + ["❌ G3: 매칭 질문(GQ)이 있는 후보가 없어 체인 행을 만들지 못함",
+                      notify.alert("G1→G3", "후보에 맞는 질문 없음", "질문 은행에 질문 추가 후 g2.py 스냅샷 갱신, 또는 후보 '선택'")]
+    plan = pairs(picks)
+    if len(picks) < PICKS:   # 10/28·29·11/4: 후보 1건 → N 행만 생기고 T가 빈 날 → 같은 주제로 채움 (D-037)
+        other = CHANNEL[plan[1][1]]
+        out.append(notify.alert("G3", f"쓸 수 있는 후보 {len(picks)}건 → 같은 주제로 {other} 행 자동 생성(D-037)",
+                                "질문 은행 '바로 가능' 보충(D-036)"))
     numbers = [_plain(r.get("properties", {}).get("글 번호", {})) for r in chain]
     logs = [_plain(r.get("properties", {}).get("작업 기록", {})) for r in chain]
-    made_before = {c.page_id: [no for no, log in zip(numbers, logs) if c.page_id[:8] in log] for c in picks}
+    made_before = {(c.page_id, prefix): [no for no, log in zip(numbers, logs)
+                                         if c.page_id[:8] in log and no.startswith(f"{prefix}-")]
+                   for c, prefix in plan}
     again = [int(m.group(1)) for v in made_before.values() for no in v if (m := re.match(r"[NT]-(\d+)$", no))]
     n = again[0] if again else next_number(numbers)   # 한쪽만 만들고 멈췄으면 같은 번호로 이어서
-    for c, prefix in zip(picks, channels(picks)):
-        made = made_before[c.page_id]
+    marks: dict[str, list[str]] = {}
+    for i, (c, prefix) in enumerate(plan):
+        made = made_before[(c.page_id, prefix)]
+        twin = i > 0 and c is plan[0][0]
         if made:   # 행은 만들었는데 후보에 번호를 못 적은 경우(중간 실패) → 번호만 적는다
             out.append(f"   {c.rank}등 {c.title[:30]} → 이미 {', '.join(made)} 있음, 후보에 번호만 기록")
         else:
-            row = row_for(c, prefix, n, today, db)
+            row = row_for(c, prefix, n, today, db, twin=twin)
             made = [f"{prefix}-{n:03d}"]
             rev = row["properties"]["리뷰어"]["rich_text"][0]["text"]["content"]
             out.append(f"   {c.rank}등 {c.title[:30]} ({c.total or '상록'}) → {made[0]} {CHANNEL[prefix]} · 리뷰 {rev}"
-                       + (" [dry-run]" if dry_run else ""))
+                       + (" (같은 주제, D-037)" if twin else "") + (" [dry-run]" if dry_run else ""))
             if not dry_run:
                 _http.request_json("POST", f"{API}/pages", row, headers=h)
                 time.sleep(pause)   # 노션 API 초당 3회 제한
-        if not dry_run:
-            _mark(c.page_id, ", ".join(made), h)
+        marks.setdefault(c.page_id, []).extend(made)
+    if not dry_run:
+        for pid, made in marks.items():
+            _mark(pid, ", ".join(made), h)
     return out
+
+
+def pairs(picks: list[Candidate]) -> list[tuple[Candidate, str]]:
+    """(후보, 채널) 계획. 후보가 1건이면 같은 후보로 N·T 둘 다 만든다(D-037, 문장 유사도 80% 금지는 그대로)."""
+    chans = channels(picks)
+    if len(picks) == 1:
+        first = chans[0]
+        return [(picks[0], first), (picks[0], "T" if first == "N" else "N")]
+    return list(zip(picks, chans))
 
 
 def _mark(page_id: str, numbers: str, h: dict) -> None:

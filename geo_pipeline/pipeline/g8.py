@@ -11,6 +11,9 @@
   상태는 '게시완료' → '색인확인'만 바꾼다(색인 확인일 때). 사람확인 등 다른 상태는 건드리지 않는다.
   '확인'을 '미확인'으로 되돌리지 않는다(검색 순위가 흔들려도 한 번 색인된 글).
 
+  11/5 세현 결정(D-041·D-026): 같은 실행에서 모든 행의 상태값과 게시 기록을 대조하고(불일치는 🔔),
+  근거수집·원고작성에서 24시간 넘게 멈춘 행을 알린다. 고치지는 않는다(어느 쪽이 맞는지 사람이 정함).
+
 Secrets: NOTION_TOKEN · NAVER_CLIENT_ID/SECRET · GSC_GA4_SA_KEY(서비스 계정 JSON 전체)
 Variables(선택): GSC_SITE_URL(기본 https://doctoronhr.tistory.com/) · GA4_PROPERTY_ID(기본 559499976)
 """
@@ -23,9 +26,9 @@ import re
 import time
 import urllib.parse
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 
-from . import _http
+from . import _http, notify
 from .g3 import _plain, _query
 from .notion import DEFAULT_DB, VERSION, _text
 
@@ -206,6 +209,48 @@ def measure(post: Post, cp: int, today: date, gtoken: str | None) -> Measure:
     return m
 
 
+# --------------------------------------------------------------------------- #
+# 상태값 대조 · 정체 (D-041, D-026 — 11/5 세현 결정). 고치지 않고 알리기만 한다.
+# 사람확인인데 공개된 글처럼 '어느 쪽이 맞는지' 사람이 봐야 하는 경우가 섞여 있어서다(D-031은 되돌릴 수 있는
+# 정정만 허용하지만, 상태를 올릴지 글을 내릴지는 판단이 필요).
+# --------------------------------------------------------------------------- #
+BEFORE_POST = {"근거수집", "원고작성", "검수통과"}
+AFTER_POST = LIVE - {"사람확인"}
+STALL = {"근거수집", "원고작성"}
+STALL_HOURS = 24
+
+
+def audit(rows: list[dict], now: datetime) -> list[str]:
+    if now.tzinfo is None:   # 테스트·수동 실행에서 시간대 없이 들어오면 KST로 본다
+        now = now.replace(tzinfo=timezone(timedelta(hours=9)))
+    mismatch, stalled = [], []
+    for r in rows:
+        p = r.get("properties", {})
+        g = lambda k: _plain(p.get(k, {})).strip()
+        no, state, url, day = g("글 번호"), g("상태"), g("게시 URL"), g("게시일")
+        if (url or day) and state in BEFORE_POST:
+            mismatch.append(f"{no} 게시 기록이 있는데 상태 '{state}'")
+        elif url and state == "사람확인":
+            mismatch.append(f"{no} 상태 '사람확인'인데 게시 URL 있음(공개 여부 확인)")
+        elif state in AFTER_POST and not url:
+            mismatch.append(f"{no} 상태 '{state}'인데 게시 URL 없음")
+        elif bool(url) != bool(day):
+            mismatch.append(f"{no} 게시 URL·게시일 중 하나만 있음")
+        made = r.get("created_time", "")
+        if state in STALL and made:
+            hours = (now - datetime.fromisoformat(made.replace("Z", "+00:00"))).total_seconds() / 3600
+            if hours > STALL_HOURS:
+                stalled.append(f"{no} {state} {int(hours // 24)}일째")
+    out = [f"   ⚠️ {m}" for m in mismatch] + [f"   ⏳ {s}" for s in stalled]
+    if mismatch:
+        out.append(notify.alert("G7·G8", f"상태값과 게시 기록 불일치 {len(mismatch)}건",
+                                "손댄 사람이 상태값을 바꾸고 작업 기록 1줄(D-041)"))
+    if stalled:
+        out.append(notify.alert("G4~G6", f"하루 넘게 멈춘 행 {len(stalled)}개({', '.join(s.split()[0] for s in stalled)})",
+                                "작업키트 세션 열기 · 막힌 이유를 작업 기록에"))
+    return out
+
+
 def run(now: datetime, dry_run: bool = False, today: date | None = None, pause: float = 0.4) -> list[str]:
     token = os.getenv("NOTION_TOKEN")
     if not token:
@@ -213,7 +258,8 @@ def run(now: datetime, dry_run: bool = False, today: date | None = None, pause: 
     h = {"Authorization": f"Bearer {token}", "Notion-Version": VERSION}
     db = os.getenv("NOTION_GEO_DB", DEFAULT_DB)
     today = today or now.date()
-    rows = _query(db, {"filter": {"property": "게시 URL", "url": {"is_not_empty": True}}}, h)
+    every = _query(db, {}, h)   # 대조는 모든 행, 측정은 게시 URL이 있는 행만
+    rows = [r for r in every if _plain(r.get("properties", {}).get("게시 URL", {})).strip()]
     posts = [p for r in rows if (p := from_row(r)) and p.state in LIVE]
     todo = [(p, cp) for p in posts if (cp := due(p, today))]
     out = [f"📏 G8 {today}: 게시 글 {len(posts)}편 · 오늘 잴 글 {len(todo)}편" + (" [dry-run]" if dry_run else "")]
@@ -245,4 +291,6 @@ def run(now: datetime, dry_run: bool = False, today: date | None = None, pause: 
             time.sleep(pause)   # 노션 API 초당 3회
     if fails and fails == len(todo):
         out.append("❌ 잴 글을 하나도 못 쟀음 → 위 오류 확인")
-    return out
+    checks = audit(every, now)
+    out.append(f"🔎 상태값 대조·정체 확인: {'이상 없음' if not checks else '아래'}")
+    return out + checks

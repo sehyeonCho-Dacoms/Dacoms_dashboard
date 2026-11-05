@@ -74,3 +74,38 @@ def test_from_row_skips_unpublished():
     assert p.no == "T-009" and p.published == date(2026, 10, 29) and not p.naver
     row["properties"]["게시 URL"]["url"] = None
     assert g8.from_row(row) is None
+
+
+# --- 11/5 세현 결정 D-041 · D-026: 상태값 대조 · 정체 -------------------------- #
+def _row(no, state, url="", day="", made="2026-11-03T05:00:00Z"):
+    t = lambda s: {"type": "rich_text", "rich_text": [{"plain_text": s}] if s else []}
+    return {"id": no, "created_time": made, "properties": {
+        "글 번호": {"type": "title", "title": [{"plain_text": no}]},
+        "상태": {"type": "select", "select": {"name": state}},
+        "게시 URL": {"type": "url", "url": url or None},
+        "게시일": {"type": "date", "date": {"start": day} if day else None},
+        "제목": t("x")}}
+
+
+def test_audit_flags_state_mismatch_and_stall():
+    from datetime import datetime
+    rows = [
+        _row("N-001", "사람확인", "https://blog.naver.com/doctoronhr/1", "2026-10-22"),   # 공개됐는데 사람확인
+        _row("T-003", "검수통과", "https://doctoronhr.tistory.com/6", "2026-10-27"),      # 게시 기록 있는데 검수통과
+        _row("N-010", "게시완료"),                                                       # 게시 이후 상태인데 URL 없음
+        _row("N-013", "근거수집", made="2026-11-03T07:21:57Z"),                         # 이틀째 정체
+        _row("N-014", "근거수집", made="2026-11-05T05:00:00Z"),                         # 오늘 만든 행은 정상
+        _row("T-008", "색인확인", "https://doctoronhr.tistory.com/8", "2026-10-28"),      # 정상
+    ]
+    out = g8.audit(rows, datetime(2026, 11, 5, 11, 0))
+    text = "\n".join(out)
+    assert "N-001" in text and "T-003" in text and "N-010" in text and "T-008" not in text
+    assert "N-013" in text and "N-014" not in text
+    assert sum(x.startswith("🔔") for x in out) == 2
+
+
+def test_audit_clean_has_no_alert():
+    from datetime import datetime
+    out = g8.audit([_row("T-008", "색인확인", "https://doctoronhr.tistory.com/8", "2026-10-28")],
+                   datetime(2026, 11, 5, 11, 0))
+    assert out == []

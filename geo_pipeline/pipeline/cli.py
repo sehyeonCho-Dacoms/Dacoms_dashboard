@@ -103,6 +103,7 @@ def _g2(config: Config, articles, now) -> None:
         "scored": [g2.line(s) for s in scores],
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"🎯 G2: 채점 {len(scores)}건 · {g2.CUTOFF}점 이상 후보 {len(top)}건 · 상록 슬롯 {len(slots)}건 → {md}")
+    print(g2.stock_line(written if chain else None))   # D-036 재고 5개 미만이면 🔔
     print(notion_g0.push_candidates(top, slots, now))   # G3 담당자는 노션 'G2 오늘의 후보'에서 고른다
 
 
@@ -190,6 +191,19 @@ def cmd_g8(config: Config, args) -> None:
     print("\n".join(g8.run(datetime.now(KST), dry_run=args.dry_run, today=today)))
 
 
+def cmd_notify(config: Config, args) -> None:
+    """로그 파일들에서 ❌·🔔 줄만 모아 슬랙으로 (D-030). 웹훅이 없거나 보내다 실패해도 워크플로를 깨지 않는다."""
+    from pathlib import Path
+
+    from . import notify
+
+    text = "\n".join(Path(f).read_text(encoding="utf-8") for f in args.log if Path(f).exists())
+    try:
+        print(notify.send(args.title, text, args.run_url or ""))
+    except Exception as exc:   # 알림 실패가 본 작업 결과를 가리지 않게
+        print(f"   ⚠️ 슬랙 전송 실패: {getattr(exc, 'code', type(exc).__name__)}")
+
+
 def cmd_notion_check(config: Config, args) -> None:
     from . import notion
 
@@ -235,6 +249,11 @@ def build_parser() -> argparse.ArgumentParser:
     g8p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 잴 글·결과만 보기")
     g8p.add_argument("--today", help="기준일 YYYY-MM-DD (기본: 오늘, 시험용)")
     g8p.set_defaults(func=cmd_g8)
+    nt = sub.add_parser("notify", help="로그의 ❌·🔔 줄을 슬랙으로 보냄 (SLACK_WEBHOOK_URL, 없으면 건너뜀)")
+    nt.add_argument("--log", nargs="+", required=True, help="읽을 로그 파일")
+    nt.add_argument("--title", default="블로그 GEO 체인 알림")
+    nt.add_argument("--run-url", help="GitHub Actions 실행 주소")
+    nt.set_defaults(func=cmd_notify)
     sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
     return p
 

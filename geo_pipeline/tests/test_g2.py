@@ -77,3 +77,12 @@ def test_general_wage_news_is_not_our_target():
     assert s.total < g2.CUTOFF and s.b == 5 and s.f == 0 and s.gq is None
     d = g2.score(_a("의사 평균소득 연 4억 돌파… 변호사 보다 3.8배 더 벌었다"), NOW)
     assert d.gq.gq == 39
+
+
+def test_stock_line_alerts_under_five():
+    """D-036: '바로 가능' 재고가 5개 미만이면 🔔, 체인 DB를 못 읽었으면 세지 않음."""
+    ready = [q.gq for q in g2.QUESTIONS if q.ready == "바로 가능"]
+    assert g2.stock_line(None).startswith("   질문 은행 재고: 체인 DB를 못 읽어")
+    assert g2.stock_line(set(ready)).startswith("🔔 [G1]")            # 전부 글이 됐으면 0개
+    if len(ready) >= g2.REFILL_AT:
+        assert not g2.stock_line(set()).startswith("🔔")               # 아무 글도 없으면 전부 재고
