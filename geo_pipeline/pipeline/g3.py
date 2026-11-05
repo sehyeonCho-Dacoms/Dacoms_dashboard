@@ -39,7 +39,7 @@ API = "https://api.notion.com/v1"
 STAGE = "근거수집"
 OWNER = "웅서"
 PICKS = 2
-LATE_HOUR = 16   # KST. 이 시각 뒤에도 후보가 0건이면 실패(❌)로 본다 — G0는 14시대, 첫 안전망은 16:37
+LATE_HOUR = 16   # KST. 이 시각 뒤에도 후보가 0건이면 실패(❌)로 본다 — G0는 실제 10~12시, 안전망은 실제 13~21시 (D-055)
 PREF = {"티스토리": "T", "네이버": "N"}   # 둘 다 → 정하지 않음
 CHANNEL = {"N": "네이버 블로그", "T": "티스토리"}
 # 체인 DB 타깃은 의사/반의사 두 칸뿐. 병원(원장·인사 담당)은 반의사 형식, 공통은 의사 형식으로 쓴다.
@@ -249,7 +249,7 @@ def run(now: datetime, dry_run: bool = False, pause: float = 0.35, day: str | No
     today = now.date()
     out = [f"🧭 G3 {day}: 후보 {len(cands)}건 · {week_balance(chain, today)}"]
     if not cands:
-        if now.hour >= LATE_HOUR:   # 첫 안전망(16:37)에도 후보가 없으면 그날 체인이 멈춘 것 (10/30 사고)
+        if now.hour >= LATE_HOUR:   # 16시가 넘었는데도 후보가 없으면 그날 체인이 멈춘 것 (10/30 사고)
             return out + [f"❌ G3: {day} 후보가 없어 체인 행을 만들지 못함",
                           notify.alert("G2→G3", "그날 후보 0건", "G0·G2 실행 기록 확인, 질문 은행 '바로 가능' 보충(D-036)")]
         return out + ["   후보가 아직 없음 (G2가 돌고 나면 다시)"]
