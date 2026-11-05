@@ -3,7 +3,9 @@
 G2가 그날 'G2 오늘의 후보' DB에 후보를 올리면, **점수 1·2등을 자동 선택**해(10/27 세현 결정) '블로그 GEO 체인'
 DB에 글 행을 만들고 상태를 '근거수집'으로 둔다. 이 행이 웅서(G4~G11)에게 넘기는 유일한 연결 고리다.
 
-- 하루 = 같은 번호의 N-·T- 한 쌍(기존 N-002/T-002처럼 주제는 서로 다름). 1등이 원하는 채널을 먼저 갖고 2등이 나머지.
+- 하루 = 한 주제(1등)로 같은 번호의 N-·T- 한 쌍 = 주제 번호 NT-xxx (11/5 세현 결정 '하루 한 주제', D-049·D-054).
+  두 글은 문장 유사도 80% 미만으로 다르게 쓴다. 2등은 쓰지 않는다(그 질문은 은행에 남아 다음에 다시 뽑힌다).
+  (10/27~11/4에는 1등·2등이 서로 다른 주제로 N·T를 나눠 가졌다. 예: N-013 병원 행정직 / T-013 의사 연봉)
 - 자동 실행 전에 사람이 '선택'을 체크해 두었으면 그 후보를 쓴다(덮어쓰기). 상록 슬롯도 순위대로 후보가 된다.
 - 그날 후보 중 하나라도 '체인 글 번호'가 있으면 그날은 끝난 것으로 보고 건너뛴다. 지난 날짜는 손대지 않는다.
 
@@ -14,8 +16,8 @@ DB에 글 행을 만들고 상태를 '근거수집'으로 둔다. 이 행이 웅
 - 행을 만든 뒤에는 2장 칸만 고친다(3장 칸은 웅서). 기사 본문·요약은 넣지 않는다(RULE-11).
 
 11/5 세현 결정 (세계관 결정 목록):
-- D-037: 쓸 수 있는 후보가 1건이면 같은 후보로 다른 채널 행도 만든다(같은 번호 N·T). 작업 기록에 '같은 주제
-  다른 채널, 문장 유사도 80% 미만'을 적고 🔔 알림 줄을 남긴다. (10/28·29·11/4에 T 행이 빠졌던 문제)
+- D-037: 같은 주제 두 번째 채널 행의 작업 기록에 '같은 주제 다른 채널, 문장 유사도 80% 미만'을 적는다.
+  D-054 뒤로는 매일 이 방식이라 따로 알림을 보내지 않는다. (10/28·29·11/4에 T 행이 빠졌던 문제도 함께 막힘)
 - D-026·D-030: 후보 0건(16시 이후)·질문 없는 후보만 있는 날은 ❌로 끝내 워크플로를 실패시키고 ⏸ 알림을 남긴다.
   예전에는 초록으로 끝나 아무도 몰랐다(10/30 조용한 실패).
 """
@@ -258,10 +260,6 @@ def run(now: datetime, dry_run: bool = False, pause: float = 0.35, day: str | No
         return out + ["❌ G3: 매칭 질문(GQ)이 있는 후보가 없어 체인 행을 만들지 못함",
                       notify.alert("G1→G3", "후보에 맞는 질문 없음", "질문 은행에 질문 추가 후 g2.py 스냅샷 갱신, 또는 후보 '선택'")]
     plan = pairs(picks)
-    if len(picks) < PICKS:   # 10/28·29·11/4: 후보 1건 → N 행만 생기고 T가 빈 날 → 같은 주제로 채움 (D-037)
-        other = CHANNEL[plan[1][1]]
-        out.append(notify.alert("G3", f"쓸 수 있는 후보 {len(picks)}건 → 같은 주제로 {other} 행 자동 생성(D-037)",
-                                "질문 은행 '바로 가능' 보충(D-036)"))
     numbers = [_plain(r.get("properties", {}).get("글 번호", {})) for r in chain]
     logs = [_plain(r.get("properties", {}).get("작업 기록", {})) for r in chain]
     made_before = {(c.page_id, prefix): [no for no, log in zip(numbers, logs)
@@ -292,12 +290,10 @@ def run(now: datetime, dry_run: bool = False, pause: float = 0.35, day: str | No
 
 
 def pairs(picks: list[Candidate]) -> list[tuple[Candidate, str]]:
-    """(후보, 채널) 계획. 후보가 1건이면 같은 후보로 N·T 둘 다 만든다(D-037, 문장 유사도 80% 금지는 그대로)."""
-    chans = channels(picks)
-    if len(picks) == 1:
-        first = chans[0]
-        return [(picks[0], first), (picks[0], "T" if first == "N" else "N")]
-    return list(zip(picks, chans))
+    """(후보, 채널) 계획. 하루 한 주제(D-054): 1등 후보 하나로 N·T 둘 다 만든다(문장 유사도 80% 금지, D-037).
+    1등이 원하는 채널을 먼저 만든다. 2등 이하는 쓰지 않는다."""
+    first = channels(picks[:1])[0]
+    return [(picks[0], first), (picks[0], "T" if first == "N" else "N")]
 
 
 def _mark(page_id: str, numbers: str, h: dict) -> None:
