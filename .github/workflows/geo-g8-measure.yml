@@ -53,9 +53,9 @@ jobs:
           cat g8_log.txt >> "$GITHUB_STEP_SUMMARY"
           ! grep -q "❌" g8_log.txt
 
-      - name: 슬랙 알림 (❌·🔔 줄만, D-030)
+      - name: 슬랙 알림 (⛔·⏸ 줄, 없으면 ✅ 하루 요약, D-046)
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          PYTHONPATH=geo_pipeline python -m pipeline.cli notify --log g8_log.txt             --title "GEO 체인 G8 측정·상태 대조" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          PYTHONPATH=geo_pipeline python -m pipeline.cli notify --daily --log g8_log.txt             --title "GEO 체인 G8 측정·상태 대조" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

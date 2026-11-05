@@ -244,7 +244,7 @@ def audit(rows: list[dict], now: datetime) -> list[str]:
     out = [f"   ⚠️ {m}" for m in mismatch] + [f"   ⏳ {s}" for s in stalled]
     if mismatch:
         out.append(notify.alert("G7·G8", f"상태값과 게시 기록 불일치 {len(mismatch)}건",
-                                "손댄 사람이 상태값을 바꾸고 작업 기록 1줄(D-041)"))
+                                "손댄 사람이 상태값을 바꾸고 작업 기록 1줄(D-041)", owner="손댄 사람"))
     if stalled:
         out.append(notify.alert("G4~G6", f"하루 넘게 멈춘 행 {len(stalled)}개({', '.join(s.split()[0] for s in stalled)})",
                                 "작업키트 세션 열기 · 막힌 이유를 작업 기록에"))

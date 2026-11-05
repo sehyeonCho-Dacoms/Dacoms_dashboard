@@ -192,14 +192,16 @@ def cmd_g8(config: Config, args) -> None:
 
 
 def cmd_notify(config: Config, args) -> None:
-    """로그 파일들에서 ❌·🔔 줄만 모아 슬랙으로 (D-030). 웹훅이 없거나 보내다 실패해도 워크플로를 깨지 않는다."""
+    """로그의 ⛔(❌)·⏸ 줄을 슬랙으로 (D-046). --daily 면 문제가 없을 때 ✅ 하루 요약(각 로그 첫 줄)을 보낸다.
+    웹훅이 없거나 보내다 실패해도 워크플로를 깨지 않는다."""
     from pathlib import Path
 
     from . import notify
 
-    text = "\n".join(Path(f).read_text(encoding="utf-8") for f in args.log if Path(f).exists())
+    texts = [Path(f).read_text(encoding="utf-8") for f in args.log if Path(f).exists()]
+    summary = [next((ln for ln in t.splitlines() if ln.strip()), "") for t in texts]
     try:
-        print(notify.send(args.title, text, args.run_url or ""))
+        print(notify.send(args.title, "\n".join(texts), args.run_url or "", daily=args.daily, summary=summary))
     except Exception as exc:   # 알림 실패가 본 작업 결과를 가리지 않게
         print(f"   ⚠️ 슬랙 전송 실패: {getattr(exc, 'code', type(exc).__name__)}")
 
@@ -249,10 +251,11 @@ def build_parser() -> argparse.ArgumentParser:
     g8p.add_argument("--dry-run", action="store_true", help="노션에 쓰지 않고 잴 글·결과만 보기")
     g8p.add_argument("--today", help="기준일 YYYY-MM-DD (기본: 오늘, 시험용)")
     g8p.set_defaults(func=cmd_g8)
-    nt = sub.add_parser("notify", help="로그의 ❌·🔔 줄을 슬랙으로 보냄 (SLACK_WEBHOOK_URL, 없으면 건너뜀)")
+    nt = sub.add_parser("notify", help="로그의 ⛔·⏸ 줄을 슬랙으로 보냄, --daily 면 문제없을 때 ✅ 요약 (SLACK_WEBHOOK_URL, 없으면 건너뜀)")
     nt.add_argument("--log", nargs="+", required=True, help="읽을 로그 파일")
     nt.add_argument("--title", default="블로그 GEO 체인 알림")
     nt.add_argument("--run-url", help="GitHub Actions 실행 주소")
+    nt.add_argument("--daily", action="store_true", help="하루 1번 도는 실행: 문제가 없어도 ✅ 요약을 보냄 (D-046)")
     nt.set_defaults(func=cmd_notify)
     sub.add_parser("notion-check", help="NOTION_TOKEN 으로 '블로그 GEO 체인' DB 접속 확인").set_defaults(func=cmd_notion_check)
     return p
