@@ -52,3 +52,10 @@ jobs:
           PYTHONPATH=geo_pipeline python -m pipeline.cli g8 "${args[@]}" | tee g8_log.txt
           cat g8_log.txt >> "$GITHUB_STEP_SUMMARY"
           ! grep -q "❌" g8_log.txt
+
+      - name: 슬랙 알림 (❌·🔔 줄만, D-030)
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          PYTHONPATH=geo_pipeline python -m pipeline.cli notify --log g8_log.txt             --title "GEO 체인 G8 측정·상태 대조" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

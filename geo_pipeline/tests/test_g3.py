@@ -136,3 +136,54 @@ def test_run_resumes_half_done_with_same_number(monkeypatch):
     g3.run(datetime(2026, 10, 28, tzinfo=KST), pause=0)
     posts = [p for m, u, p in calls if m == "POST" and u.endswith("/pages")]
     assert [p["properties"]["글 번호"]["title"][0]["text"]["content"] for p in posts] == ["N-008"]
+
+
+# --- 11/5 세현 결정 (D-037 · D-026 · D-030) --------------------------------- #
+def _numbers(calls):
+    return [p["properties"]["글 번호"]["title"][0]["text"]["content"]
+            for m, u, p in calls if m == "POST" and u.endswith("/pages")]
+
+
+def test_single_candidate_makes_both_channels_same_topic(monkeypatch):
+    """D-037: 후보가 1건뿐이면 같은 후보로 N·T 둘 다 만든다 (10/28·29·11/4 T 행 누락)."""
+    calls = []
+    cands = [_page("a1", rank=1, channel="네이버"), _page("b2", rank=2, question="없음 → 새 질문 후보")]
+    monkeypatch.setenv("NOTION_TOKEN", "t")
+    monkeypatch.setattr(g3._http, "request_json", _fake(calls, cands, []))
+    out = g3.run(datetime(2026, 11, 4, 14, 50, tzinfo=KST), pause=0)
+    assert _numbers(calls) == ["N-001", "T-001"]
+    posts = [p for m, u, p in calls if m == "POST" and u.endswith("/pages")]
+    t_log = posts[1]["properties"]["작업 기록"]["rich_text"][0]["text"]["content"]
+    assert "D-037" in t_log and "80%" in t_log
+    marks = [(u.rsplit("/", 1)[1], p) for m, u, p in calls if m == "PATCH"]
+    assert len(marks) == 1 and marks[0][0] == "a1"
+    assert marks[0][1]["properties"]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "N-001, T-001"
+    assert any(line.startswith("🔔 [G3]") for line in out) and not any("❌" in line for line in out)
+
+
+def test_single_candidate_resume_makes_only_missing_channel(monkeypatch):
+    calls = []
+    chain = [{"properties": {
+        "글 번호": {"type": "title", "title": [{"plain_text": "N-012"}]},
+        "작업 기록": {"type": "rich_text", "rich_text": [{"plain_text": "11/04 G3 자동 선택 1등 (뉴스 · 후보 2026-11-04 a1)"}]}}}]
+    monkeypatch.setenv("NOTION_TOKEN", "t")
+    monkeypatch.setattr(g3._http, "request_json", _fake(calls, [_page("a1", rank=1, channel="네이버")], chain))
+    g3.run(datetime(2026, 11, 4, 16, 40, tzinfo=KST), pause=0)
+    assert _numbers(calls) == ["T-012"]
+
+
+def test_no_candidates_fails_after_safety_net_hour(monkeypatch):
+    """D-026: 16시 이후에도 후보가 없으면 ❌ (예전엔 초록으로 끝나 10/30에 아무도 몰랐음)."""
+    monkeypatch.setenv("NOTION_TOKEN", "t")
+    monkeypatch.setattr(g3._http, "request_json", _fake([], [], []))
+    early = g3.run(datetime(2026, 11, 5, 14, 50, tzinfo=KST), pause=0)
+    late = g3.run(datetime(2026, 11, 5, 16, 40, tzinfo=KST), pause=0)
+    assert not any("❌" in x for x in early)
+    assert any(x.startswith("❌") for x in late) and any(x.startswith("🔔 [G2→G3]") for x in late)
+
+
+def test_candidates_without_question_fail(monkeypatch):
+    monkeypatch.setenv("NOTION_TOKEN", "t")
+    monkeypatch.setattr(g3._http, "request_json", _fake([], [_page("a1", question="없음 → 새 질문 후보")], []))
+    out = g3.run(datetime(2026, 11, 5, 14, 50, tzinfo=KST), pause=0)
+    assert any(x.startswith("❌") for x in out) and any("🔔 [G1→G3]" in x for x in out)

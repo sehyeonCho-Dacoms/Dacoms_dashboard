@@ -77,6 +77,14 @@ def post_json(url: str, payload: dict, headers: dict | None = None, timeout: int
         return json.loads(resp.read().decode("utf-8"))
 
 
+def post_raw(url: str, payload: dict, timeout: int = DEFAULT_TIMEOUT) -> str:
+    """JSON을 보내고 응답은 글자 그대로 (슬랙 웹훅은 'ok'만 돌려준다)."""
+    body = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(url, data=body, method="POST", headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 (Slack 웹훅)
+        return resp.read().decode("utf-8", errors="replace")
+
+
 def request_json(method: str, url: str, payload: dict | None = None, headers: dict | None = None,
                  timeout: int = DEFAULT_TIMEOUT) -> Any:
     """GET·POST·PATCH 공용 (노션 API)."""

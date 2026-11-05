@@ -49,3 +49,10 @@ jobs:
           PYTHONPATH=geo_pipeline python -m pipeline.cli g3 "${args[@]}" | tee g3_log.txt
           cat g3_log.txt >> "$GITHUB_STEP_SUMMARY"
           ! grep -q "❌" g3_log.txt
+
+      - name: 슬랙 알림 (❌·🔔 줄만, D-030)
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          PYTHONPATH=geo_pipeline python -m pipeline.cli notify --log g3_log.txt             --title "GEO 체인 G3 안전망" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

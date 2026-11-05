@@ -225,6 +225,27 @@ def evergreen_slots(n: int, written_gq: set[int], month: int) -> list[Question]:
     return pool[:n]
 
 
+REFILL_AT = 5   # D-036 (11/5 세현): '바로 가능' 질문이 이보다 적으면 보충
+
+
+def ready_left(written_gq: set[int]) -> list[Question]:
+    """아직 글이 없는 '바로 가능' 질문 = 상록 슬롯 재고. 이 수가 0이 되면 뉴스가 약한 날 체인이 멈춘다(10/30)."""
+    return [q for q in QUESTIONS if q.ready == "바로 가능" and q.gq not in written_gq]
+
+
+def stock_line(written_gq: set[int] | None) -> str:
+    """G2 로그 한 줄. 체인 DB를 못 읽었으면(written 모름) 세지 않는다. 기준 미만이면 🔔 알림 줄."""
+    if written_gq is None:
+        return "   질문 은행 재고: 체인 DB를 못 읽어 세지 않음"
+    left = ready_left(written_gq)
+    ids = ", ".join(f"GQ-{q.gq}" for q in left) or "없음"
+    if len(left) < REFILL_AT:
+        from .notify import alert
+        return alert("G1", f"질문 은행 '바로 가능' 재고 {len(left)}개(기준 {REFILL_AT}개 미만: {ids})",
+                     "질문 채택 → 노션 질문 은행 '답 준비도'와 g2.py QUESTIONS 스냅샷 함께 갱신(D-036)")
+    return f"   질문 은행 재고: '바로 가능' {len(left)}개 ({ids})"
+
+
 def run_g2(articles: list[Article], now: datetime, written_gq: set[int] | None = None,
            recent_gq: dict[int, str] | None = None) -> tuple[list[Score], list[Score], list[Question]]:
     """(채점 전체, G3로 넘길 후보, 상록 슬롯)."""
