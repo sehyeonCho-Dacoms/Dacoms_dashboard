@@ -70,12 +70,12 @@ jobs:
           cat g3_log.txt >> "$GITHUB_STEP_SUMMARY"
           ! grep -q "❌" g3_log.txt
 
-      - name: 슬랙 알림 (❌·🔔 줄만, D-030)
+      - name: 슬랙 알림 (⛔·⏸ 줄, 없으면 ✅ 하루 요약, D-046)
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          PYTHONPATH=geo_pipeline python -m pipeline.cli notify --log g0_log.txt g3_log.txt             --title "GEO 체인 G0·G2·G3 (매일)" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          PYTHONPATH=geo_pipeline python -m pipeline.cli notify --daily --log g0_log.txt g3_log.txt             --title "GEO 체인 G0·G2·G3 (매일)" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - uses: actions/upload-artifact@v4
         if: always()

@@ -50,7 +50,7 @@ jobs:
           cat g3_log.txt >> "$GITHUB_STEP_SUMMARY"
           ! grep -q "❌" g3_log.txt
 
-      - name: 슬랙 알림 (❌·🔔 줄만, D-030)
+      - name: 슬랙 알림 (⛔·⏸ 줄만, 문제 없으면 조용히, D-046)
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

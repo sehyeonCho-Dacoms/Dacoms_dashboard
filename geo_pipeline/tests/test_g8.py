@@ -101,7 +101,7 @@ def test_audit_flags_state_mismatch_and_stall():
     text = "\n".join(out)
     assert "N-001" in text and "T-003" in text and "N-010" in text and "T-008" not in text
     assert "N-013" in text and "N-014" not in text
-    assert sum(x.startswith("🔔") for x in out) == 2
+    assert sum(x.startswith("⏸") for x in out) == 2
 
 
 def test_audit_clean_has_no_alert():

@@ -158,7 +158,7 @@ def test_single_candidate_makes_both_channels_same_topic(monkeypatch):
     marks = [(u.rsplit("/", 1)[1], p) for m, u, p in calls if m == "PATCH"]
     assert len(marks) == 1 and marks[0][0] == "a1"
     assert marks[0][1]["properties"]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "N-001, T-001"
-    assert any(line.startswith("🔔 [G3]") for line in out) and not any("❌" in line for line in out)
+    assert any(line.startswith("⏸ [G3]") for line in out) and not any("❌" in line for line in out)
 
 
 def test_single_candidate_resume_makes_only_missing_channel(monkeypatch):
@@ -179,11 +179,11 @@ def test_no_candidates_fails_after_safety_net_hour(monkeypatch):
     early = g3.run(datetime(2026, 11, 5, 14, 50, tzinfo=KST), pause=0)
     late = g3.run(datetime(2026, 11, 5, 16, 40, tzinfo=KST), pause=0)
     assert not any("❌" in x for x in early)
-    assert any(x.startswith("❌") for x in late) and any(x.startswith("🔔 [G2→G3]") for x in late)
+    assert any(x.startswith("❌") for x in late) and any(x.startswith("⏸ [G2→G3]") for x in late)
 
 
 def test_candidates_without_question_fail(monkeypatch):
     monkeypatch.setenv("NOTION_TOKEN", "t")
     monkeypatch.setattr(g3._http, "request_json", _fake([], [_page("a1", question="없음 → 새 질문 후보")], []))
     out = g3.run(datetime(2026, 11, 5, 14, 50, tzinfo=KST), pause=0)
-    assert any(x.startswith("❌") for x in out) and any("🔔 [G1→G3]" in x for x in out)
+    assert any(x.startswith("❌") for x in out) and any("⏸ [G1→G3]" in x for x in out)
