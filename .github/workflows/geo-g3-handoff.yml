@@ -35,6 +35,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: G1-Q 질문 검수 미리 보기 (dry-run 일 때만, D-056)
+        if: github.event.inputs.dry_run == 'true'
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NAVER_API_MODE: ${{ vars.NAVER_API_MODE || 'hub' }}
+          NAVER_NEWS_ENDPOINT: ${{ vars.NAVER_NEWS_ENDPOINT }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+        run: |
+          PYTHONPATH=geo_pipeline python -m pipeline.cli g1q --dry-run | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: 1·2등 후보 → 체인 DB 행
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
