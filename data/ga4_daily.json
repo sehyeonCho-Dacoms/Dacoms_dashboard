@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T17:11:35.799846+00:00",
+  "generated_at": "2026-11-06T01:25:19.996177+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -501,12 +501,12 @@
     },
     {
       "date": "20261105",
-      "sessions": 39,
-      "totalUsers": 33,
-      "newUsers": 19,
-      "screenPageViews": 266,
-      "engagementRate": 0.6923,
-      "averageSessionDuration": 123.044
+      "sessions": 44,
+      "totalUsers": 38,
+      "newUsers": 24,
+      "screenPageViews": 277,
+      "engagementRate": 0.6591,
+      "averageSessionDuration": 114.5234
     }
   ],
   "by_channel": [
@@ -1911,20 +1911,26 @@
     {
       "date": "20261105",
       "sessionDefaultChannelGroup": "Organic Search",
-      "sessions": 21,
-      "totalUsers": 18
+      "sessions": 22,
+      "totalUsers": 19
     },
     {
       "date": "20261105",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 16,
-      "totalUsers": 14
+      "sessions": 19,
+      "totalUsers": 17
     },
     {
       "date": "20261105",
       "sessionDefaultChannelGroup": "Unassigned",
       "sessions": 2,
       "totalUsers": 2
+    },
+    {
+      "date": "20261105",
+      "sessionDefaultChannelGroup": "AI Assistant",
+      "sessions": 1,
+      "totalUsers": 1
     },
     {
       "date": "20261105",
@@ -4446,13 +4452,13 @@
       "date": "20261105",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 16
+      "sessions": 19
     },
     {
       "date": "20261105",
       "sessionSource": "google",
       "sessionMedium": "organic",
-      "sessions": 12
+      "sessions": 13
     },
     {
       "date": "20261105",
@@ -4470,6 +4476,12 @@
       "date": "20261105",
       "sessionSource": "bing",
       "sessionMedium": "organic",
+      "sessions": 1
+    },
+    {
+      "date": "20261105",
+      "sessionSource": "chatgpt.com",
+      "sessionMedium": "ai-assistant",
       "sessions": 1
     },
     {
@@ -5234,12 +5246,12 @@
     {
       "date": "20261105",
       "deviceCategory": "desktop",
-      "sessions": 35
+      "sessions": 39
     },
     {
       "date": "20261105",
       "deviceCategory": "mobile",
-      "sessions": 4
+      "sessions": 5
     }
   ],
   "events": [
@@ -9371,27 +9383,27 @@
     {
       "date": "20261105",
       "eventName": "page_view",
-      "eventCount": 266
+      "eventCount": 277
     },
     {
       "date": "20261105",
       "eventName": "user_engagement",
-      "eventCount": 227
+      "eventCount": 236
     },
     {
       "date": "20261105",
       "eventName": "scroll",
-      "eventCount": 212
+      "eventCount": 218
     },
     {
       "date": "20261105",
       "eventName": "recruit_list_view",
-      "eventCount": 106
+      "eventCount": 110
     },
     {
       "date": "20261105",
       "eventName": "session_start",
-      "eventCount": 39
+      "eventCount": 44
     },
     {
       "date": "20261105",
@@ -9400,18 +9412,18 @@
     },
     {
       "date": "20261105",
+      "eventName": "first_visit",
+      "eventCount": 24
+    },
+    {
+      "date": "20261105",
       "eventName": "form_start",
-      "eventCount": 22
+      "eventCount": 23
     },
     {
       "date": "20261105",
       "eventName": "form_submit",
-      "eventCount": 20
-    },
-    {
-      "date": "20261105",
-      "eventName": "first_visit",
-      "eventCount": 19
+      "eventCount": 21
     },
     {
       "date": "20261105",
@@ -9442,13 +9454,13 @@
   "top_pages": [
     {
       "pagePath": "/recruit/recruitList.do",
-      "screenPageViews": 9907,
-      "userEngagementDuration": 108042
+      "screenPageViews": 9911,
+      "userEngagementDuration": 108140
     },
     {
       "pagePath": "/main/main.do",
-      "screenPageViews": 6352,
-      "userEngagementDuration": 58950
+      "screenPageViews": 6358,
+      "userEngagementDuration": 58988
     },
     {
       "pagePath": "/recruit/recruitView.do",
@@ -9457,8 +9469,8 @@
     },
     {
       "pagePath": "/member/loginGen.do",
-      "screenPageViews": 3168,
-      "userEngagementDuration": 11455
+      "screenPageViews": 3169,
+      "userEngagementDuration": 11461
     },
     {
       "pagePath": "/company/companyList.do",
