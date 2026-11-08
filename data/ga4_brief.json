@@ -1,94 +1,87 @@
 {
-  "generated_at": "2026-11-08T00:17:19.715250+00:00",
-  "source_generated_at": "2026-11-08T00:17:19.618793+00:00",
+  "generated_at": "2026-11-08T15:51:47.306684+00:00",
+  "source_generated_at": "2026-11-08T15:51:47.210887+00:00",
   "yesterday": {
-    "date": "20261107",
-    "sessions": 28,
-    "totalUsers": 25,
-    "newUsers": 15,
-    "engagementRate": 0.5,
-    "averageSessionDuration": 542.2,
-    "sessions_prev_day": 54,
-    "sessions_dod_pct": -48.1
+    "date": "20261108",
+    "sessions": 23,
+    "totalUsers": 22,
+    "newUsers": 13,
+    "engagementRate": 0.6522,
+    "averageSessionDuration": 88.2,
+    "sessions_prev_day": 28,
+    "sessions_dod_pct": -17.9
   },
   "week": {
     "sessions": {
-      "current": 381,
-      "previous": 491,
-      "change_pct": -22.4
+      "current": 374,
+      "previous": 485,
+      "change_pct": -22.9
     },
     "totalUsers": {
-      "current": 338,
-      "previous": 417,
-      "change_pct": -18.9
+      "current": 332,
+      "previous": 412,
+      "change_pct": -19.4
     },
     "newUsers": {
-      "current": 210,
-      "previous": 259,
-      "change_pct": -18.9
+      "current": 204,
+      "previous": 256,
+      "change_pct": -20.3
     },
     "screenPageViews": {
-      "current": 3141,
-      "previous": 2937,
-      "change_pct": 6.9
+      "current": 3059,
+      "previous": 2956,
+      "change_pct": 3.5
     },
     "engagementRate": {
-      "current": 0.6643,
-      "previous": 0.6321,
-      "change_pct": 5.1
+      "current": 0.6629,
+      "previous": 0.6694,
+      "change_pct": -1.0
     },
     "averageSessionDuration": {
-      "current": 230.3029,
-      "previous": 192.1914,
-      "change_pct": 19.8
+      "current": 187.4286,
+      "previous": 200.669,
+      "change_pct": -6.6
     }
   },
   "window": {
     "current": {
-      "start": "20261101",
-      "end": "20261107"
+      "start": "20261102",
+      "end": "20261108"
     },
     "previous": {
-      "start": "20261025",
-      "end": "20261031"
+      "start": "20261026",
+      "end": "20261101"
     }
   },
   "baseline_comparison": null,
   "channels": [
     {
       "channel": "Direct",
-      "current": 205,
+      "current": 197,
       "previous": 284,
-      "change_pct": -27.8,
-      "share_pct": 52.2
+      "change_pct": -30.6,
+      "share_pct": 52.4
     },
     {
       "channel": "Organic Search",
-      "current": 145,
-      "previous": 180,
-      "change_pct": -19.4,
-      "share_pct": 36.9
+      "current": 147,
+      "previous": 171,
+      "change_pct": -14.0,
+      "share_pct": 39.1
     },
     {
       "channel": "Organic Social",
-      "current": 20,
-      "previous": 9,
-      "change_pct": 122.2,
-      "share_pct": 5.1
-    },
-    {
-      "channel": "Unassigned",
-      "current": 11,
-      "previous": 3,
-      "change_pct": 266.7,
-      "share_pct": 2.8
+      "current": 21,
+      "previous": 11,
+      "change_pct": 90.9,
+      "share_pct": 5.6
     },
     {
       "channel": "AI Assistant",
-      "current": 8,
-      "previous": 7,
-      "change_pct": 14.3,
-      "share_pct": 2.0
+      "current": 6,
+      "previous": 9,
+      "change_pct": -33.3,
+      "share_pct": 1.6
     },
     {
       "channel": "Email",
@@ -96,99 +89,106 @@
       "previous": 3,
       "change_pct": 0.0,
       "share_pct": 0.8
+    },
+    {
+      "channel": "Unassigned",
+      "current": 1,
+      "previous": 2,
+      "change_pct": -50.0,
+      "share_pct": 0.3
     }
   ],
   "instagram_referral": {
-    "current": 7,
+    "current": 8,
     "previous": 4,
-    "change_pct": 75.0,
-    "share_of_sessions_pct": 1.8
+    "change_pct": 100.0,
+    "share_of_sessions_pct": 2.1
   },
   "weekly_trend": [
     {
-      "week_start": "20260913",
-      "week_end": "20260919",
-      "sessions": 850,
-      "totalUsers": 711,
-      "newUsers": 446,
-      "screenPageViews": 4551
+      "week_start": "20260914",
+      "week_end": "20260920",
+      "sessions": 773,
+      "totalUsers": 655,
+      "newUsers": 399,
+      "screenPageViews": 4407
     },
     {
-      "week_start": "20260920",
-      "week_end": "20260926",
-      "sessions": 469,
-      "totalUsers": 411,
-      "newUsers": 276,
-      "screenPageViews": 2502
+      "week_start": "20260921",
+      "week_end": "20260927",
+      "sessions": 492,
+      "totalUsers": 429,
+      "newUsers": 288,
+      "screenPageViews": 2567
     },
     {
-      "week_start": "20260927",
-      "week_end": "20261003",
-      "sessions": 631,
-      "totalUsers": 535,
-      "newUsers": 329,
-      "screenPageViews": 3974
-    },
-    {
-      "week_start": "20261004",
-      "week_end": "20261010",
-      "sessions": 585,
-      "totalUsers": 484,
+      "week_start": "20260928",
+      "week_end": "20261004",
+      "sessions": 612,
+      "totalUsers": 516,
       "newUsers": 313,
-      "screenPageViews": 4147
+      "screenPageViews": 3873
     },
     {
-      "week_start": "20261011",
-      "week_end": "20261017",
-      "sessions": 613,
-      "totalUsers": 520,
-      "newUsers": 330,
-      "screenPageViews": 3810
+      "week_start": "20261005",
+      "week_end": "20261011",
+      "sessions": 608,
+      "totalUsers": 505,
+      "newUsers": 334,
+      "screenPageViews": 4334
     },
     {
-      "week_start": "20261018",
-      "week_end": "20261024",
-      "sessions": 484,
-      "totalUsers": 416,
-      "newUsers": 261,
-      "screenPageViews": 2680
+      "week_start": "20261012",
+      "week_end": "20261018",
+      "sessions": 598,
+      "totalUsers": 508,
+      "newUsers": 321,
+      "screenPageViews": 3644
     },
     {
-      "week_start": "20261025",
-      "week_end": "20261031",
-      "sessions": 491,
-      "totalUsers": 417,
-      "newUsers": 259,
-      "screenPageViews": 2937
+      "week_start": "20261019",
+      "week_end": "20261025",
+      "sessions": 470,
+      "totalUsers": 406,
+      "newUsers": 254,
+      "screenPageViews": 2652
     },
     {
-      "week_start": "20261101",
-      "week_end": "20261107",
-      "sessions": 381,
-      "totalUsers": 338,
-      "newUsers": 210,
-      "screenPageViews": 3141
+      "week_start": "20261026",
+      "week_end": "20261101",
+      "sessions": 485,
+      "totalUsers": 412,
+      "newUsers": 256,
+      "screenPageViews": 2956
+    },
+    {
+      "week_start": "20261102",
+      "week_end": "20261108",
+      "sessions": 374,
+      "totalUsers": 332,
+      "newUsers": 204,
+      "screenPageViews": 3059
     }
   ],
   "measurement": {
     "recent_dates": [
-      "20261105",
       "20261106",
-      "20261107"
+      "20261107",
+      "20261108"
     ],
     "events": [
       {
         "event": "recruit_view",
         "label": "공고 상세",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
-          33,
           58,
-          42
+          42,
+          21
         ],
         "alive": true
       },
@@ -196,14 +196,14 @@
         "event": "recruit_list_view",
         "label": "공고 목록",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
-          110,
           116,
-          80
+          80,
+          51
         ],
         "alive": true
       },
@@ -211,24 +211,24 @@
         "event": "apply_start",
         "label": "지원 시작",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
-          0,
           1,
-          1
+          1,
+          0
         ],
-        "alive": true
+        "alive": false
       },
       {
         "event": "apply_resume_selected",
         "label": "이력서 선택",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
           0,
@@ -241,9 +241,9 @@
         "event": "apply_click_final",
         "label": "최종 지원",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
           0,
@@ -256,13 +256,13 @@
         "event": "sign_up_start",
         "label": "가입 시작",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
-          1,
           2,
+          0,
           0
         ],
         "alive": false
@@ -271,56 +271,59 @@
         "event": "resume_new_start",
         "label": "이력서 작성",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
           0,
-          0,
-          3
+          3,
+          0
         ],
-        "alive": true
+        "alive": false
       },
       {
         "event": "resume_edit_start",
         "label": "이력서 수정",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
-          9,
           2,
-          7
+          7,
+          0
         ],
-        "alive": true
+        "alive": false
       },
       {
         "event": "resume_save_click",
         "label": "이력서 저장",
         "dates": [
-          "20261105",
           "20261106",
-          "20261107"
+          "20261107",
+          "20261108"
         ],
         "counts": [
-          6,
           2,
-          8
+          8,
+          0
         ],
-        "alive": true
+        "alive": false
       }
     ],
     "broken": [
+      "지원 시작",
       "이력서 선택",
       "최종 지원",
-      "가입 시작"
+      "가입 시작",
+      "이력서 작성",
+      "이력서 수정",
+      "이력서 저장"
     ]
   },
   "alerts": [
-    "계측 끊김 의심 — 이력서 선택, 최종 지원, 가입 시작 (20261107 0건)",
-    "세션 급변 — 전일 대비 -48.1%"
+    "계측 끊김 의심 — 지원 시작, 이력서 선택, 최종 지원, 가입 시작, 이력서 작성, 이력서 수정, 이력서 저장 (20261108 0건)"
   ]
 }
