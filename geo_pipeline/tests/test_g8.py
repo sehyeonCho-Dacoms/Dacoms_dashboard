@@ -109,3 +109,23 @@ def test_audit_clean_has_no_alert():
     out = g8.audit([_row("T-008", "색인확인", "https://doctoronhr.tistory.com/8", "2026-10-28")],
                    datetime(2026, 11, 5, 11, 0))
     assert out == []
+
+
+# --- 준칙 v2 (11/8): 주제 1개 = N 행 1개, 티스토리판 URL은 같은 행 ---------- #
+def test_twin_tistory_post_from_n_row_and_separate_checkpoints():
+    t = lambda s: {"type": "rich_text", "rich_text": [{"plain_text": s}]}
+    row = {"id": "p9", "properties": {
+        "글 번호": {"type": "title", "title": [{"plain_text": "N-016"}]},
+        "채널": {"type": "select", "select": {"name": "네이버 블로그"}},
+        "제목": t("제목"), "상태": {"type": "select", "select": {"name": "게시완료"}},
+        "게시 URL": {"type": "url", "url": "https://blog.naver.com/doctoronhr/224470000000"},
+        "티스토리 게시 URL": {"type": "url", "url": "https://doctoronhr.tistory.com/20"},
+        "게시일": {"type": "date", "date": {"start": "2026-10-27"}},
+        "측정 기록": t("11/03 G8 D+7 자동: 네이버 검색 노출 확인")}}
+    twin = g8.twin_from_row(row)
+    assert twin.twin and not twin.naver and twin.no == "N-016(T)" and twin.url.endswith("/20")
+    assert g8.due(g8.from_row(row), TODAY) is None          # 네이버판은 D+7 끝남
+    assert g8.due(twin, TODAY) == 7                         # 티스토리판은 따로 잰다
+    props, line = g8.decide(twin, g8.Measure(7, 7, True, views=9), TODAY)
+    assert "색인 여부" not in props and "상태" not in props and props["조회수 D+7"]["number"] == 9
+    assert "G8(T) D+7" in line and g8.done_checkpoints(line, twin=True) == {7}

@@ -1,15 +1,18 @@
-"""G0 1차 거름망 — 흥미도 준칙 v1(제안) 3-1의 거름망 6개 중 기계로 판별할 수 있는 것.
+"""G0 1차 거름망 — 준칙 v2(11/8) 거름망 7개 중 기계로 판별할 수 있는 것.
 
 제목·요약의 단어로만 판단하는 1차 표시다. 최종 판단은 G2 흥미도 점수(AI)와 사람이 한다.
 그래서 탈락 기사도 지우지 않고 '탈락(번호·근거)'으로 남겨, 잘못 걸러진 기사를 찾을 수 있게 한다.
 
-  ① 주제 밖           제목에 의료 단어와 인력·채용·근무 단어가 함께 있어야 통과
-                      (준칙: 의사 인력·채용·근무 조건·병원 운영과 무관하면 탈락)
-  ② 의료 조언형       증상·예방법·건강 관리 기사
-  ③ 특정 개인·사건    수사·재판·사고 기사
+  ① 주제 밖           제목에 의료 단어가 없으면 탈락. 의료 단어는 있는데 인력·채용·근무 단어가 없으면
+                      v2부터 탈락이 아니라 '의료 뉴스' 트랙(치료·신약·사건사고·정책)으로 통과.
+                      단, 홍보·행사 기사(개최·협약·박람회 등)는 계속 탈락 (10/22 보정: KT 의료 AI·코메드 행사)
+  ② 의료 조언형       증상·예방법·건강 관리 기사 (진단·치료 권유로만 쓸 수 있는 글)
+  ③ 특정 개인         실명 개인의 수사·재판 기사(구속·기소·혐의·폭행 등). 의료 사고·사망 사고처럼
+                      기관·제도를 다룰 수 있는 사건은 통과시키고 '사건' 표시 → 사람 확인 (v2)
   ④ 출처 불분명       루머·찌라시 표현
   ⑤ 7일 지난 뉴스
   ⑥ 14일 안 같은 질문(GQ)으로 쓴 글 → 질문 매칭이 필요해 G2에서 판단 (여기선 안 함)
+  ⑦ 근거 부족         최근 12개월 공식 자료 → 기사만으로 알 수 없어 G2가 '근거 확인' 표시, G4가 30분 안에 확인
 
 단어 사전은 운영하며 키운다. 잘못 걸러진 기사를 보면 아래 목록을 고친다.
 """
@@ -19,7 +22,7 @@ from __future__ import annotations
 import re
 from datetime import datetime, timedelta
 
-from .models import SCREEN_DROP, SCREEN_PASS, Article
+from .models import SCREEN_DROP, SCREEN_PASS, TRACK_JOB, TRACK_NEWS, Article
 
 # ① 조건 1: 제목에 의료 단어가 하나는 있어야 한다 (요약만 보면 '의사를 밝혔다' 같은 말에 걸림)
 MEDICAL_TITLE_TERMS = [
@@ -41,10 +44,18 @@ FALSE_FRIENDS = [
     "의사를 전달", "의사를 내비", "의사를 표",
 ]
 
-# ① 탈락 근거에 함께 적는 주제 밖 단어 (판정은 조건 1·2로 한다)
+# 건강보험 '급여'는 임금 '급여'가 아니다 → 트랙 판정 전에 지운다 (v2: 신약 급여 기사가 채용 트랙으로 가던 문제)
+COVERAGE_TERMS = ["건강보험 급여", "보험 급여", "급여 적용", "급여화", "비급여", "급여 확대", "급여 기준", "급여 등재"]
+# 치료·신약 기사: v1에서는 ① 주제 밖 근거였고, v2에서는 '의료 뉴스' 트랙 + '의료' 표시(G6 의료 조언 확인)
 OFF_TOPIC_TITLE = ["신약", "임상시험", "임상 3상", "임상3상", "치료제", "수술 성공", "신기술 도입", "효능", "환자 사례"]
+TREATMENT_TITLE = OFF_TOPIC_TITLE + ["치료", "허가", "승인", "백신", "처방"]
+# ① 홍보·행사: 의료 단어가 있어도 글감이 아니다 (10/22 보정표에서 사람·Claude 모두 주제 밖으로 봄)
+PROMO_TITLE = ["개최", "행사", "박람회", "협약", "MOU", "기부", "봉사", "시상", "수상", "세미나", "심포지엄",
+               "모델 소개", "출시 기념", "오픈 기념", "캠페인"]
 ADVICE_TITLE = ["증상", "예방법", "건강 관리", "건강관리", "다이어트", "좋은 음식", "먹으면", "자가진단"]
-INCIDENT_TITLE = ["구속", "기소", "체포", "혐의", "피의자", "피고인", "숨져", "숨진", "사망사고", "폭행", "성추행", "횡령", "압수수색"]
+# ③ 실명 개인의 수사·재판 → 탈락. 기관·제도로 쓸 수 있는 사건 → 통과 + '사건' 표시
+INCIDENT_TITLE = ["구속", "기소", "체포", "혐의", "피의자", "피고인", "폭행", "성추행", "횡령"]
+EVENT_TITLE = ["숨져", "숨진", "사망사고", "의료사고", "의료 사고", "압수수색", "사고"]
 RUMOR_TITLE = ["루머", "찌라시", "카더라", "확인되지 않은"]
 
 # 점수와 별도로 붙이는 표시 (준칙 3-3). '수치'(닥터온 숫자)는 원고 단계(G5·G6)에서 본다
@@ -67,11 +78,13 @@ def screen(article: Article, now: datetime) -> Article:
     reasons: list[str] = []
 
     clean_title = _strip_false(title)
-    off = _hit(title, OFF_TOPIC_TITLE)
-    if not _hit(clean_title, MEDICAL_TITLE_TERMS):
+    track = TRACK_JOB
+    if not _hit(clean_title, MEDICAL_TITLE_TERMS + TREATMENT_TITLE):
         reasons.append("① 주제 밖(제목에 의료 단어 없음)")
-    elif not _hit(clean_title, WORKFORCE_TERMS):
-        reasons.append(f"① 주제 밖(제목에 인력·채용 단어 없음{': ' + '·'.join(off) if off else ''})")
+    elif not _hit(_strip(clean_title, COVERAGE_TERMS), WORKFORCE_TERMS):
+        if promo := _hit(title, PROMO_TITLE):
+            reasons.append(f"① 주제 밖(홍보·행사: {'·'.join(promo)})")
+        track = TRACK_NEWS   # v2: 인력·채용 단어가 없는 의료 기사 = 의료 뉴스 트랙
     if hit := _hit(title, ADVICE_TITLE):
         reasons.append(f"② 의료 조언형({'·'.join(hit)})")
     if hit := _hit(title, INCIDENT_TITLE):
@@ -83,13 +96,22 @@ def screen(article: Article, now: datetime) -> Article:
 
     article.screen = SCREEN_DROP if reasons else SCREEN_PASS
     article.screen_reasons = reasons
+    article.track = track
     article.flags = [name for name, terms in (("논쟁", CONTROVERSY_TERMS), ("법률", LEGAL_TERMS))
                      if _hit(text, terms)]
+    if _hit(title, TREATMENT_TITLE):
+        article.flags.append("의료")   # 치료·신약 → G6에서 의료 조언 여부 따로 확인 (원고 규칙 8)
+    if _hit(title, EVENT_TITLE):
+        article.flags.append("사건")   # 사건사고 → 개인 신상은 쓰지 않음, 사람 확인
     return article
 
 
 def _strip_false(text: str) -> str:
-    for ff in FALSE_FRIENDS:
+    return _strip(text, FALSE_FRIENDS)
+
+
+def _strip(text: str, terms: list[str]) -> str:
+    for ff in terms:
         text = text.replace(ff, "")
     return text
 

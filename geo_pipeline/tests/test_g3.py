@@ -1,4 +1,4 @@
-"""G3 선택 → 체인 DB 행 테스트 (네트워크 불필요)."""
+"""G3 선택 → 체인 DB 행 테스트 (네트워크 불필요). 준칙 v2 (11/8): 평일 트랙 · 주제 1개 = N 행 1개."""
 
 from __future__ import annotations
 
@@ -9,7 +9,8 @@ from pipeline.sources.news import KST
 
 
 def _page(pid="abcd1234-0000", kind="뉴스", channel="둘 다", question="GQ-4 병원에서 의사를 빨리 채용하는 방법은?",
-          target="병원", total=70, url="https://news.example/1", marks=("논쟁",), rank=1, checked=False, no=""):
+          target="병원", total=70, url="https://news.example/1", marks=("논쟁",), rank=1, checked=False, no="",
+          track="채용·의사 일"):
     t = lambda s: {"type": "rich_text", "rich_text": [{"plain_text": s}]}
     return {"id": pid, "properties": {
         "후보": {"type": "title", "title": [{"plain_text": "울산시 지역필수의사 구인난"}]},
@@ -27,6 +28,7 @@ def _page(pid="abcd1234-0000", kind="뉴스", channel="둘 다", question="GQ-4 
         "순위": {"type": "number", "number": rank},
         "선택": {"type": "checkbox", "checkbox": checked},
         "체인 글 번호": t(no),
+        "트랙": {"type": "select", "select": {"name": track}},
     }}
 
 
@@ -38,56 +40,70 @@ def _props(row):
 
 def test_news_row_has_required_fields():
     c = g3.from_page(_page())
-    p, get = _props(g3.row_for(c, "N", 8, date(2026, 10, 28), "db"))
+    p, get = _props(g3.row_for(c, 8, date(2026, 10, 28), "db"))
     assert get("글 번호") == "N-008" and p["채널"]["select"]["name"] == "네이버 블로그"
+    assert p["트랙"]["select"]["name"] == "채용·의사 일"
     assert p["타깃"]["select"]["name"] == "반의사"            # 병원 → 반의사 형식
     assert get("대상 질문").startswith("GQ-4 ")
-    assert p["질문 의도"]["select"]["name"] == "정보"
+    assert p["질문 의도"]["select"]["name"] == "하는 법"      # v2: '방법' → 하는 법
     assert p["원천 기사"]["url"] == "https://news.example/1"
     assert get("흥미도 점수") == "70점 (A25 B20 C8 D10 E5 F2)"
     assert get("담당") == "웅서" and p["상태"]["select"]["name"] == "근거수집"
     assert get("제목") == "병원에서 의사를 빨리 채용하는 방법은?"   # 기사 제목을 쓰지 않음
     log = get("작업 기록")
     assert "자동 선택 1등" in log and "원고 설계" in log and "DR-MKT-02" in log and "abcd1234" in log
+    assert "티스토리" in log and "80%" in log and "원고 규칙 v2" in log and "내부 링크 금지(11/9 전)" in log
     assert "울산" not in log
 
 
 def test_evergreen_row_has_no_article():
     c = g3.from_page(_page(kind="상록 슬롯", channel="티스토리", question="GQ-6 의사 헤드헌팅과 매칭 플랫폼은 뭐가 달라?",
                            target="공통", total=None, url="", marks=()))
-    p, get = _props(g3.row_for(c, "T", 9, date(2026, 10, 28), "db"))
-    assert get("글 번호") == "T-009" and "원천 기사" not in p
+    p, get = _props(g3.row_for(c, 9, date(2026, 11, 10), "db"))
+    assert get("글 번호") == "N-009" and "원천 기사" not in p
     assert get("흥미도 점수") == "상록" and p["질문 의도"]["select"]["name"] == "비교"
     assert p["타깃"]["select"]["name"] == "의사"
+    assert "내부 링크: 채용 글 1~2개" in get("작업 기록")      # 11/9 오픈 뒤 규칙
 
 
-def test_choose_top2_with_question_or_checked():
-    a = g3.from_page(_page("a", rank=1))
-    b = g3.from_page(_page("b", rank=2, question="없음 → 좋은 기사면 G1 새 질문 후보"))
-    c = g3.from_page(_page("c", rank=3))
-    d = g3.from_page(_page("d", rank=4, checked=True))
-    assert [x.page_id for x in g3.choose([c, b, a])] == ["a", "c"]   # GQ 없는 2등은 건너뜀
-    assert [x.page_id for x in g3.choose([a, c, d])] == ["d"]        # 사람이 체크했으면 그것
-    assert g3.row_for(b, "N", 8, date(2026, 10, 28), "db") is None
+def test_medical_news_row_without_question():
+    c = g3.from_page(_page(question="없음 → 좋은 기사면 G1 새 질문 후보", track="의료 뉴스", marks=("의료", "근거 확인")))
+    p, get = _props(g3.row_for(c, 20, date(2026, 11, 9), "db"))
+    assert p["트랙"]["select"]["name"] == "의료 뉴스" and get("대상 질문").startswith("뉴스 · ")
+    assert get("제목").startswith("(가제) ")
+    log = get("작업 기록")
+    assert "의료 조언" in log and "근거 부족 되돌림" in log and "누구에게 무엇이 달라지나" in log
 
 
-def test_channels_pair():
-    mk = lambda ch: g3.from_page(_page(channel=ch))
-    assert g3.channels([mk("티스토리"), mk("티스토리")]) == ["T", "N"]
-    assert g3.channels([mk("둘 다"), mk("티스토리")]) == ["N", "T"]
-    assert g3.channels([mk("둘 다"), mk("네이버")]) == ["T", "N"]
-    assert g3.channels([mk("둘 다")]) == ["N"]
+def test_choose_by_day_track_checked_and_fallback():
+    job = g3.from_page(_page("j", rank=1))
+    noq = g3.from_page(_page("q", rank=2, question="없음 → 좋은 기사면 G1 새 질문 후보"))
+    news = g3.from_page(_page("n", rank=1, question="없음", track="의료 뉴스"))
+    chk = g3.from_page(_page("c", rank=3, checked=True))
+    assert [x.page_id for x in g3.choose([noq, job, news], "의료 뉴스")] == ["n"]
+    assert [x.page_id for x in g3.choose([noq, job, news], "채용·의사 일")] == ["j"]
+    assert [x.page_id for x in g3.choose([noq, job], "의료 뉴스")] == ["j"]          # 뉴스 없으면 채용으로
+    assert [x.page_id for x in g3.choose([job, news, chk], "의료 뉴스")] == ["c"]    # 사람이 체크했으면 그것
+    assert g3.row_for(noq, 8, date(2026, 10, 28), "db") is None                    # 채용 후보는 GQ 필수
+
+
+def test_day_track_weekdays_only():
+    assert g3.day_track(date(2026, 11, 9)) == "의료 뉴스"     # 월
+    assert g3.day_track(date(2026, 11, 10)) == "채용·의사 일"  # 화
+    assert g3.day_track(date(2026, 11, 14)) is None           # 토
 
 
 def test_reviewer_rotation_skips_owner():
     assert g3.reviewer(date(2026, 10, 22))[0] == "세현"    # 1주차 리뷰어 웅서 = 담당 → 블로그 순번 세현
     assert g3.reviewer(date(2026, 10, 28)) == ("세현", "")  # 2주차
     assert g3.reviewer(date(2026, 11, 3)) == ("모세", "")   # 3주차
+    assert g3.reviewer(date(2026, 11, 17)) == ("세현", "")  # 5주차 (v2 표 연장)
 
 
 def test_next_number_and_intent():
     assert g3.next_number(["N-007", "T-007", "T-001", "N-20261026-0001", ""]) == 8
     assert g3.intent("닥터온 수수료는 얼마야?") == "브랜드"
+    assert g3.intent("봉직의 근로계약서에서 꼭 확인할 조항은?") == "하는 법"
 
 
 def _fake(calls, cands, chain):
@@ -99,23 +115,43 @@ def _fake(calls, cands, chain):
     return fake
 
 
-def test_run_one_topic_both_channels(monkeypatch):
-    """D-054 하루 한 주제: 1등 하나로 N·T를 만들고(1등이 원하는 채널 먼저), 2등은 건드리지 않는다."""
+def _numbers(calls):
+    return [p["properties"]["글 번호"]["title"][0]["text"]["content"]
+            for m, u, p in calls if m == "POST" and u.endswith("/pages")]
+
+
+def test_run_one_topic_one_n_row(monkeypatch):
+    """v2: 주제 1개 = N 행 1개(티스토리판 포함). T 행은 만들지 않는다. 화요일 = 채용·의사 일."""
     calls = []
-    chain = [{"properties": {"글 번호": {"type": "title", "title": [{"plain_text": "N-007"}]}},
-              "created_time": "2026-10-26T15:07:15Z"}]
-    cands = [_page("a1", rank=1, channel="티스토리"), _page("b2", rank=2), _page("c3", rank=3)]
+    chain = [{"properties": {"글 번호": {"type": "title", "title": [{"plain_text": "T-015"}]}},
+              "created_time": "2026-11-06T15:07:15Z"}]
+    cands = [_page("a1", rank=1, channel="티스토리"), _page("b2", rank=2), _page("n1", rank=1, track="의료 뉴스")]
     monkeypatch.setenv("NOTION_TOKEN", "t")
     monkeypatch.setattr(g3._http, "request_json", _fake(calls, cands, chain))
-    out = g3.run(datetime(2026, 10, 28, 14, 50, tzinfo=KST), pause=0)
-    posts = [p for m, u, p in calls if m == "POST" and u.endswith("/pages")]
-    assert [p["properties"]["글 번호"]["title"][0]["text"]["content"] for p in posts] == ["T-008", "N-008"]
-    assert posts[0]["properties"]["대상 질문"] == posts[1]["properties"]["대상 질문"]   # 같은 주제
+    out = g3.run(datetime(2026, 11, 10, 14, 50, tzinfo=KST), pause=0)
+    assert _numbers(calls) == ["N-016"]
     marks = [(u.rsplit("/", 1)[1], p["properties"]) for m, u, p in calls if m == "PATCH"]
-    assert [m[0] for m in marks] == ["a1"]                                               # 2등(b2)은 안 씀
-    assert marks[0][1]["선택"]["checkbox"] is True
-    assert marks[0][1]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "T-008, N-008"
-    assert "T-008" in out[1] and "N-008" in out[2]
+    assert [m[0] for m in marks] == ["a1"]
+    assert marks[0][1]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "N-016"
+    assert "채용·의사 일 날" in out[0] and "N-016" in out[1]
+
+
+def test_run_news_day_picks_news_track(monkeypatch):
+    calls = []
+    cands = [_page("a1", rank=1), _page("n1", rank=1, question="없음", track="의료 뉴스")]
+    monkeypatch.setenv("NOTION_TOKEN", "t")
+    monkeypatch.setattr(g3._http, "request_json", _fake(calls, cands, []))
+    g3.run(datetime(2026, 11, 11, 14, 50, tzinfo=KST), pause=0)   # 수
+    posts = [p for m, u, p in calls if m == "POST" and u.endswith("/pages")]
+    assert len(posts) == 1 and posts[0]["properties"]["트랙"]["select"]["name"] == "의료 뉴스"
+
+
+def test_run_weekend_makes_nothing(monkeypatch):
+    calls = []
+    monkeypatch.setenv("NOTION_TOKEN", "t")
+    monkeypatch.setattr(g3._http, "request_json", _fake(calls, [_page()], []))
+    out = g3.run(datetime(2026, 11, 14, 14, 50, tzinfo=KST), pause=0)
+    assert not calls and "주말" in out[0] and not any("❌" in x for x in out)
 
 
 def test_run_skips_day_already_handed_over(monkeypatch):
@@ -127,51 +163,16 @@ def test_run_skips_day_already_handed_over(monkeypatch):
     assert "이미 넘김" in out[-1]
 
 
-def test_run_resumes_half_done_with_same_number(monkeypatch):
+def test_run_resumes_half_done_without_new_row(monkeypatch):
     calls = []
     chain = [{"properties": {
-        "글 번호": {"type": "title", "title": [{"plain_text": "T-008"}]},
-        "작업 기록": {"type": "rich_text", "rich_text": [{"plain_text": "10/28 G3 자동 선택 1등 (뉴스 · 후보 2026-10-28 a1)"}]}}}]
-    cands = [_page("a1", rank=1, channel="티스토리"), _page("b2", rank=2)]
+        "글 번호": {"type": "title", "title": [{"plain_text": "N-016"}]},
+        "작업 기록": {"type": "rich_text", "rich_text": [{"plain_text": "11/10 G3 자동 선택 1등 (뉴스 · 후보 2026-11-10 a1)"}]}}}]
     monkeypatch.setenv("NOTION_TOKEN", "t")
-    monkeypatch.setattr(g3._http, "request_json", _fake(calls, cands, chain))
-    g3.run(datetime(2026, 10, 28, tzinfo=KST), pause=0)
-    posts = [p for m, u, p in calls if m == "POST" and u.endswith("/pages")]
-    assert [p["properties"]["글 번호"]["title"][0]["text"]["content"] for p in posts] == ["N-008"]
-
-
-# --- 11/5 세현 결정 (D-037 · D-026 · D-030) --------------------------------- #
-def _numbers(calls):
-    return [p["properties"]["글 번호"]["title"][0]["text"]["content"]
-            for m, u, p in calls if m == "POST" and u.endswith("/pages")]
-
-
-def test_single_candidate_makes_both_channels_same_topic(monkeypatch):
-    """D-037·D-054: 후보가 1건뿐이어도 같은 후보로 N·T 둘 다 만든다 (10/28·29·11/4 T 행 누락)."""
-    calls = []
-    cands = [_page("a1", rank=1, channel="네이버"), _page("b2", rank=2, question="없음 → 새 질문 후보")]
-    monkeypatch.setenv("NOTION_TOKEN", "t")
-    monkeypatch.setattr(g3._http, "request_json", _fake(calls, cands, []))
-    out = g3.run(datetime(2026, 11, 4, 14, 50, tzinfo=KST), pause=0)
-    assert _numbers(calls) == ["N-001", "T-001"]
-    posts = [p for m, u, p in calls if m == "POST" and u.endswith("/pages")]
-    t_log = posts[1]["properties"]["작업 기록"]["rich_text"][0]["text"]["content"]
-    assert "D-037" in t_log and "80%" in t_log
-    marks = [(u.rsplit("/", 1)[1], p) for m, u, p in calls if m == "PATCH"]
-    assert len(marks) == 1 and marks[0][0] == "a1"
-    assert marks[0][1]["properties"]["체인 글 번호"]["rich_text"][0]["text"]["content"] == "N-001, T-001"
-    assert not any(line.startswith(("⏸", "❌")) for line in out)   # D-054 뒤로는 평소 방식이라 알림 없음
-
-
-def test_single_candidate_resume_makes_only_missing_channel(monkeypatch):
-    calls = []
-    chain = [{"properties": {
-        "글 번호": {"type": "title", "title": [{"plain_text": "N-012"}]},
-        "작업 기록": {"type": "rich_text", "rich_text": [{"plain_text": "11/04 G3 자동 선택 1등 (뉴스 · 후보 2026-11-04 a1)"}]}}}]
-    monkeypatch.setenv("NOTION_TOKEN", "t")
-    monkeypatch.setattr(g3._http, "request_json", _fake(calls, [_page("a1", rank=1, channel="네이버")], chain))
-    g3.run(datetime(2026, 11, 4, 16, 40, tzinfo=KST), pause=0)
-    assert _numbers(calls) == ["T-012"]
+    monkeypatch.setattr(g3._http, "request_json", _fake(calls, [_page("a1", rank=1)], chain))
+    g3.run(datetime(2026, 11, 10, tzinfo=KST), pause=0)
+    assert _numbers(calls) == []
+    assert [u.rsplit("/", 1)[1] for m, u, p in calls if m == "PATCH"] == ["a1"]
 
 
 def test_no_candidates_fails_after_safety_net_hour(monkeypatch):

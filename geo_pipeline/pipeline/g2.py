@@ -1,7 +1,12 @@
 """G2 흥미도 점수·선별 (DR-GEO-10) — 흥미도 점수 준칙 v1 (10/22 스터디 채택: v1로 v0 대체 · 60점 컷).
 
-  G0 거름망 통과 기사 → 6항목 100점 채점(A~F) → 60점 이상 상위 3건 → G3(사람 5분)
-  60점 이상이 3건이 안 되면 질문 은행의 상록 슬롯으로 채운다(준칙 3-4).
+  G0 거름망 통과 기사 → 6항목 100점 채점(A~F) → 트랙별 60점 이상 상위 3건 → G3
+  채용·의사 일 트랙에서 60점 이상이 3건이 안 되면 질문 은행의 상록 슬롯으로 채운다(준칙 3-4).
+
+준칙 v2 (11/8 세현 결정): 트랙 2개 — 채용·의사 일(기존 기준 그대로) / 의료 뉴스(치료·신약·사건사고·정책).
+배점(A25·B25·C15·D10·E15·F10)은 11/19까지 동결이라 그대로 두고, 의료 뉴스 트랙은 기준 문장만 다르게 읽는다.
+  A = 같은 이슈의 검색·AI 질문 수요 · B = 의사·의료인 독자의 관심도 · F = 닥터온 독자(의사·병원)에게 필요한 정보
+공식 자료 단서(기관·발표·수치)가 없는 기사에는 '근거 확인' 표시를 붙인다(거름망 ⑦ → G4가 30분 안에 확인).
 
 채점은 제목·API 요약의 단어로 하는 규칙 채점이다. 기준 문장(준칙 3-2)을 단어 사전으로 옮겼고,
 10/22 채점 보정표의 Claude 점수(기사 1·3·5: 42·47·20점)를 그대로 재현하도록 맞췄다(테스트).
@@ -21,7 +26,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
-from .models import SCREEN_PASS, Article
+from .models import SCREEN_PASS, TRACK_JOB, TRACK_NEWS, Article
 
 CUTOFF = 60
 TOP_N = 3
@@ -108,7 +113,7 @@ CONTEXT = ("의사", "의료인", "전공의", "전문의", "봉직의", "페이
 HOSPITAL = ("병원장", "의료원", "병원들", "병원이", "병원은", "병원 경영", "경영난", "구인난", "공백", "못 구")
 # C. 실용성: 읽고 바로 할 일이 있음 / 알아두면 좋음
 C_ACTION = ("신청", "모집", "접수", "마감", "시행", "지원사업", "공고", "계약", "개정안", "입법예고", "바뀐", "달라")
-C_INFO = ("발표", "확정", "통과", "개정", "조사", "결과", "평균", "현황", "선정", "실태")
+C_INFO = ("발표", "확정", "통과", "개정", "조사", "결과", "평균", "현황", "선정", "실태", "허가", "승인")
 # E. 검색·AI 질문 수요가 큰 주제 (질문 매칭이 없어도)
 E_DEMAND = ("비대면", "의대 정원", "의대정원", "전공의", "필수의료", "연봉", "월급", "지역의사")
 E_FIGURE = re.compile(r"\d[\d,.]*\s*(?:만\s*원|억|원|%|퍼센트|배)")
@@ -116,6 +121,17 @@ E_FIGURE = re.compile(r"\d[\d,.]*\s*(?:만\s*원|억|원|%|퍼센트|배)")
 F_DIRECT = ("익명", "비공개", "현 직장", "조건 변경", "약속과 다른", "처우", "계약", "연봉", "월급", "임금",
             "급여", "수당", "시세", "억")
 F_INDIRECT = ("구인난", "공백", "부족", "못 구", "채용", "구인", "이직")
+
+# 의료 뉴스 트랙 (v2) 기준 문장 → 단어 사전
+# A. 같은 이슈의 검색·AI 질문 수요가 큰 주제
+NEWS_DEMAND = ("비대면", "의대 정원", "의대정원", "필수의료", "응급실", "급여", "수가", "실손", "허가", "승인",
+               "신약", "백신", "비급여", "본인부담", "의료사고", "의료 사고")
+# A·⑦. 공식 자료 단서 (기관·발표). 없으면 '근거 확인' 표시
+OFFICIAL = ("복지부", "보건복지부", "식약처", "질병청", "질병관리청", "심평원", "건보공단", "건강보험공단", "통계청",
+            "정부", "국회", "발표", "고시", "입법예고", "허가", "승인", "의협", "병협")
+# B·F. 의사·병원이 진료·운영에서 바로 쓰는 정보
+NEWS_PRO = ("수가", "급여", "처방", "진료", "허가", "승인", "의료사고", "의료 사고", "응급", "의료법", "비대면",
+            "개정", "의료계", "시행규칙", "고시")
 
 
 @dataclass
@@ -132,6 +148,7 @@ class Score:
     marks: list[str] = field(default_factory=list)
     reason: str = ""
     update_candidate: bool = False   # 거름망 ⑥: 14일 안 같은 질문 글 있음
+    track: str = TRACK_JOB
 
     @property
     def total(self) -> int:
@@ -156,16 +173,20 @@ def match_question(text: str) -> Question | None:
 def score(a: Article, now: datetime, recent_gq: dict[int, str] | None = None) -> Score:
     """기사 1건 채점. 제목을 우선 보고, 요약은 질문 매칭에만 보탠다(요약의 우연한 단어로 점수가 뛰지 않게)."""
     title = a.title
-    s = Score(a, marks=[m for m in a.flags if m in ("논쟁", "법률")])
+    news = a.track == TRACK_NEWS
+    s = Score(a, marks=[m for m in a.flags if m in ("논쟁", "법률", "의료", "사건")],
+              track=TRACK_NEWS if news else TRACK_JOB)
 
     q = match_question(title) or match_question(f"{title} {a.description}")
     if q:
         s.gq, s.a = q, q.points
+    elif news:   # v2 A: 질문 은행에 없어도 같은 이슈의 검색·AI 질문 수요로 본다
+        s.a = 15 if _has(title, NEWS_DEMAND) else 8 if _has(title, OFFICIAL) else 0
 
     ctx = bool(_has(title, CONTEXT))
     if _has(title, B_DIRECT) and ctx:
         s.b = 25
-    elif _has(title, B_INDIRECT):
+    elif _has(title, B_INDIRECT) or (news and _has(title, NEWS_PRO)):
         s.b = 12
     else:
         s.b = 5
@@ -181,10 +202,18 @@ def score(a: Article, now: datetime, recent_gq: dict[int, str] | None = None) ->
     age = now - a.published if a.published else timedelta(0)
     s.d = 10 if age <= timedelta(hours=48) else 6 if age <= timedelta(days=4) else 3 if age <= timedelta(days=7) else 0
 
-    s.e = (5 if (q or _has(title, E_DEMAND)) else 0) + (5 if E_FIGURE.search(title) else 0)
+    demand = q or _has(title, E_DEMAND) or (news and _has(title, NEWS_DEMAND))
+    s.e = (5 if demand else 0) + (5 if E_FIGURE.search(title) else 0)
     # '같은 질문에 좋은 답 글이 적음 +5'는 검색해 봐야 알 수 있어 자동 채점에서는 주지 않는다(사람 확인)
 
-    s.f = (10 if _has(title, F_DIRECT) else 5 if _has(title, F_INDIRECT) else 0) if ctx else 0
+    if news:   # v2 F: 닥터온 독자(의사·병원)가 진료·운영에 바로 쓰는 정보인가
+        s.f = 10 if _has(title, NEWS_PRO) else 5 if ctx else 0
+    else:
+        s.f = (10 if _has(title, F_DIRECT) else 5 if _has(title, F_INDIRECT) else 0) if ctx else 0
+
+    # 거름망 ⑦ 1차 표시: 공식 자료 단서도 수치도 없으면 G4가 30분 안에 최근 12개월 공식 자료를 확인
+    if not _has(f"{title} {a.description}", OFFICIAL) and not E_FIGURE.search(f"{title} {a.description}"):
+        s.marks.append("근거 확인")
 
     if q and recent_gq and q.gq in recent_gq:
         s.update_candidate = True
@@ -195,6 +224,12 @@ def score(a: Article, now: datetime, recent_gq: dict[int, str] | None = None) ->
 
 def _reason(s: Score) -> str:
     parts = []
+    if s.track == TRACK_NEWS:
+        parts.append(f"의료 뉴스 · GQ-{s.gq.gq}" if s.gq else "의료 뉴스 · 이슈 수요" if s.a else "의료 뉴스 · 수요 약함")
+        parts.append({25: "채용·근무 조건에 직접", 12: "의사·의료인 관심 큼", 5: "의료인 관심 약함"}[s.b])
+        if s.c == 15:
+            parts.append("바로 할 일 있음")
+        return " · ".join(parts)
     parts.append(f"GQ-{s.gq.gq}({s.gq.priority})에 답하는 재료" if s.gq else "맞는 질문 없음")
     parts.append({25: "채용·근무 조건에 직접", 12: "시장·정책 간접", 5: "타깃 영향 약함"}[s.b])
     if s.c == 15:
@@ -202,9 +237,9 @@ def _reason(s: Score) -> str:
     return " · ".join(parts)
 
 
-def pick(scores: list[Score]) -> list[Score]:
-    """60점 이상 · 업데이트 후보 제외 · 동점이면 A 높은 것 → 최신순, 상위 3건 (준칙 3-4)."""
-    ok = [s for s in scores if s.total >= CUTOFF and not s.update_candidate]
+def pick(scores: list[Score], track: str | None = None) -> list[Score]:
+    """60점 이상 · 업데이트 후보 제외 · 동점이면 A 높은 것 → 최신순, 상위 3건 (준칙 3-4). track을 주면 그 트랙만."""
+    ok = [s for s in scores if s.total >= CUTOFF and not s.update_candidate and (track is None or s.track == track)]
     ok.sort(key=lambda s: (s.total, s.a, s.article.published.timestamp() if s.article.published else 0), reverse=True)
     return ok[:TOP_N]
 
@@ -248,11 +283,15 @@ def stock_line(written_gq: set[int] | None) -> str:
 
 def run_g2(articles: list[Article], now: datetime, written_gq: set[int] | None = None,
            recent_gq: dict[int, str] | None = None) -> tuple[list[Score], list[Score], list[Question]]:
-    """(채점 전체, G3로 넘길 후보, 상록 슬롯)."""
+    """(채점 전체, G3로 넘길 후보, 상록 슬롯).
+
+    v2: 후보 = 채용·의사 일 상위 3 + 의료 뉴스 상위 3. 상록 슬롯은 채용·의사 일 트랙만 3건까지 채운다.
+    """
     scores = [score(a, now, recent_gq) for a in articles if a.screen == SCREEN_PASS]
     scores.sort(key=lambda s: s.total, reverse=True)
-    top = pick(scores)
-    slots = evergreen_slots(TOP_N - len(top), written_gq or set(), now.month) if len(top) < TOP_N else []
+    job = pick(scores, TRACK_JOB)
+    top = job + pick(scores, TRACK_NEWS)
+    slots = evergreen_slots(TOP_N - len(job), written_gq or set(), now.month) if len(job) < TOP_N else []
     return scores, top, slots
 
 
@@ -260,29 +299,31 @@ def line(s: Score) -> str:
     """준칙 3-5 출력 형식."""
     a = s.article
     gq = f"GQ-{s.gq.gq}" if s.gq else "-"
-    return (f"{a.id} | 통과 | {s.a} {s.b} {s.c} {s.d} {s.e} {s.f} | {s.total} | {s.target} | {gq} | {s.channel} | "
-            f"{'·'.join(s.marks) or '-'} | {s.reason}")
+    return (f"{a.id} | 통과 | {s.a} {s.b} {s.c} {s.d} {s.e} {s.f} | {s.total} | {s.track} | {s.target} | {gq} | "
+            f"{s.channel} | {'·'.join(s.marks) or '-'} | {s.reason}")
 
 
 def summary_md(scores: list[Score], top: list[Score], slots: list[Question], day: str) -> str:
     out = [f"# G2 흥미도 점수 — {day}", "",
            f"- 채점 {len(scores)}건(G0 거름망 통과) · {CUTOFF}점 이상 {sum(s.total >= CUTOFF for s in scores)}건"
            f" → G3 후보 {len(top)}건" + (f" + 상록 슬롯 {len(slots)}건" if slots else ""),
-           "- 규칙 채점(제목 단어)입니다. 후보를 고르는 것은 G3 담당자 5분입니다. 체인 DB 행은 고른 1건만 만듭니다.",
-           "- 뉴스형 글은 주 1편까지, 주 2편이면 의사 1 + 병원·반의사 1 (준칙 3-4). '논쟁'은 입장을 사람이 정합니다(DR-MKT-02).",
+           "- 규칙 채점(제목 단어)입니다. G3가 평일에 그날 트랙 1등을 골라 체인 DB N 행 1개(티스토리판 포함)를 만듭니다.",
+           "- 준칙 v2: 월·수·금 의료 뉴스 · 화·목 채용·의사 일, 주말 발행 없음. '논쟁'은 입장을 사람이 정합니다(DR-MKT-02).",
            "", "## G3로 넘길 후보", ""]
     if not top and not slots:
         out.append("- 없음")
     for i, s in enumerate(top, 1):
         a = s.article
-        gq = f"GQ-{s.gq.gq} {s.gq.text}" if s.gq else "맞는 질문 없음 → 좋은 기사면 G1 새 질문 후보"
-        out += [f"{i}. **{s.total}점** [{_md(a.title)}]({a.url}) · {a.press}",
+        gq = (f"GQ-{s.gq.gq} {s.gq.text}" if s.gq else
+              "질문 은행 밖 의료 뉴스 → G1 '의료 뉴스' 묶음 대표 질문 후보" if s.track == TRACK_NEWS else
+              "맞는 질문 없음 → 좋은 기사면 G1 새 질문 후보")
+        out += [f"{i}. **{s.total}점** [{s.track}] [{_md(a.title)}]({a.url}) · {a.press}",
                 f"   - 타깃 {s.target} · 채널 {s.channel} · {gq}" + (f" · 표시 {'·'.join(s.marks)}" if s.marks else ""),
                 f"   - A{s.a} B{s.b} C{s.c} D{s.d} E{s.e} F{s.f} · {s.reason}"]
     for j, q in enumerate(slots, len(top) + 1):
         out.append(f"{j}. **상록 슬롯** GQ-{q.gq} {q.text} · 대상 {q.target} · 채널 {q.channel}")
     out += ["", "## 채점 전체 (준칙 3-5 형식)", "", "```txt",
-            "기사ID | 거름망 | A B C D E F | 총점 | 타깃 | 매칭 질문 | 채널 | 표시 | 한 줄 이유"]
+            "기사ID | 거름망 | A B C D E F | 총점 | 트랙 | 타깃 | 매칭 질문 | 채널 | 표시 | 한 줄 이유"]
     out += [line(s) for s in scores]
     out += ["```", ""]
     return "\n".join(out)

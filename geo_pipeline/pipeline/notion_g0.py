@@ -13,7 +13,7 @@ import time
 from datetime import datetime, timedelta
 
 from . import _http
-from .models import SCREEN_PASS, Article
+from .models import SCREEN_PASS, TRACK_JOB, Article
 from .notion import DEFAULT_DB, VERSION, _text
 
 API = "https://api.notion.com/v1"
@@ -109,14 +109,20 @@ def chain_questions(now: datetime) -> tuple[set[int], dict[int, str]] | None:
 DEFAULT_G2_DB = "5c99c33be0114c328d7d41c14bb74105"
 
 
+MARKS = ("논쟁", "법률", "의료", "사건", "근거 확인")   # 후보 DB '표시' 선택지 (v2: 의료·사건·근거 확인 추가)
+
+
 def candidate_rows(top, slots, day: str, db: str) -> list[dict]:
-    rows = []
-    for i, s in enumerate(top, 1):
+    """v2: '트랙' 칸을 채우고, 순위는 트랙 안에서 1부터 센다(G3가 그날 트랙 1등을 고른다)."""
+    rows, rank = [], {}
+    for s in top:
         a = s.article
+        rank[s.track] = i = rank.get(s.track, 0) + 1
         props = {
             "후보": {"title": _text(a.title)},
             "날짜": {"date": {"start": day}},
             "순위": {"number": i},
+            "트랙": {"select": {"name": s.track}},
             "종류": {"select": {"name": "뉴스"}},
             "총점": {"number": s.total},
             "점수 내역": {"rich_text": _text(f"A{s.a} B{s.b} C{s.c} D{s.d} E{s.e} F{s.f}")},
@@ -125,16 +131,17 @@ def candidate_rows(top, slots, day: str, db: str) -> list[dict]:
             "매칭 질문": {"rich_text": _text(f"GQ-{s.gq.gq} {s.gq.text}" if s.gq else "없음 → 좋은 기사면 G1 새 질문 후보")},
             "원천 기사": {"url": a.url or None},
             "매체": {"rich_text": _text(a.press)},
-            "표시": {"multi_select": [{"name": m} for m in s.marks if m in ("논쟁", "법률")]},
+            "표시": {"multi_select": [{"name": m} for m in s.marks if m in MARKS]},
             "한 줄 이유": {"rich_text": _text(s.reason)},
             "기사 ID": {"rich_text": _text(a.id)},
         }
         rows.append({"parent": {"database_id": db}, "properties": props})
-    for j, q in enumerate(slots, len(top) + 1):
+    for j, q in enumerate(slots, rank.get(TRACK_JOB, 0) + 1):
         props = {
             "후보": {"title": _text(f"GQ-{q.gq} {q.text}")},
             "날짜": {"date": {"start": day}},
             "순위": {"number": j},
+            "트랙": {"select": {"name": TRACK_JOB}},
             "종류": {"select": {"name": "상록 슬롯"}},
             "타깃": {"select": {"name": q.target}},
             "채널": {"select": {"name": q.channel}},
