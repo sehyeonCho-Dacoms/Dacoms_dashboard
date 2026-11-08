@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-07T15:31:37.683838+00:00",
-  "source_generated_at": "2026-11-07T15:31:37.614071+00:00",
+  "generated_at": "2026-11-08T00:17:19.690975+00:00",
+  "source_generated_at": "2026-11-08T00:17:19.618793+00:00",
   "window": {
     "current": {
       "start": "20261101",
@@ -13,50 +13,50 @@
   },
   "summary": {
     "sessions": {
-      "current": 377,
+      "current": 381,
       "previous": 491,
-      "change_pct": -23.2
+      "change_pct": -22.4
     },
     "totalUsers": {
-      "current": 335,
+      "current": 338,
       "previous": 417,
-      "change_pct": -19.7
+      "change_pct": -18.9
     },
     "newUsers": {
-      "current": 207,
+      "current": 210,
       "previous": 259,
-      "change_pct": -20.1
+      "change_pct": -18.9
     },
     "screenPageViews": {
-      "current": 3123,
+      "current": 3141,
       "previous": 2937,
-      "change_pct": 6.3
+      "change_pct": 6.9
     },
     "engagementRate": {
-      "current": 0.6702,
+      "current": 0.6643,
       "previous": 0.6321,
-      "change_pct": 6.0
+      "change_pct": 5.1
     },
     "averageSessionDuration": {
-      "current": 242.4991,
+      "current": 230.3029,
       "previous": 192.1914,
-      "change_pct": 26.2
+      "change_pct": 19.8
     }
   },
   "by_channel": [
     {
       "channel": "Direct",
-      "current": 203,
+      "current": 205,
       "previous": 284,
-      "change_pct": -28.5,
+      "change_pct": -27.8,
       "share_pct": 52.2
     },
     {
       "channel": "Organic Search",
-      "current": 143,
+      "current": 145,
       "previous": 180,
-      "change_pct": -20.6,
-      "share_pct": 36.8
+      "change_pct": -19.4,
+      "share_pct": 36.9
     },
     {
       "channel": "Organic Social",
@@ -77,7 +77,7 @@
       "current": 8,
       "previous": 7,
       "change_pct": 14.3,
-      "share_pct": 2.1
+      "share_pct": 2.0
     },
     {
       "channel": "Email",
@@ -161,10 +161,10 @@
     {
       "week_start": "20261101",
       "week_end": "20261107",
-      "sessions": 377,
-      "totalUsers": 335,
-      "newUsers": 207,
-      "screenPageViews": 3123
+      "sessions": 381,
+      "totalUsers": 338,
+      "newUsers": 210,
+      "screenPageViews": 3141
     }
   ],
   "instagram_referral": {
