@@ -25,7 +25,7 @@ def test_calibration_sheet_scores():
     assert s3.target == "병원"
     s5 = g2.score(_a("비대면진료 처방일수 '30일 예외' 논란…의료계·플랫폼 대립", flags=["논쟁"]), NOW)
     assert (s5.a, s5.b, s5.c, s5.d, s5.e, s5.f, s5.total) == (0, 5, 0, 10, 5, 0, 20) and s5.gq is None
-    assert s5.marks == ["논쟁"]
+    assert s5.marks == ["논쟁", "근거 확인"]   # v2 거름망 ⑦: 공식 자료 단서·수치 없음 → G4 확인
 
 
 def test_direct_hiring_news_passes_cutoff():
@@ -86,3 +86,20 @@ def test_stock_line_alerts_under_five():
     assert g2.stock_line(set(ready)).startswith("⏸ [G1]")            # 전부 글이 됐으면 0개
     if len(ready) >= g2.REFILL_AT:
         assert not g2.stock_line(set()).startswith("⏸")               # 아무 글도 없으면 전부 재고
+
+
+# --- 준칙 v2 (11/8) ------------------------------------------------------- #
+def test_v2_news_track_scored_by_news_criteria_and_picked_separately():
+    from pipeline.models import SCREEN_PASS, TRACK_JOB, TRACK_NEWS
+    news = _a("식약처, 비만 치료제 허가…건강보험 급여 적용 검토", i="n1")
+    news.track, news.flags = TRACK_NEWS, ["의료"]
+    s = g2.score(news, NOW)
+    assert s.track == TRACK_NEWS and s.a == 15 and s.b == 12 and s.f == 10 and s.total >= g2.CUTOFF
+    assert "의료" in s.marks and "근거 확인" not in s.marks          # 식약처·허가 = 공식 자료 단서
+    job = _a("지방 병원 봉직의 연봉 2억 돌파…의사 채용 경쟁", i="j1")
+    job.track = TRACK_JOB
+    for a in (news, job):
+        a.screen = SCREEN_PASS
+    _, top, slots = g2.run_g2([news, job], NOW)
+    assert {t.track for t in top} == {TRACK_NEWS, TRACK_JOB}
+    assert len(slots) == g2.TOP_N - sum(t.track == TRACK_JOB for t in top)   # 상록은 채용 트랙만 채움

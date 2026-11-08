@@ -10,7 +10,7 @@ from pipeline import _http
 from pipeline.config import Config
 from pipeline.export import pick_calibration, write_g0_outputs
 from pipeline.g0 import run_g0
-from pipeline.models import SCREEN_DROP, SCREEN_PASS, Article
+from pipeline.models import SCREEN_DROP, SCREEN_PASS, TRACK_JOB, TRACK_NEWS, Article
 from pipeline.screen import screen, title_key
 from pipeline.sources.news import KST, NaverNewsSource, parse_date, parse_feed, parse_naver_news
 
@@ -37,9 +37,11 @@ def test_screen_passes_workforce_news_and_flags_controversy():
 
 
 def test_screen_reasons():
-    assert screen(_a("대학병원 항암 신약 임상시험 결과"), NOW).screen_reasons[0].startswith("①")
+    # v2: 치료·신약 기사는 탈락이 아니라 '의료 뉴스' 트랙 + '의료' 표시
+    drug = screen(_a("대학병원 항암 신약 임상시험 결과"), NOW)
+    assert drug.screen == SCREEN_PASS and drug.track == TRACK_NEWS and "의료" in drug.flags
     assert screen(_a("기업 이사회 의사결정 구조 개편"), NOW).screen_reasons == ["① 주제 밖(제목에 의료 단어 없음)"]
-    assert screen(_a("병원 홍보 행사 개최"), NOW).screen_reasons == ["① 주제 밖(제목에 인력·채용 단어 없음)"]
+    assert screen(_a("병원 홍보 행사 개최"), NOW).screen_reasons == ["① 주제 밖(홍보·행사: 개최·행사)"]
     assert screen(_a("전문의가 알려주는 감기 증상과 예방법"), NOW).screen_reasons == ["② 의료 조언형(증상·예방법)"]
     assert screen(_a("병원 운영 혐의로 의사 기소"), NOW).screen_reasons[0].startswith("③")
     assert screen(_a("전공의 복귀 찌라시 확산"), NOW).screen_reasons[0].startswith("④")
@@ -63,9 +65,7 @@ def test_calibration_false_passes_are_dropped_by_title_rule():
     expo = screen(_a("보건의료 통합행사 '코메드 2026' 개최", "의료 인력 채용 박람회 부스"), NOW)
     assert kt.screen == SCREEN_DROP and expo.screen == SCREEN_DROP
     assert screen(_a('"상주 의사 0명"…장애인선수촌 의료 공백 질타'), NOW).screen == SCREEN_PASS
-    assert screen(_a("대학병원 신약 임상시험 결과"), NOW).screen_reasons == [
-        "① 주제 밖(제목에 인력·채용 단어 없음: 신약·임상시험)"
-    ]
+    assert screen(_a("대학병원 신약 임상시험 결과"), NOW).screen == SCREEN_PASS   # v2: 의료 뉴스 트랙
 
 
 def test_legal_flag():
@@ -89,9 +89,9 @@ def test_cap_keeps_passed_articles_first(tmp_path):
     stats: dict = {}
     articles = run_g0(_config(tmp_path, g0_max=4), NOW, stats)
     assert len(articles) == 4 and all(a.screen == SCREEN_PASS for a in articles)
-    assert (stats["deduped"], stats["passed"]) == (11, 5)
+    assert (stats["deduped"], stats["passed"]) == (11, 6)   # v2: 신약 임상 기사가 의료 뉴스로 통과
     summary = write_g0_outputs(articles, tmp_path, "d", stats)["summary"].read_text(encoding="utf-8")
-    assert "검토 11건" in summary and "거름망 통과 5건 → 통과 기사 먼저 4건 기록" in summary
+    assert "검토 11건" in summary and "거름망 통과 6건 → 통과 기사 먼저 4건 기록" in summary
 
 
 def test_offtopic_title_kept_when_title_is_about_workforce():
@@ -196,3 +196,14 @@ def test_naver_news_fetch_survives_one_failed_query(tmp_path, monkeypatch):
 def test_g0_sources_without_credentials_fall_back_to_sample(tmp_path):
     c = _config(tmp_path, g0_sources=["naver_news", "rss"], naver_client_id=None, naver_client_secret=None)
     assert c.enabled_g0_source_keys() == ["sample"]
+
+
+# --- 준칙 v2 (11/8) ------------------------------------------------------- #
+def test_v2_tracks_and_incident_split():
+    assert screen(_a("봉직의 연봉 상승세"), NOW).track == TRACK_JOB
+    news = screen(_a("식약처, 비만 치료제 국내 허가…건강보험 급여는 내년 검토"), NOW)
+    assert news.screen == SCREEN_PASS and news.track == TRACK_NEWS and "의료" in news.flags
+    accident = screen(_a("응급실 의료사고 잇따라…복지부 실태 조사"), NOW)
+    assert accident.screen == SCREEN_PASS and "사건" in accident.flags      # 기관·제도로 쓸 수 있는 사건
+    assert screen(_a("환자 폭행 혐의 의사 구속"), NOW).screen_reasons[0].startswith("③")   # 실명 개인 사건
+    assert screen(_a("서울대병원 의료 AI 협약 체결 행사"), NOW).screen == SCREEN_DROP      # 홍보·행사

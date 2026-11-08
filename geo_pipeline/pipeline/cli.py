@@ -101,7 +101,7 @@ def _g2(config: Config, articles, now) -> None:
     (config.out_dir / f"g2_{day}.json").write_text(json.dumps({
         "day": day, "cutoff": g2.CUTOFF,
         "candidates": [{"id": s.article.id, "title": s.article.title, "url": s.article.url, "total": s.total,
-                        "abcdef": [s.a, s.b, s.c, s.d, s.e, s.f], "target": s.target,
+                        "abcdef": [s.a, s.b, s.c, s.d, s.e, s.f], "target": s.target, "track": s.track,
                         "gq": s.gq.gq if s.gq else None, "channel": s.channel, "marks": s.marks} for s in top],
         "evergreen": [{"gq": q.gq, "question": q.text, "target": q.target, "channel": q.channel} for q in slots],
         "scored": [g2.line(s) for s in scores],

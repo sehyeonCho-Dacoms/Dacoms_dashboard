@@ -88,6 +88,10 @@ class StructureRecord:
 SCREEN_PASS = "통과"
 SCREEN_DROP = "탈락"
 
+# 준칙 v2 (11/8 세현 결정): 주 10편 = 의료 뉴스 6편(월·수·금) + 채용·의사 일 4편(화·목)
+TRACK_JOB = "채용·의사 일"
+TRACK_NEWS = "의료 뉴스"
+
 
 @dataclass
 class Article:
@@ -105,6 +109,7 @@ class Article:
     screen: str = SCREEN_PASS                 # 거름망 결과
     screen_reasons: list[str] = field(default_factory=list)
     flags: list[str] = field(default_factory=list)   # 논쟁 등 (사람 확인)
+    track: str = ""                           # 준칙 v2 트랙: TRACK_JOB | TRACK_NEWS (거름망이 정함)
 
     def to_dict(self) -> dict:
         d = asdict(self)

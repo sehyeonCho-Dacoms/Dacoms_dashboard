@@ -52,10 +52,14 @@ class Post:
     state: str
     index: str
     log: str
+    twin: bool = False   # 준칙 v2: N 행의 '티스토리 게시 URL'로 만든 티스토리판 (같은 행에 기록)
 
     @property
     def naver(self) -> bool:
         return self.channel == "네이버 블로그"
+
+
+TWIN_COL = "티스토리 게시 URL"   # 준칙 v2 (11/8): 주제 1개 = N 행 1개, 티스토리판 URL은 이 칸
 
 
 @dataclass
@@ -77,17 +81,28 @@ def from_row(r: dict) -> Post | None:
                 published=date.fromisoformat(day), state=g("상태"), index=g("색인 여부"), log=g("측정 기록"))
 
 
+def twin_from_row(r: dict) -> Post | None:
+    """v2: N 행에 '티스토리 게시 URL'이 있으면 티스토리판을 따로 잰다. 게시일은 같은 날(20:01~20:28 동시 발행)."""
+    base = from_row(r)
+    url = _plain(r.get("properties", {}).get(TWIN_COL, {})).strip()
+    if not base or not url or not base.naver:
+        return None
+    return Post(page_id=base.page_id, no=f"{base.no}(T)", channel="티스토리", title=base.title, url=url,
+                published=base.published, state=base.state, index="", log=base.log, twin=True)
+
+
 # --------------------------------------------------------------------------- #
 # 언제 잴까
 # --------------------------------------------------------------------------- #
-def done_checkpoints(log: str) -> set[int]:
-    """측정 기록의 'G8 D+n' 중 정식 시점(3·7·30)만. 수동 기록 'D+11' 같은 값은 시점으로 치지 않는다."""
-    return {int(n) for n in re.findall(r"G8 D\+(\d+)", log) if int(n) in CHECKPOINTS}
+def done_checkpoints(log: str, twin: bool = False) -> set[int]:
+    """측정 기록의 'G8 D+n'(티스토리판은 'G8(T) D+n') 중 정식 시점(3·7·30)만. 수동 기록 'D+11'은 치지 않는다."""
+    pattern = r"G8\(T\) D\+(\d+)" if twin else r"G8 D\+(\d+)"
+    return {int(n) for n in re.findall(pattern, log) if int(n) in CHECKPOINTS}
 
 
 def due(post: Post, today: date) -> int | None:
     age = (today - post.published).days
-    last = max(done_checkpoints(post.log), default=0)   # 늦은 시점을 이미 쟀으면 앞 시점은 건너뛴 것으로 본다
+    last = max(done_checkpoints(post.log, post.twin), default=0)   # 늦은 시점을 이미 쟀으면 앞 시점은 건너뛴 것으로 본다
     todo = [cp for cp in CHECKPOINTS if last < cp <= age]
     return max(todo) if todo else None
 
@@ -164,6 +179,13 @@ def ga4_views(url: str, since: date, token: str) -> int:
 def decide(post: Post, m: Measure, today: date) -> tuple[dict, str]:
     """(노션 properties, 측정 기록에 붙일 한 줄)."""
     props: dict = {}
+    if post.twin:   # 같은 행의 '색인 여부'·상태는 네이버판 몫 → 티스토리판은 조회수 칸과 기록만
+        if m.views is not None and m.checkpoint in (7, 30):
+            props[f"조회수 D+{m.checkpoint}"] = {"number": m.views}
+        seen = {True: "구글 색인 확인", False: "구글 미색인", None: "구글 측정 실패"}[m.found]
+        views = f" · 조회 {m.views}" if m.views is not None else " · 조회 측정 실패"
+        when = f"G8(T) D+{m.checkpoint}" + (f"(실측 D+{m.age})" if m.age != m.checkpoint else "")
+        return props, f"{today:%m/%d} {when} 자동(티스토리판): {seen}{views}" + (f" · {m.note}" if m.note else "")
     if m.found is True:
         index = "확인"
     elif m.found is False:
@@ -261,7 +283,9 @@ def run(now: datetime, dry_run: bool = False, today: date | None = None, pause: 
     every = _query(db, {}, h)   # 대조는 모든 행, 측정은 게시 URL이 있는 행만
     rows = [r for r in every if _plain(r.get("properties", {}).get("게시 URL", {})).strip()]
     posts = [p for r in rows if (p := from_row(r)) and p.state in LIVE]
+    posts += [p for r in rows if (p := twin_from_row(r)) and p.state in LIVE]   # v2 티스토리판
     todo = [(p, cp) for p in posts if (cp := due(p, today))]
+    logs: dict[str, str] = {}   # 같은 행에 네이버판·티스토리판이 이어 쓰므로 방금 쓴 기록을 이어받는다
     out = [f"📏 G8 {today}: 게시 글 {len(posts)}편 · 오늘 잴 글 {len(todo)}편" + (" [dry-run]" if dry_run else "")]
 
     gtoken = None
@@ -287,7 +311,9 @@ def run(now: datetime, dry_run: bool = False, today: date | None = None, pause: 
         props, line = decide(p, m, today)
         out.append(f"   {p.no} {line[6:]}")
         if not dry_run:
+            p.log = logs.get(p.page_id, p.log)
             write(p, props, line, h)
+            logs[p.page_id] = f"{p.log}\n{line}" if p.log else line
             time.sleep(pause)   # 노션 API 초당 3회
     if fails and fails == len(todo):
         out.append("❌ 잴 글을 하나도 못 쟀음 → 위 오류 확인")
