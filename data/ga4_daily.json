@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-08T15:51:47.210887+00:00",
+  "generated_at": "2026-11-09T00:37:58.050345+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -501,12 +501,12 @@
     },
     {
       "date": "20261108",
-      "sessions": 23,
-      "totalUsers": 22,
-      "newUsers": 13,
-      "screenPageViews": 131,
-      "engagementRate": 0.6522,
-      "averageSessionDuration": 88.175
+      "sessions": 31,
+      "totalUsers": 30,
+      "newUsers": 19,
+      "screenPageViews": 173,
+      "engagementRate": 0.6129,
+      "averageSessionDuration": 86.498
     }
   ],
   "by_channel": [
@@ -1881,8 +1881,8 @@
     {
       "date": "20261108",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 10,
-      "totalUsers": 10
+      "sessions": 18,
+      "totalUsers": 18
     },
     {
       "date": "20261108",
@@ -1899,8 +1899,8 @@
     {
       "date": "20261108",
       "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 1,
-      "totalUsers": 1
+      "sessions": 2,
+      "totalUsers": 2
     }
   ],
   "by_source": [
@@ -4362,7 +4362,7 @@
       "date": "20261108",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 10
+      "sessions": 18
     },
     {
       "date": "20261108",
@@ -4378,15 +4378,15 @@
     },
     {
       "date": "20261108",
-      "sessionSource": "facebook.com",
-      "sessionMedium": "referral",
+      "sessionSource": "(not set)",
+      "sessionMedium": "(not set)",
       "sessions": 2
     },
     {
       "date": "20261108",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 1
+      "sessionSource": "facebook.com",
+      "sessionMedium": "referral",
+      "sessions": 2
     },
     {
       "date": "20261108",
@@ -5135,12 +5135,12 @@
     {
       "date": "20261108",
       "deviceCategory": "mobile",
-      "sessions": 12
+      "sessions": 17
     },
     {
       "date": "20261108",
       "deviceCategory": "desktop",
-      "sessions": 9
+      "sessions": 12
     },
     {
       "date": "20261108",
@@ -9212,69 +9212,69 @@
     {
       "date": "20261108",
       "eventName": "page_view",
-      "eventCount": 131
+      "eventCount": 173
     },
     {
       "date": "20261108",
       "eventName": "user_engagement",
-      "eventCount": 100
+      "eventCount": 144
     },
     {
       "date": "20261108",
       "eventName": "recruit_list_view",
-      "eventCount": 51
+      "eventCount": 68
     },
     {
       "date": "20261108",
       "eventName": "scroll",
-      "eventCount": 38
+      "eventCount": 59
     },
     {
       "date": "20261108",
       "eventName": "session_start",
-      "eventCount": 24
+      "eventCount": 32
     },
     {
       "date": "20261108",
       "eventName": "recruit_view",
-      "eventCount": 21
+      "eventCount": 24
     },
     {
       "date": "20261108",
       "eventName": "first_visit",
-      "eventCount": 13
+      "eventCount": 19
     },
     {
       "date": "20261108",
       "eventName": "form_start",
-      "eventCount": 10
+      "eventCount": 15
     },
     {
       "date": "20261108",
       "eventName": "form_submit",
-      "eventCount": 10
+      "eventCount": 15
     }
   ],
   "top_pages": [
     {
       "pagePath": "/recruit/recruitList.do",
-      "screenPageViews": 9465,
-      "userEngagementDuration": 101909
+      "screenPageViews": 9481,
+      "userEngagementDuration": 102277
     },
     {
       "pagePath": "/main/main.do",
-      "screenPageViews": 6127,
-      "userEngagementDuration": 56855
+      "screenPageViews": 6140,
+      "userEngagementDuration": 57209
     },
     {
       "pagePath": "/recruit/recruitView.do",
-      "screenPageViews": 3370,
-      "userEngagementDuration": 68602
+      "screenPageViews": 3373,
+      "userEngagementDuration": 68692
     },
     {
       "pagePath": "/member/loginGen.do",
-      "screenPageViews": 2974,
-      "userEngagementDuration": 10947
+      "screenPageViews": 2982,
+      "userEngagementDuration": 10959
     },
     {
       "pagePath": "/company/companyList.do",
@@ -9298,8 +9298,8 @@
     },
     {
       "pagePath": "/event/eventList.do",
-      "screenPageViews": 342,
-      "userEngagementDuration": 3494
+      "screenPageViews": 344,
+      "userEngagementDuration": 3500
     },
     {
       "pagePath": "/mypageGen/recruitList.do",
