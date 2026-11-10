@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-09T19:37:23",
+  "generatedAt": "2026-11-10T03:17:36",
   "kpis": {
-    "collected": 106,
-    "uploadReady": 17,
-    "uploadReadyPct": 16,
-    "hotLeads": 0,
-    "pipelineValue": 0,
-    "pipelineValueLabel": "₩0만"
+    "collected": 109,
+    "uploadReady": 18,
+    "uploadReadyPct": 17,
+    "hotLeads": 1,
+    "pipelineValue": 32700,
+    "pipelineValueLabel": "₩3.3억"
   },
   "jobs": [
     {
@@ -298,6 +298,23 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73271"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "대한사이클연맹 국가대표 전담팀(의료면허소지자, 트레이너: 기술) 채용 공고",
+      "role": "코치/트레이너",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 71,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73305"
     },
     {
       "platform": "대한체육회",
@@ -1811,20 +1828,54 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73266"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "대한사이클연맹 BMX 국가대표 지도자 채용공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73307"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "(사)대한육상연맹 사무처 계약직(육아휴직 대체인력) 직원 공개 채용 (회계부)",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73303"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 106,
-      "growth": "±0",
+      "open": 109,
+      "growth": "+3",
       "senior": 0,
-      "tier": "Warm",
-      "score": 52,
-      "fee": 31800,
+      "tier": "Hot",
+      "score": 65,
+      "fee": 32700,
       "stage": "신규",
-      "signal": "106개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "3건↑ 채용 확대 중(스케일업 신호) · 109개 직무 동시 채용 — 스케일업 정황"
     }
   ],
   "actions": {
@@ -1853,32 +1904,32 @@
     ],
     "demand": [
       {
-        "pr": "P1",
-        "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩31,800만",
-        "why": "106개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
-        "cta": "콜드 아웃리치"
+        "pr": "P0",
+        "title": "대한체육회 헤드헌팅 계약 제안",
+        "company": "예상 수수료 ₩32,700만",
+        "why": "3건↑ 채용 확대 중(스케일업 신호) · 109개 직무 동시 채용 — 스케일업 정황",
+        "cta": "제안서 발송"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 77,
-      "코치/트레이너": 27,
+      "기타": 79,
+      "코치/트레이너": 28,
       "데이터": 2
     },
     "size": {
-      "공공/협회": 106
+      "공공/협회": 109
     },
     "platform": {
-      "대한체육회": 106
+      "대한체육회": 109
     },
     "sector": {
-      "협회": 106
+      "협회": 109
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 106,
+      "미들(3~5년)": 109,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -1893,24 +1944,24 @@
         "이번주"
       ],
       "total": [
-        4,
-        3,
-        5,
-        13,
+        6,
+        2,
+        9,
+        9,
         9,
         11,
         7,
-        3
+        5
       ],
       "uploadReady": [
         0,
         0,
-        0,
-        5,
+        4,
+        1,
         0,
         3,
         0,
-        2
+        3
       ]
     }
   }
