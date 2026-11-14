@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-11-13T17:02:49.326877+00:00",
-  "source_generated_at": "2026-11-13T17:02:49.233598+00:00",
+  "generated_at": "2026-11-14T01:20:37.034154+00:00",
+  "source_generated_at": "2026-11-14T01:20:36.942417+00:00",
   "yesterday": {
     "date": "20261113",
-    "sessions": 40,
-    "totalUsers": 39,
-    "newUsers": 23,
-    "engagementRate": 0.475,
-    "averageSessionDuration": 107.1,
+    "sessions": 51,
+    "totalUsers": 47,
+    "newUsers": 29,
+    "engagementRate": 0.5294,
+    "averageSessionDuration": 112.8,
     "sessions_prev_day": 58,
-    "sessions_dod_pct": -31.0
+    "sessions_dod_pct": -12.1
   },
   "week": {
     "sessions": {
-      "current": 375,
+      "current": 386,
       "previous": 388,
-      "change_pct": -3.4
+      "change_pct": -0.5
     },
     "totalUsers": {
-      "current": 330,
+      "current": 338,
       "previous": 345,
-      "change_pct": -4.3
+      "change_pct": -2.0
     },
     "newUsers": {
-      "current": 204,
+      "current": 210,
       "previous": 220,
-      "change_pct": -7.3
+      "change_pct": -4.5
     },
     "screenPageViews": {
-      "current": 2190,
+      "current": 2289,
       "previous": 3067,
-      "change_pct": -28.6
+      "change_pct": -25.4
     },
     "engagementRate": {
-      "current": 0.5858,
+      "current": 0.5961,
       "previous": 0.6867,
-      "change_pct": -14.7
+      "change_pct": -13.2
     },
     "averageSessionDuration": {
-      "current": 152.3934,
+      "current": 153.6123,
       "previous": 174.9554,
-      "change_pct": -12.9
+      "change_pct": -12.2
     }
   },
   "window": {
@@ -57,38 +57,38 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 220,
+      "current": 227,
       "previous": 210,
-      "change_pct": 4.8,
-      "share_pct": 57.6
+      "change_pct": 8.1,
+      "share_pct": 57.8
     },
     {
       "channel": "Organic Search",
-      "current": 123,
+      "current": 128,
       "previous": 144,
-      "change_pct": -14.6,
-      "share_pct": 32.2
+      "change_pct": -11.1,
+      "share_pct": 32.6
     },
     {
       "channel": "Organic Social",
       "current": 14,
       "previous": 20,
       "change_pct": -30.0,
-      "share_pct": 3.7
+      "share_pct": 3.6
     },
     {
       "channel": "AI Assistant",
       "current": 10,
       "previous": 10,
       "change_pct": 0.0,
-      "share_pct": 2.6
+      "share_pct": 2.5
     },
     {
       "channel": "Unassigned",
-      "current": 8,
+      "current": 7,
       "previous": 1,
-      "change_pct": 700.0,
-      "share_pct": 2.1
+      "change_pct": 600.0,
+      "share_pct": 1.8
     },
     {
       "channel": "Paid Social",
@@ -102,7 +102,7 @@
     "current": 8,
     "previous": 7,
     "change_pct": 14.3,
-    "share_of_sessions_pct": 2.1
+    "share_of_sessions_pct": 2.0
   },
   "weekly_trend": [
     {
@@ -164,10 +164,10 @@
     {
       "week_start": "20261107",
       "week_end": "20261113",
-      "sessions": 375,
-      "totalUsers": 330,
-      "newUsers": 204,
-      "screenPageViews": 2190
+      "sessions": 386,
+      "totalUsers": 338,
+      "newUsers": 210,
+      "screenPageViews": 2289
     }
   ],
   "measurement": {
@@ -188,7 +188,7 @@
         "counts": [
           86,
           47,
-          27
+          39
         ],
         "alive": true
       },
@@ -203,7 +203,7 @@
         "counts": [
           186,
           163,
-          47
+          98
         ],
         "alive": true
       },
@@ -292,10 +292,10 @@
         ],
         "counts": [
           0,
-          11,
-          0
+          12,
+          1
         ],
-        "alive": false
+        "alive": true
       },
       {
         "event": "resume_save_click",
@@ -307,23 +307,20 @@
         ],
         "counts": [
           2,
-          15,
-          0
+          17,
+          1
         ],
-        "alive": false
+        "alive": true
       }
     ],
     "broken": [
       "지원 시작",
       "이력서 선택",
       "최종 지원",
-      "이력서 작성",
-      "이력서 수정",
-      "이력서 저장"
+      "이력서 작성"
     ]
   },
   "alerts": [
-    "계측 끊김 의심 — 지원 시작, 이력서 선택, 최종 지원, 이력서 작성, 이력서 수정, 이력서 저장 (20261113 0건)",
-    "세션 급변 — 전일 대비 -31.0%"
+    "계측 끊김 의심 — 지원 시작, 이력서 선택, 최종 지원, 이력서 작성 (20261113 0건)"
   ]
 }
