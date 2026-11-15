@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-14T15:39:29.687529+00:00",
-  "source_generated_at": "2026-11-14T15:39:29.619540+00:00",
+  "generated_at": "2026-11-15T00:52:59.132521+00:00",
+  "source_generated_at": "2026-11-15T00:52:59.078313+00:00",
   "window": {
     "current": {
       "start": "20261108",
@@ -13,50 +13,50 @@
   },
   "summary": {
     "sessions": {
-      "current": 330,
+      "current": 333,
       "previous": 381,
-      "change_pct": -13.4
+      "change_pct": -12.6
     },
     "totalUsers": {
-      "current": 295,
+      "current": 297,
       "previous": 338,
-      "change_pct": -12.7
+      "change_pct": -12.1
     },
     "newUsers": {
-      "current": 185,
+      "current": 187,
       "previous": 210,
-      "change_pct": -11.9
+      "change_pct": -11.0
     },
     "screenPageViews": {
-      "current": 1810,
+      "current": 1825,
       "previous": 3141,
-      "change_pct": -42.4
+      "change_pct": -41.9
     },
     "engagementRate": {
-      "current": 0.6524,
+      "current": 0.649,
       "previous": 0.6745,
-      "change_pct": -3.3
+      "change_pct": -3.8
     },
     "averageSessionDuration": {
-      "current": 133.9559,
+      "current": 135.8157,
       "previous": 199.2837,
-      "change_pct": -32.8
+      "change_pct": -31.8
     }
   },
   "by_channel": [
     {
       "channel": "Direct",
-      "current": 199,
+      "current": 202,
       "previous": 205,
-      "change_pct": -2.9,
-      "share_pct": 59.6
+      "change_pct": -1.5,
+      "share_pct": 59.9
     },
     {
       "channel": "Organic Search",
       "current": 100,
       "previous": 145,
       "change_pct": -31.0,
-      "share_pct": 29.9
+      "share_pct": 29.7
     },
     {
       "channel": "Organic Social",
@@ -161,10 +161,10 @@
     {
       "week_start": "20261108",
       "week_end": "20261114",
-      "sessions": 330,
-      "totalUsers": 295,
-      "newUsers": 185,
-      "screenPageViews": 1810
+      "sessions": 333,
+      "totalUsers": 297,
+      "newUsers": 187,
+      "screenPageViews": 1825
     }
   ],
   "instagram_referral": {
