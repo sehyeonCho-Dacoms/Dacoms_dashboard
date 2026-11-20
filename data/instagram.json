@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-19T18:04:04.7746637Z",
+  "generatedAt": "2026-11-20T02:06:29.5926474Z",
   "account": {
     "username": "drafton.co.kr",
     "id": "28961157813485354",
     "accountType": "BUSINESS",
     "mediaCount": 853,
-    "followersCount": 11711
+    "followersCount": 11709
   },
   "media": [
     {
@@ -15,8 +15,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfmHO90D6Xr/",
       "timestamp": "2026-11-11T09:02:16+00:00",
-      "views": 22774,
-      "reach": 9780,
+      "views": 22820,
+      "reach": 9789,
       "saved": 37,
       "shares": 41
     },
@@ -77,8 +77,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfmHO90D6Xr/",
       "timestamp": "2026-11-11T09:02:16+00:00",
-      "views": 22774,
-      "reach": 9780,
+      "views": 22820,
+      "reach": 9789,
       "saved": 37,
       "shares": 41
     },
@@ -221,7 +221,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DegyMPCj_yd/",
       "timestamp": "2026-10-15T10:50:48+00:00",
-      "views": 104550,
+      "views": 104551,
       "reach": 51669,
       "saved": 218,
       "shares": 1932
@@ -306,7 +306,7 @@
       "permalink": "https://www.instagram.com/p/DeMDWjBvShR/",
       "timestamp": "2026-10-07T12:20:04+00:00",
       "views": 20648,
-      "reach": 9168,
+      "reach": 9175,
       "saved": 35,
       "shares": 62
     },
@@ -317,7 +317,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeL9Qh6D4DS/",
       "timestamp": "2026-10-07T08:43:27+00:00",
-      "views": 31867,
+      "views": 31868,
       "reach": 13041,
       "saved": 204,
       "shares": 117
@@ -372,21 +372,17 @@
     }
   ],
   "brief": {
-    "date": "2026-11-19",
-    "followers": 11711,
+    "date": "2026-11-20",
+    "followers": 11709,
     "followersDelta": -2,
-    "summary": "팔로워 11711명 (▼ 전일 대비 2 명 감소). 최근 5개 게시물 평균 조회수 17700회, 도달 합계 33098회, 저장+공유 합계 341회. 최고 성과: '⠀ 🏃 마라톤을 꼭 서울에서 열어야 할까? 참가자가 많은 곳, 교통이 …' (조회수 22774회)",
+    "summary": "팔로워 11709명 (▼ 전일 대비 2 명 감소). 최근 5개 게시물 평균 조회수 17710회, 도달 합계 33107회, 저장+공유 합계 341회. 최고 성과: '⠀ 🏃 마라톤을 꼭 서울에서 열어야 할까? 참가자가 많은 곳, 교통이 …' (조회수 22820회)",
     "topPost": {
       "caption": "⠀ 🏃 마라톤을 꼭 서울에서 열어야 할까? 참가자가 많은 곳, 교통이 …",
-      "views": 22774,
+      "views": 22820,
       "permalink": "https://www.instagram.com/p/DfmHO90D6Xr/"
     }
   },
   "followerHistory": [
-    {
-      "date": "2026-09-21",
-      "followers": 10848
-    },
     {
       "date": "2026-09-22",
       "followers": 10886
@@ -622,20 +618,15 @@
     {
       "date": "2026-11-19",
       "followers": 11711
+    },
+    {
+      "date": "2026-11-20",
+      "followers": 11709
     }
   ],
   "surging": null,
   "engagedDemographics": {},
   "analysisHistory": [
-    {
-      "date": "2026-09-21",
-      "followers": 10848,
-      "viewsAvg": 13981.0,
-      "reachSum": 28646.0,
-      "engagementSum": 373.0,
-      "topCategory": "마케팅",
-      "surgingCount": 1
-    },
     {
       "date": "2026-09-22",
       "followers": 10886,
@@ -1163,6 +1154,15 @@
       "followers": 11711,
       "viewsAvg": 17700.0,
       "reachSum": 33098.0,
+      "engagementSum": 341.0,
+      "topCategory": "마케팅",
+      "surgingCount": 0
+    },
+    {
+      "date": "2026-11-20",
+      "followers": 11709,
+      "viewsAvg": 17710.0,
+      "reachSum": 33107.0,
       "engagementSum": 341.0,
       "topCategory": "마케팅",
       "surgingCount": 0
