@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-20T17:38:41",
+  "generatedAt": "2026-11-21T02:01:15",
   "kpis": {
     "collected": 124,
     "uploadReady": 22,
@@ -2205,8 +2205,8 @@
         12,
         5,
         7,
-        12,
-        6
+        13,
+        5
       ],
       "uploadReady": [
         0,

@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-11-20T17:38:51.189713+00:00",
-  "source_generated_at": "2026-11-20T17:38:51.114701+00:00",
+  "generated_at": "2026-11-21T02:01:23.426772+00:00",
+  "source_generated_at": "2026-11-21T02:01:23.319846+00:00",
   "yesterday": {
     "date": "20261120",
-    "sessions": 56,
-    "totalUsers": 44,
-    "newUsers": 33,
-    "engagementRate": 0.5893,
-    "averageSessionDuration": 198.0,
+    "sessions": 60,
+    "totalUsers": 46,
+    "newUsers": 35,
+    "engagementRate": 0.5833,
+    "averageSessionDuration": 258.6,
     "sessions_prev_day": 50,
-    "sessions_dod_pct": 12.0
+    "sessions_dod_pct": 20.0
   },
   "week": {
     "sessions": {
-      "current": 358,
+      "current": 362,
       "previous": 387,
-      "change_pct": -7.5
+      "change_pct": -6.5
     },
     "totalUsers": {
-      "current": 302,
+      "current": 304,
       "previous": 338,
-      "change_pct": -10.7
+      "change_pct": -10.1
     },
     "newUsers": {
-      "current": 197,
+      "current": 199,
       "previous": 210,
-      "change_pct": -6.2
+      "change_pct": -5.2
     },
     "screenPageViews": {
-      "current": 1864,
+      "current": 1904,
       "previous": 2281,
-      "change_pct": -18.3
+      "change_pct": -16.5
     },
     "engagementRate": {
-      "current": 0.6083,
+      "current": 0.6075,
       "previous": 0.597,
-      "change_pct": 1.9
+      "change_pct": 1.8
     },
     "averageSessionDuration": {
-      "current": 173.7605,
+      "current": 182.4112,
       "previous": 167.9197,
-      "change_pct": 3.5
+      "change_pct": 8.6
     }
   },
   "window": {
@@ -57,24 +57,24 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 204,
+      "current": 206,
       "previous": 227,
-      "change_pct": -10.1,
-      "share_pct": 56.4
+      "change_pct": -9.3,
+      "share_pct": 56.9
     },
     {
       "channel": "Organic Search",
-      "current": 126,
+      "current": 127,
       "previous": 129,
-      "change_pct": -2.3,
-      "share_pct": 34.8
+      "change_pct": -1.6,
+      "share_pct": 35.1
     },
     {
       "channel": "Organic Social",
-      "current": 16,
+      "current": 17,
       "previous": 14,
-      "change_pct": 14.3,
-      "share_pct": 4.4
+      "change_pct": 21.4,
+      "share_pct": 4.7
     },
     {
       "channel": "AI Assistant",
@@ -84,18 +84,18 @@
       "share_pct": 1.9
     },
     {
-      "channel": "Unassigned",
-      "current": 5,
-      "previous": 0,
-      "change_pct": null,
-      "share_pct": 1.4
-    },
-    {
       "channel": "Email",
       "current": 3,
       "previous": 1,
       "change_pct": 200.0,
       "share_pct": 0.8
+    },
+    {
+      "channel": "Unassigned",
+      "current": 1,
+      "previous": 0,
+      "change_pct": null,
+      "share_pct": 0.3
     }
   ],
   "instagram_referral": {
@@ -164,10 +164,10 @@
     {
       "week_start": "20261114",
       "week_end": "20261120",
-      "sessions": 358,
-      "totalUsers": 302,
-      "newUsers": 197,
-      "screenPageViews": 1864
+      "sessions": 362,
+      "totalUsers": 304,
+      "newUsers": 199,
+      "screenPageViews": 1904
     }
   ],
   "measurement": {
@@ -188,7 +188,7 @@
         "counts": [
           26,
           28,
-          27
+          34
         ],
         "alive": true
       },
@@ -203,7 +203,7 @@
         "counts": [
           82,
           103,
-          94
+          109
         ],
         "alive": true
       },
@@ -293,9 +293,9 @@
         "counts": [
           6,
           6,
-          0
+          3
         ],
-        "alive": false
+        "alive": true
       },
       {
         "event": "resume_save_click",
@@ -308,7 +308,7 @@
         "counts": [
           4,
           5,
-          2
+          4
         ],
         "alive": true
       }
@@ -316,11 +316,10 @@
     "broken": [
       "지원 시작",
       "이력서 선택",
-      "최종 지원",
-      "이력서 수정"
+      "최종 지원"
     ]
   },
   "alerts": [
-    "계측 끊김 의심 — 지원 시작, 이력서 선택, 최종 지원, 이력서 수정 (20261120 0건)"
+    "계측 끊김 의심 — 지원 시작, 이력서 선택, 최종 지원 (20261120 0건)"
   ]
 }
