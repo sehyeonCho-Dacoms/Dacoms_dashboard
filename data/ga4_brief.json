@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-11-21T16:40:02.993824+00:00",
-  "source_generated_at": "2026-11-21T16:40:02.899591+00:00",
+  "generated_at": "2026-11-22T01:02:13.446020+00:00",
+  "source_generated_at": "2026-11-22T01:02:13.363611+00:00",
   "yesterday": {
     "date": "20261121",
-    "sessions": 27,
-    "totalUsers": 25,
-    "newUsers": 19,
-    "engagementRate": 0.5926,
-    "averageSessionDuration": 106.1,
+    "sessions": 33,
+    "totalUsers": 30,
+    "newUsers": 23,
+    "engagementRate": 0.5455,
+    "averageSessionDuration": 106.5,
     "sessions_prev_day": 60,
-    "sessions_dod_pct": -55.0
+    "sessions_dod_pct": -45.0
   },
   "week": {
     "sessions": {
-      "current": 357,
+      "current": 363,
       "previous": 391,
-      "change_pct": -8.7
+      "change_pct": -7.2
     },
     "totalUsers": {
-      "current": 301,
+      "current": 306,
       "previous": 341,
-      "change_pct": -11.7
+      "change_pct": -10.3
     },
     "newUsers": {
-      "current": 198,
+      "current": 202,
       "previous": 215,
-      "change_pct": -7.9
+      "change_pct": -6.0
     },
     "screenPageViews": {
-      "current": 1851,
+      "current": 1868,
       "previous": 2220,
-      "change_pct": -16.6
+      "change_pct": -15.9
     },
     "engagementRate": {
-      "current": 0.6118,
+      "current": 0.6051,
       "previous": 0.5957,
-      "change_pct": 2.7
+      "change_pct": 1.6
     },
     "averageSessionDuration": {
-      "current": 164.8844,
+      "current": 164.9414,
       "previous": 154.1672,
       "change_pct": 7.0
     }
@@ -57,31 +57,31 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 205,
+      "current": 208,
       "previous": 229,
-      "change_pct": -10.5,
-      "share_pct": 57.3
+      "change_pct": -9.2,
+      "share_pct": 57.1
     },
     {
       "channel": "Organic Search",
-      "current": 124,
+      "current": 126,
       "previous": 128,
-      "change_pct": -3.1,
+      "change_pct": -1.6,
       "share_pct": 34.6
     },
     {
       "channel": "Organic Social",
-      "current": 18,
+      "current": 19,
       "previous": 15,
-      "change_pct": 20.0,
-      "share_pct": 5.0
+      "change_pct": 26.7,
+      "share_pct": 5.2
     },
     {
       "channel": "AI Assistant",
       "current": 6,
       "previous": 11,
       "change_pct": -45.5,
-      "share_pct": 1.7
+      "share_pct": 1.6
     },
     {
       "channel": "Email",
@@ -95,14 +95,14 @@
       "current": 2,
       "previous": 0,
       "change_pct": null,
-      "share_pct": 0.6
+      "share_pct": 0.5
     }
   ],
   "instagram_referral": {
-    "current": 5,
+    "current": 6,
     "previous": 9,
-    "change_pct": -44.4,
-    "share_of_sessions_pct": 1.4
+    "change_pct": -33.3,
+    "share_of_sessions_pct": 1.6
   },
   "weekly_trend": [
     {
@@ -164,10 +164,10 @@
     {
       "week_start": "20261115",
       "week_end": "20261121",
-      "sessions": 357,
-      "totalUsers": 301,
-      "newUsers": 198,
-      "screenPageViews": 1851
+      "sessions": 363,
+      "totalUsers": 306,
+      "newUsers": 202,
+      "screenPageViews": 1868
     }
   ],
   "measurement": {
@@ -293,7 +293,7 @@
         "counts": [
           6,
           3,
-          2
+          4
         ],
         "alive": true
       },
@@ -308,21 +308,20 @@
         "counts": [
           5,
           4,
-          0
+          3
         ],
-        "alive": false
+        "alive": true
       }
     ],
     "broken": [
       "이력서 선택",
       "최종 지원",
       "가입 시작",
-      "이력서 작성",
-      "이력서 저장"
+      "이력서 작성"
     ]
   },
   "alerts": [
-    "계측 끊김 의심 — 이력서 선택, 최종 지원, 가입 시작, 이력서 작성, 이력서 저장 (20261121 0건)",
-    "세션 급변 — 전일 대비 -55.0%"
+    "계측 끊김 의심 — 이력서 선택, 최종 지원, 가입 시작, 이력서 작성 (20261121 0건)",
+    "세션 급변 — 전일 대비 -45.0%"
   ]
 }
