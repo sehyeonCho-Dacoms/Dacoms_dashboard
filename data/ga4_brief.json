@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-11-22T16:57:48.410344+00:00",
-  "source_generated_at": "2026-11-22T16:57:48.318788+00:00",
+  "generated_at": "2026-11-23T01:28:05.350124+00:00",
+  "source_generated_at": "2026-11-23T01:28:05.255844+00:00",
   "yesterday": {
     "date": "20261122",
-    "sessions": 51,
-    "totalUsers": 42,
-    "newUsers": 36,
-    "engagementRate": 0.5882,
-    "averageSessionDuration": 200.5,
+    "sessions": 53,
+    "totalUsers": 44,
+    "newUsers": 35,
+    "engagementRate": 0.6226,
+    "averageSessionDuration": 229.6,
     "sessions_prev_day": 33,
-    "sessions_dod_pct": 54.5
+    "sessions_dod_pct": 60.6
   },
   "week": {
     "sessions": {
-      "current": 373,
+      "current": 375,
       "previous": 401,
-      "change_pct": -7.0
+      "change_pct": -6.5
     },
     "totalUsers": {
-      "current": 310,
+      "current": 312,
       "previous": 349,
-      "change_pct": -11.2
+      "change_pct": -10.6
     },
     "newUsers": {
-      "current": 211,
+      "current": 210,
       "previous": 223,
-      "change_pct": -5.4
+      "change_pct": -5.8
     },
     "screenPageViews": {
-      "current": 1984,
+      "current": 1979,
       "previous": 2286,
-      "change_pct": -13.2
+      "change_pct": -13.4
     },
     "engagementRate": {
-      "current": 0.6089,
+      "current": 0.6139,
       "previous": 0.5883,
-      "change_pct": 3.5
+      "change_pct": 4.4
     },
     "averageSessionDuration": {
-      "current": 177.0993,
+      "current": 181.2523,
       "previous": 163.7258,
-      "change_pct": 8.2
+      "change_pct": 10.7
     }
   },
   "window": {
@@ -57,24 +57,24 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 211,
+      "current": 212,
       "previous": 233,
-      "change_pct": -9.4,
-      "share_pct": 56.1
+      "change_pct": -9.0,
+      "share_pct": 56.5
     },
     {
       "channel": "Organic Search",
       "current": 121,
       "previous": 135,
       "change_pct": -10.4,
-      "share_pct": 32.2
+      "share_pct": 32.3
     },
     {
       "channel": "Organic Social",
-      "current": 28,
+      "current": 29,
       "previous": 12,
-      "change_pct": 133.3,
-      "share_pct": 7.4
+      "change_pct": 141.7,
+      "share_pct": 7.7
     },
     {
       "channel": "AI Assistant",
@@ -84,18 +84,18 @@
       "share_pct": 1.6
     },
     {
-      "channel": "Unassigned",
-      "current": 5,
-      "previous": 1,
-      "change_pct": 400.0,
-      "share_pct": 1.3
-    },
-    {
       "channel": "Email",
       "current": 3,
       "previous": 1,
       "change_pct": 200.0,
       "share_pct": 0.8
+    },
+    {
+      "channel": "Unassigned",
+      "current": 2,
+      "previous": 1,
+      "change_pct": 100.0,
+      "share_pct": 0.5
     }
   ],
   "instagram_referral": {
@@ -164,10 +164,10 @@
     {
       "week_start": "20261116",
       "week_end": "20261122",
-      "sessions": 373,
-      "totalUsers": 310,
-      "newUsers": 211,
-      "screenPageViews": 1984
+      "sessions": 375,
+      "totalUsers": 312,
+      "newUsers": 210,
+      "screenPageViews": 1979
     }
   ],
   "measurement": {
@@ -188,7 +188,7 @@
         "counts": [
           34,
           15,
-          42
+          35
         ],
         "alive": true
       },
@@ -203,7 +203,7 @@
         "counts": [
           109,
           48,
-          100
+          89
         ],
         "alive": true
       },
@@ -263,9 +263,9 @@
         "counts": [
           2,
           0,
-          1
+          0
         ],
-        "alive": true
+        "alive": false
       },
       {
         "event": "resume_new_start",
@@ -278,7 +278,7 @@
         "counts": [
           3,
           0,
-          3
+          1
         ],
         "alive": true
       },
@@ -293,7 +293,7 @@
         "counts": [
           3,
           4,
-          22
+          29
         ],
         "alive": true
       },
@@ -308,14 +308,17 @@
         "counts": [
           4,
           3,
-          19
+          26
         ],
         "alive": true
       }
     ],
-    "broken": []
+    "broken": [
+      "가입 시작"
+    ]
   },
   "alerts": [
-    "세션 급변 — 전일 대비 +54.5%"
+    "계측 끊김 의심 — 가입 시작 (20261122 0건)",
+    "세션 급변 — 전일 대비 +60.6%"
   ]
 }
