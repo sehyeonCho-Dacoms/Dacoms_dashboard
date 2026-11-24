@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-23T20:58:58.806983+00:00",
-  "source_generated_at": "2026-11-23T20:58:58.716051+00:00",
+  "generated_at": "2026-11-24T05:15:35.074591+00:00",
+  "source_generated_at": "2026-11-24T05:15:34.995177+00:00",
   "yesterday": {
     "date": "20261123",
     "sessions": 85,
     "totalUsers": 73,
-    "newUsers": 46,
-    "engagementRate": 0.5529,
-    "averageSessionDuration": 154.1,
+    "newUsers": 45,
+    "engagementRate": 0.6235,
+    "averageSessionDuration": 205.2,
     "sessions_prev_day": 53,
     "sessions_dod_pct": 60.4
   },
@@ -23,9 +23,9 @@
       "change_pct": 3.3
     },
     "newUsers": {
-      "current": 237,
+      "current": 236,
       "previous": 207,
-      "change_pct": 14.5
+      "change_pct": 14.0
     },
     "screenPageViews": {
       "current": 2242,
@@ -33,14 +33,14 @@
       "change_pct": 7.1
     },
     "engagementRate": {
-      "current": 0.603,
+      "current": 0.6131,
       "previous": 0.589,
-      "change_pct": 2.4
+      "change_pct": 4.1
     },
     "averageSessionDuration": {
-      "current": 190.6611,
+      "current": 197.9646,
       "previous": 158.5903,
-      "change_pct": 20.2
+      "change_pct": 24.8
     }
   },
   "window": {
@@ -57,31 +57,24 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 231,
+      "current": 233,
       "previous": 223,
-      "change_pct": 3.6,
-      "share_pct": 55.5
+      "change_pct": 4.5,
+      "share_pct": 56.6
     },
     {
       "channel": "Organic Search",
-      "current": 124,
+      "current": 127,
       "previous": 135,
-      "change_pct": -8.1,
-      "share_pct": 29.8
+      "change_pct": -5.9,
+      "share_pct": 30.8
     },
     {
       "channel": "Organic Social",
-      "current": 37,
+      "current": 38,
       "previous": 7,
-      "change_pct": 428.6,
-      "share_pct": 8.9
-    },
-    {
-      "channel": "Unassigned",
-      "current": 10,
-      "previous": 1,
-      "change_pct": 900.0,
-      "share_pct": 2.4
+      "change_pct": 442.9,
+      "share_pct": 9.2
     },
     {
       "channel": "AI Assistant",
@@ -96,6 +89,13 @@
       "previous": 3,
       "change_pct": 66.7,
       "share_pct": 1.2
+    },
+    {
+      "channel": "Email",
+      "current": 2,
+      "previous": 2,
+      "change_pct": 0.0,
+      "share_pct": 0.5
     }
   ],
   "instagram_referral": {
@@ -166,7 +166,7 @@
       "week_end": "20261123",
       "sessions": 412,
       "totalUsers": 345,
-      "newUsers": 237,
+      "newUsers": 236,
       "screenPageViews": 2242
     }
   ],

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-23T20:58:58.716051+00:00",
+  "generated_at": "2026-11-24T05:15:34.995177+00:00",
   "timezone": "Asia/Seoul",
   "property_id": "***",
   "range_days": 56,
@@ -503,10 +503,10 @@
       "date": "20261123",
       "sessions": 85,
       "totalUsers": 73,
-      "newUsers": 46,
+      "newUsers": 45,
       "screenPageViews": 436,
-      "engagementRate": 0.5529,
-      "averageSessionDuration": 154.0828
+      "engagementRate": 0.6235,
+      "averageSessionDuration": 205.2075
     }
   ],
   "by_channel": [
@@ -1893,26 +1893,20 @@
     {
       "date": "20261123",
       "sessionDefaultChannelGroup": "Direct",
-      "sessions": 45,
-      "totalUsers": 41
+      "sessions": 47,
+      "totalUsers": 43
     },
     {
       "date": "20261123",
       "sessionDefaultChannelGroup": "Organic Search",
-      "sessions": 23,
-      "totalUsers": 19
-    },
-    {
-      "date": "20261123",
-      "sessionDefaultChannelGroup": "Unassigned",
-      "sessions": 10,
-      "totalUsers": 10
+      "sessions": 26,
+      "totalUsers": 22
     },
     {
       "date": "20261123",
       "sessionDefaultChannelGroup": "Organic Social",
-      "sessions": 8,
-      "totalUsers": 7
+      "sessions": 9,
+      "totalUsers": 8
     },
     {
       "date": "20261123",
@@ -4404,25 +4398,19 @@
       "date": "20261123",
       "sessionSource": "(direct)",
       "sessionMedium": "(none)",
-      "sessions": 45
+      "sessions": 47
     },
     {
       "date": "20261123",
       "sessionSource": "google",
       "sessionMedium": "organic",
-      "sessions": 16
-    },
-    {
-      "date": "20261123",
-      "sessionSource": "(not set)",
-      "sessionMedium": "(not set)",
-      "sessions": 10
+      "sessions": 18
     },
     {
       "date": "20261123",
       "sessionSource": "m.search.naver.com",
       "sessionMedium": "referral",
-      "sessions": 5
+      "sessions": 6
     },
     {
       "date": "20261123",
@@ -4447,6 +4435,12 @@
       "sessionSource": "naver",
       "sessionMedium": "organic",
       "sessions": 2
+    },
+    {
+      "date": "20261123",
+      "sessionSource": "accounts.kakao.com",
+      "sessionMedium": "referral",
+      "sessions": 1
     },
     {
       "date": "20261123",
