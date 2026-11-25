@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-25T04:00:10.2685850Z",
+  "generatedAt": "2026-11-25T19:01:33.9650335Z",
   "account": {
     "username": "drafton.co.kr",
     "id": "28961157813485354",
     "accountType": "BUSINESS",
     "mediaCount": 853,
-    "followersCount": 11702
+    "followersCount": 11701
   },
   "media": [
     {
@@ -15,8 +15,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfmHO90D6Xr/",
       "timestamp": "2026-11-11T09:02:16+00:00",
-      "views": 23441,
-      "reach": 10060,
+      "views": 23460,
+      "reach": 10063,
       "saved": 37,
       "shares": 42
     },
@@ -27,7 +27,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfWtnA1jwkp/",
       "timestamp": "2026-11-05T09:29:45+00:00",
-      "views": 16759,
+      "views": 16766,
       "reach": 5882,
       "saved": 59,
       "shares": 29
@@ -39,7 +39,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfUARt1jyvh/",
       "timestamp": "2026-11-04T08:15:09+00:00",
-      "views": 14176,
+      "views": 14179,
       "reach": 5241,
       "saved": 35,
       "shares": 13
@@ -51,7 +51,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfRmucqjwKM/",
       "timestamp": "2026-11-03T09:53:24+00:00",
-      "views": 16209,
+      "views": 16222,
       "reach": 5787,
       "saved": 64,
       "shares": 27
@@ -63,7 +63,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfEsKQ5Dytp/",
       "timestamp": "2026-10-29T09:30:45+00:00",
-      "views": 18665,
+      "views": 18671,
       "reach": 6444,
       "saved": 10,
       "shares": 26
@@ -77,8 +77,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfmHO90D6Xr/",
       "timestamp": "2026-11-11T09:02:16+00:00",
-      "views": 23441,
-      "reach": 10060,
+      "views": 23460,
+      "reach": 10063,
       "saved": 37,
       "shares": 42
     },
@@ -89,7 +89,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfWtnA1jwkp/",
       "timestamp": "2026-11-05T09:29:45+00:00",
-      "views": 16759,
+      "views": 16766,
       "reach": 5882,
       "saved": 59,
       "shares": 29
@@ -101,7 +101,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfUARt1jyvh/",
       "timestamp": "2026-11-04T08:15:09+00:00",
-      "views": 14176,
+      "views": 14179,
       "reach": 5241,
       "saved": 35,
       "shares": 13
@@ -113,7 +113,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfRmucqjwKM/",
       "timestamp": "2026-11-03T09:53:24+00:00",
-      "views": 16209,
+      "views": 16222,
       "reach": 5787,
       "saved": 64,
       "shares": 27
@@ -125,7 +125,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfEsKQ5Dytp/",
       "timestamp": "2026-10-29T09:30:45+00:00",
-      "views": 18665,
+      "views": 18671,
       "reach": 6444,
       "saved": 10,
       "shares": 26
@@ -137,8 +137,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DfEr_CzD0w_/",
       "timestamp": "2026-10-29T09:29:13+00:00",
-      "views": 23253,
-      "reach": 8465,
+      "views": 23261,
+      "reach": 8469,
       "saved": 44,
       "shares": 20
     },
@@ -149,8 +149,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/De_kDm-j6zn/",
       "timestamp": "2026-10-27T09:43:44+00:00",
-      "views": 10830,
-      "reach": 2988,
+      "views": 10833,
+      "reach": 2993,
       "saved": 35,
       "shares": 13
     },
@@ -161,8 +161,8 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/De9BhFij1NM/",
       "timestamp": "2026-10-26T10:03:27+00:00",
-      "views": 18136,
-      "reach": 6518,
+      "views": 18137,
+      "reach": 6521,
       "saved": 8,
       "shares": 14
     },
@@ -197,7 +197,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/Deq8VhOjy1o/",
       "timestamp": "2026-10-19T09:31:51+00:00",
-      "views": 26759,
+      "views": 26761,
       "reach": 12179,
       "saved": 35,
       "shares": 35
@@ -209,7 +209,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DejIh8BDwXM/",
       "timestamp": "2026-10-16T08:44:29+00:00",
-      "views": 124009,
+      "views": 124011,
       "reach": 66792,
       "saved": 271,
       "shares": 295
@@ -221,7 +221,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DegyMPCj_yd/",
       "timestamp": "2026-10-15T10:50:48+00:00",
-      "views": 104573,
+      "views": 104580,
       "reach": 51711,
       "saved": 218,
       "shares": 1932
@@ -233,7 +233,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeB1GDv0Uo/",
       "timestamp": "2026-10-14T12:30:04+00:00",
-      "views": 10224,
+      "views": 10228,
       "reach": 4775,
       "saved": 7,
       "shares": 9
@@ -245,7 +245,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeXo8hj-C1/",
       "timestamp": "2026-10-14T12:20:01+00:00",
-      "views": 20000,
+      "views": 20003,
       "reach": 7322,
       "saved": 10,
       "shares": 19
@@ -257,7 +257,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeeAfHPD-kO/",
       "timestamp": "2026-10-14T08:57:59+00:00",
-      "views": 35886,
+      "views": 35888,
       "reach": 17917,
       "saved": 350,
       "shares": 180
@@ -281,10 +281,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeY-9NPD9-M/",
       "timestamp": "2026-10-12T10:08:25+00:00",
-      "views": 26286,
-      "reach": 10527,
+      "views": 26287,
+      "reach": 10536,
       "saved": 507,
-      "shares": 206
+      "shares": 207
     },
     {
       "id": "17892394158615519",
@@ -293,7 +293,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeOi5Kbj9k1/",
       "timestamp": "2026-10-08T08:50:47+00:00",
-      "views": 25100,
+      "views": 25102,
       "reach": 8796,
       "saved": 227,
       "shares": 92
@@ -305,7 +305,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeMDWjBvShR/",
       "timestamp": "2026-10-07T12:20:04+00:00",
-      "views": 20664,
+      "views": 20668,
       "reach": 9227,
       "saved": 35,
       "shares": 62
@@ -317,10 +317,10 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeL9Qh6D4DS/",
       "timestamp": "2026-10-07T08:43:27+00:00",
-      "views": 31884,
+      "views": 31885,
       "reach": 13054,
       "saved": 204,
-      "shares": 117
+      "shares": 118
     },
     {
       "id": "18110491688133820",
@@ -329,7 +329,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeJcCBIvNmt/",
       "timestamp": "2026-10-06T12:50:06+00:00",
-      "views": 10934,
+      "views": 10936,
       "reach": 5371,
       "saved": 11,
       "shares": 5
@@ -341,9 +341,9 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeJyZf1jwB3/",
       "timestamp": "2026-10-06T12:30:02+00:00",
-      "views": 26025,
+      "views": 26028,
       "reach": 10091,
-      "saved": 129,
+      "saved": 128,
       "shares": 75
     },
     {
@@ -353,7 +353,7 @@
       "mediaProductType": "FEED",
       "permalink": "https://www.instagram.com/p/DeJXbnGj1KH/",
       "timestamp": "2026-10-06T08:34:26+00:00",
-      "views": 52865,
+      "views": 52866,
       "reach": 27113,
       "saved": 558,
       "shares": 393
@@ -373,12 +373,12 @@
   ],
   "brief": {
     "date": "2026-11-25",
-    "followers": 11702,
-    "followersDelta": 0,
-    "summary": "팔로워 11702명 (전일과 동일). 최근 5개 게시물 평균 조회수 17850회, 도달 합계 33414회, 저장+공유 합계 342회. 최고 성과: '⠀ 🏃 마라톤을 꼭 서울에서 열어야 할까? 참가자가 많은 곳, 교통이 …' (조회수 23441회)",
+    "followers": 11701,
+    "followersDelta": -1,
+    "summary": "팔로워 11701명 (▼ 전일 대비 1 명 감소). 최근 5개 게시물 평균 조회수 17860회, 도달 합계 33417회, 저장+공유 합계 342회. 최고 성과: '⠀ 🏃 마라톤을 꼭 서울에서 열어야 할까? 참가자가 많은 곳, 교통이 …' (조회수 23460회)",
     "topPost": {
       "caption": "⠀ 🏃 마라톤을 꼭 서울에서 열어야 할까? 참가자가 많은 곳, 교통이 …",
-      "views": 23441,
+      "views": 23460,
       "permalink": "https://www.instagram.com/p/DfmHO90D6Xr/"
     }
   },
@@ -621,7 +621,7 @@
     },
     {
       "date": "2026-11-25",
-      "followers": 11702
+      "followers": 11701
     }
   ],
   "surging": null,
@@ -1160,9 +1160,9 @@
     },
     {
       "date": "2026-11-25",
-      "followers": 11702,
-      "viewsAvg": 17850.0,
-      "reachSum": 33414.0,
+      "followers": 11701,
+      "viewsAvg": 17860.0,
+      "reachSum": 33417.0,
       "engagementSum": 342.0,
       "topCategory": "마케팅",
       "surgingCount": 0
