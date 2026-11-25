@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-24T20:01:42.729006+00:00",
-  "source_generated_at": "2026-11-24T20:01:42.638871+00:00",
+  "generated_at": "2026-11-25T03:59:51.339050+00:00",
+  "source_generated_at": "2026-11-25T03:59:51.274960+00:00",
   "yesterday": {
     "date": "20261124",
     "sessions": 106,
     "totalUsers": 94,
     "newUsers": 69,
-    "engagementRate": 0.5755,
-    "averageSessionDuration": 173.5,
+    "engagementRate": 0.6132,
+    "averageSessionDuration": 237.2,
     "sessions_prev_day": 85,
     "sessions_dod_pct": 24.7
   },
@@ -33,14 +33,14 @@
       "change_pct": 10.4
     },
     "engagementRate": {
-      "current": 0.5989,
+      "current": 0.6043,
       "previous": 0.6015,
-      "change_pct": -0.4
+      "change_pct": 0.5
     },
     "averageSessionDuration": {
-      "current": 200.2958,
+      "current": 209.3954,
       "previous": 162.8756,
-      "change_pct": 23.0
+      "change_pct": 28.6
     }
   },
   "window": {
@@ -57,31 +57,24 @@
   "channels": [
     {
       "channel": "Direct",
-      "current": 250,
+      "current": 252,
       "previous": 219,
-      "change_pct": 14.2,
-      "share_pct": 56.2
+      "change_pct": 15.1,
+      "share_pct": 57.9
     },
     {
       "channel": "Organic Search",
-      "current": 127,
+      "current": 129,
       "previous": 141,
-      "change_pct": -9.9,
-      "share_pct": 28.5
+      "change_pct": -8.5,
+      "share_pct": 29.7
     },
     {
       "channel": "Organic Social",
       "current": 40,
       "previous": 8,
       "change_pct": 400.0,
-      "share_pct": 9.0
-    },
-    {
-      "channel": "Unassigned",
-      "current": 14,
-      "previous": 1,
-      "change_pct": 1300.0,
-      "share_pct": 3.1
+      "share_pct": 9.2
     },
     {
       "channel": "AI Assistant",
@@ -96,13 +89,20 @@
       "previous": 3,
       "change_pct": 66.7,
       "share_pct": 1.1
+    },
+    {
+      "channel": "Email",
+      "current": 4,
+      "previous": 2,
+      "change_pct": 100.0,
+      "share_pct": 0.9
     }
   ],
   "instagram_referral": {
     "current": 10,
     "previous": 5,
     "change_pct": 100.0,
-    "share_of_sessions_pct": 2.2
+    "share_of_sessions_pct": 2.3
   },
   "weekly_trend": [
     {
