@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-26T03:24:47",
+  "generatedAt": "2026-11-26T18:52:57",
   "kpis": {
-    "collected": 129,
+    "collected": 130,
     "uploadReady": 23,
     "uploadReadyPct": 18,
     "hotLeads": 0,
@@ -2202,20 +2202,37 @@
       ],
       "status": "신규",
       "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73415"
+    },
+    {
+      "platform": "대한체육회",
+      "company": "대한체육회",
+      "title": "[대한바이애슬론연맹] 2026년 대한바이애슬론연맹 정규직(사무행정) 채용공고",
+      "role": "기타",
+      "level": "",
+      "size": "공공/협회",
+      "sector": "협회",
+      "fit": 65,
+      "reasons": [
+        "스포츠 기업(체육회)",
+        "협회",
+        "연맹"
+      ],
+      "status": "신규",
+      "url": "https://sports.or.kr/sports/bbs/BMSR00024/view.do?menuNo=200027&bbsId=BMSR00024&nttId=73424"
     }
   ],
   "leads": [
     {
       "company": "대한체육회",
       "sector": "협회",
-      "open": 129,
-      "growth": "±0",
+      "open": 130,
+      "growth": "+1",
       "senior": 0,
       "tier": "Warm",
-      "score": 52,
-      "fee": 38700,
+      "score": 59,
+      "fee": 39000,
       "stage": "신규",
-      "signal": "129개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
+      "signal": "130개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
     }
   ],
   "actions": {
@@ -2246,31 +2263,31 @@
       {
         "pr": "P1",
         "title": "대한체육회 헤드헌팅 접촉",
-        "company": "예상 수수료 ₩38,700만",
-        "why": "129개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
+        "company": "예상 수수료 ₩39,000만",
+        "why": "130개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼",
         "cta": "콜드 아웃리치"
       }
     ]
   },
   "trends": {
     "role": {
-      "기타": 90,
+      "기타": 91,
       "코치/트레이너": 36,
       "데이터": 2,
       "운영": 1
     },
     "size": {
-      "공공/협회": 129
+      "공공/협회": 130
     },
     "platform": {
-      "대한체육회": 129
+      "대한체육회": 130
     },
     "sector": {
-      "협회": 129
+      "협회": 130
     },
     "level": {
       "신입~주니어": 0,
-      "미들(3~5년)": 129,
+      "미들(3~5년)": 130,
       "시니어(5년+)": 0
     },
     "weekly": {
@@ -2292,7 +2309,7 @@
         8,
         10,
         8,
-        5
+        6
       ],
       "uploadReady": [
         5,
