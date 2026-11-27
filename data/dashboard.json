@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-26T18:52:57",
+  "generatedAt": "2026-11-27T03:32:30",
   "kpis": {
     "collected": 130,
     "uploadReady": 23,
@@ -2226,10 +2226,10 @@
       "company": "대한체육회",
       "sector": "협회",
       "open": 130,
-      "growth": "+1",
+      "growth": "±0",
       "senior": 0,
       "tier": "Warm",
-      "score": 59,
+      "score": 52,
       "fee": 39000,
       "stage": "신규",
       "signal": "130개 직무 동시 채용 — 스케일업 정황 · HH 저경쟁 · 선점 가치 큼"
@@ -2302,20 +2302,20 @@
         "이번주"
       ],
       "total": [
+        11,
+        8,
         12,
+        5,
         7,
-        8,
-        9,
-        8,
-        10,
-        8,
+        12,
+        6,
         6
       ],
       "uploadReady": [
         5,
         0,
-        0,
         3,
+        0,
         2,
         4,
         1,
